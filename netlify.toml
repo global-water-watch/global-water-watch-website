@@ -1,0 +1,31 @@
+[build]
+  command = "yarn build"
+  publish = "dist/"
+  [build.processing]
+    # Disable processing to speed up build time
+    # @see https://www.voorhoede.nl/en/blog/10x-faster-nuxt-builds-on-netlify/#disable-post-processing-on-netlify
+    skip_processing = true
+  [build.environment]
+    # Setting CI will trigger Nuxt generate quiet mode, which improves build time
+    # @see https://www.voorhoede.nl/en/blog/10x-faster-nuxt-builds-on-netlify/#skip-streaming-logs
+    CI = "1"
+    # Skip install of optional dependencies to speed up build time
+    # @see https://www.voorhoede.nl/en/blog/10x-faster-nuxt-builds-on-netlify/#skip-optional-dependencies
+    NPM_FLAGS = "--no-optional"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Referrer-Policy = "no-referrer-when-downgrade"
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "SAMEORIGIN"
+
+[[headers]]
+  # Cache assets forever for faster Nuxt website
+  # @see https://www.voorhoede.nl/en/blog/faster-nuxt-sites-on-netlify/#cache-assets-forever
+  for = "/_nuxt/*"
+  [headers.values]
+    cache-control = '''
+      public,
+      max-age=31536000,
+      immutable'''

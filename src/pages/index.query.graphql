@@ -1,0 +1,15 @@
+#import '../components/ResponsiveImage.fragment.graphql'
+
+query HomeQuery {
+  page: blogOverview {
+    title
+    seo: _seoMetaTags { attributes, content, tag }
+    image {
+        responsiveImage(
+          imgixParams: { fit: crop, w: 300, h: 300, auto: format }
+        ) {
+          ...responsiveImageFragment
+        }
+      }
+  }
+}

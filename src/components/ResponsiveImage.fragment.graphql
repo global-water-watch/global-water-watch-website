@@ -1,0 +1,25 @@
+# fragment matching vue-datocms's Image component
+# see https://github.com/datocms/vue-datocms#progressiveresponsive-image
+
+fragment responsiveImageFragment on ResponsiveImage {
+  # HTML5 src/srcset/sizes attributes
+  srcSet
+  webpSrcSet
+  sizes
+  src
+
+  # size information (post-transformations)
+  width
+  height
+  aspectRatio
+
+  # SEO attributes
+  alt
+  title
+
+  # background color placeholder or...
+  bgColor
+
+  # blur-up placeholder, JPEG format, base64-encoded
+  base64
+}
