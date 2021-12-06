@@ -10,7 +10,7 @@ export default function (context, inject) {
   // @see https://github.com/nuxt/nuxt.js/issues/4491#issuecomment-648979464
   const onReady = fn => window.onNuxtReady(() => fn())
 
-  // Feature check for LocalStorage
+  // Feature check for Local Storage API
   // @see https://mathiasbynens.be/notes/localstorage-pattern
   const storage = (() => {
     // eslint-disable-next-line new-parens
@@ -41,6 +41,7 @@ export default function (context, inject) {
   }
 
   inject(pluginName, {
+    enter: enterPreview,
     exit: exitPreview,
   })
 
@@ -54,14 +55,14 @@ export default function (context, inject) {
     return
   }
 
-  if (!$config.previewSecret) {
+  if (!$config.previewModeSecret) {
     return onReady(() => error({
       statusCode: 500,
-      message: 'Set DATOCMS_READONLY_TOKEN to enable preview mode.',
+      message: 'Set publicRuntimeConfig.previewModeSecret to enable preview mode.',
     }))
   }
 
-  if (secret !== $config.previewSecret) {
+  if (secret !== $config.previewModeSecret) {
     return onReady(() => error({
       statusCode: 401,
       message: 'Invalid secret.',

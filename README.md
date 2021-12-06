@@ -1,68 +1,128 @@
 # Global Water Watch Website
 
----
+**...**
+## Getting started
 
-## Build Setup
+This project requires [Node.js](https://nodejs.org/) and [Yarn](https://yarnpkg.com/) to be installed. To get started:
 
 ```bash
+# create env file, and set the variables 
+cp .env.example .env
+
 # install dependencies
-$ yarn install
-
-$ yarn dev
-
-# build for production and launch server
-$ yarn build
-$ yarn start
+yarn
 ```
 
-For detailed explanation on how things work, check out the [documentation](https://nuxtjs.org).
+Ask a team member how to obtain the required env variables.
+
+See [available scripts](#scripts) (like `yarn dev`) below.
 
 
-## Special Directories
+## Architecture
 
-You can create the following extra directories, some of which have special behaviors. Only `pages` is required; you can delete them if you don't want to use their functionality.
+The site is created as lightweight isomorphic website connected to a headless CMS:
 
-### `assets`
-
-The assets directory contains your uncompiled assets such as Stylus or Sass files, images, or fonts.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/assets).
-
-### `components`
-
-The components directory contains your Vue.js components. Components make up the different parts of your page and can be reused and imported into your pages, layouts and even other components.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/components).
-
-### `layouts`
-
-Layouts are a great help when you want to change the look and feel of your Nuxt app, whether you want to include a sidebar or have distinct layouts for mobile and desktop.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/layouts).
+- [Nuxt](https://nuxtjs.org) - a meta framework based on Vue - is used to structure the project. This framework is selected as it's very suitable for both the highly interactive parts as well as mostly static pages. Since the framework is based on Vue many integrations and libraries are available to speed up development.
+- [DatoCMS](https://www.datocms.com/) - the site content is managed in a [headless DatoCMS instance](https://global-water-watch-website.admin.datocms.com/) (on Deltares account). DatoCMS is selected for its modular and structured content options, advanced image service, multi-language support and GraphQL API. [`vue-datocms`](https://github.com/datocms/vue-datocms) provides handy Vue components and utilties for DatoCMS data.
+- [Vuetify](https://vuetifyjs.com/en/) - is a UI component library in Material Design style. It enables us to quickly build a UI without much custom design work. It is configured to use the [Deltares theme](https://github.com/openearth/delta-vue-components/tree/master/packages/vuetify-theme).
+- [Deltares Vue Components](https://github.com/openearth/delta-vue-components/tree/master/packages/vue-components) - is a collection of Deltares specific components like `LegalDialog` and `MapboxMap`.
+- [Netlify](https://www.netlify.com/) - is used as hosting platform. It is selected for its worldwide CDN, built-in CI/CD and convenient preview environment for each PR. [Netlify Dev](https://www.netlify.com/products/dev/) is used to bring the local development experience as close to production as possible.
+- [Yarn](yarnpkg.com/) - is used as package manager instead of npm as it boosts faster builds.
 
 
-### `pages`
+### Directory structure
 
-This directory contains your application views and routes. Nuxt will read all the `*.vue` files inside this directory and setup Vue Router automatically.
+This package uses Nuxt's default directory structure. A component's file (`*.vue`) and optional data structure (`*.fragment.graphql`) are bundled in a directory with the name of the component. Pages typically also have an adjoining `*.query.graphql` file for [data loading](#cms-data-loading).
 
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/get-started/routing).
+```
+src/
+  assets/icons/
+  components/
+    Example/
+      index.js
+      Example.vue
+      Example.fragment.graphql
 
-### `plugins`
+  pages/
+    _param/
+      index.vue
+      index.query.graphql
+  
+  static/
+    fonts/
+    images/
+```
 
-The plugins directory contains JavaScript plugins that you want to run before instantiating the root Vue.js Application. This is the place to add Vue plugins and to inject functions or constants. Every time you need to use `Vue.use()`, you should create a file in `plugins/` and add its path to plugins in `nuxt.config.js`.
+### CMS data loading
 
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/plugins).
+The Nuxt app is connected to the CMS via the [DatoCMS GraphQL API](https://www.datocms.com/docs/content-delivery-api). To make data loading simple, this project uses [`graphql-loader`](https://www.npmjs.com/package/webpack-graphql-loader), a custom `$datocms` plugin for data fetching and live previews. Together these enable us to put `*.query.graphql` files next to our page templates (`*.vue`), load them directly and use the helper to fetch the data:
 
-### `static`
+```vue
+<template>
+  <div>
+    <h1>{{ page.title }}</h1>
+    <DatocmsImage :data="page.image.responsiveImage" />
+  </div>
+</template>
 
-This directory contains your static files. Each file inside this directory is mapped to `/`.
+<script>
+import query from './index.query.graphql'
 
-Example: `/static/robots.txt` is mapped as `/robots.txt`.
+export default {
+  async asyncData ({ $datocms, $preview }) {
+    const { page } = await $datocms.fetchData({ query, preview: !!$preview })
+    return { page }
+  },
+  head () {
+    return this.$datocms.toHead(this.page.seo)
+  },
+  mounted () {
+    if (this.$nuxt.isPreview) {
+      this.$datocms.subscribeToData({
+        query,
+        onData: ({ page }) => { this.page = page },
+      })
+    }
+  },
+}
+</script>
+```
 
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/static).
+Where a simple `index.query.graphql` could look like:
 
-### `store`
+```graphql
+#import '../components/ResponsiveImage.fragment.graphql'
 
-This directory contains your Vuex store files. Creating a file in this directory automatically activates Vuex.
+query ExampleQuery($locale: SiteLocale) {
+  page: examplePage(locale: $locale) {
+    title
+    seo: _seoMetaTags { attributes, content, tag }
+    image {
+        responsiveImage(
+          imgixParams: { fit: crop, w: 300, h: 300, auto: format }
+        ) {
+          ...responsiveImageFragment
+        }
+      }
+  }
+}
+```
 
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/store).
+- You can pass [variables](https://graphql.org/learn/queries/#variables) into `$datocms.request` and use them in the query.
+- You can reuse repeating [fragments](https://graphql.org/learn/queries/#fragments) in their own files, like for example [ResponsiveImage](components/ResponsiveImage.fragment.graphql).
+- You can copy-paste your GraphQL queries to and from the [API explorer](https://global-water-watch-website.admin.datocms.com/cda-explorer) to test them in isolation.
+- You get full IntelliSense (autocomplete and validation) in `.graphql` files with the [VSCode GraphQL Extension](https://marketplace.visualstudio.com/items?itemName=GraphQL.vscode-graphql)
+
+### Preview mode
+
+Finally you can view unpublished content by enabling preview mode. Navigate to `/?preview=true&secret={PREVIEW_MODE_SECRET}` or follow preview links from the CMS to enable it.
+
+
+## Scripts
+
+`yarn ...` | task
+--- | ---
+`dev` | starts development server on [`localhost:7647`](http://localhost:4999) (is "GWWW" in "T9")
+`analyze` | analyzes and visualizes output bundles
+`build` | creates optimised production build
+`start` | starts local server to test production build

@@ -3,13 +3,14 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "analyze": "nuxt build --analyze",
     "build": "run-s build:*",
     "build:app": "nuxt generate --fail-on-error",
-    "dev": "netlify dev --command='nuxt'",
+    "dev": "netlify dev --port 4999 --command='nuxt --port 4998' --targetPort 4998",
     "lint": "run-s lint:*",
     "lint:js": "eslint --ext \".js,.vue\" --ignore-path .gitignore .",
     "prepare": "husky install",
-    "start": "nuxt start"
+    "start": "netlify dev --port 4999 --dir dist/ --framework '#static'"
   },
   "lint-staged": {
     "*.{js,vue}": "eslint"

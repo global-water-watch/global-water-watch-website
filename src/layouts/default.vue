@@ -1,6 +1,6 @@
 <template>
   <VApp>
-    <PreviewBar v-if="$nuxt.isPreview" />
+    <PreviewModeBar />
     <VMain>
       <VContainer>
         <Nuxt />

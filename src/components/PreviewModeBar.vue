@@ -1,5 +1,5 @@
 <template>
-  <ClientOnly>
+  <ClientOnly v-if="$nuxt.isPreview">
     <VSystemBar dark height="50">
       <VIcon aria-hidden color="green">
         mdi-access-point

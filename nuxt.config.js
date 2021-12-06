@@ -6,7 +6,7 @@ import deltaresThemes from '@deltares/vuetify-theme'
 export default {
   publicRuntimeConfig: {
     datocmsReadonlyToken: process.env.DATOCMS_READONLY_TOKEN,
-    previewSecret: process.env.PREVIEW_SECRET,
+    previewModeSecret: process.env.PREVIEW_SECRET,
   },
 
   srcDir: 'src/',
@@ -50,22 +50,21 @@ export default {
     // https://composition-api.nuxtjs.org/
     '@nuxtjs/composition-api/module',
     // https://go.nuxtjs.dev/eslint
-    '@nuxtjs/eslint-module',
+    ['@nuxtjs/eslint-module', {
+      fix: true,
+    }],
     // https://go.nuxtjs.dev/vuetify
-    '@nuxtjs/vuetify',
+    ['@nuxtjs/vuetify', {
+      customVariables: ['~/assets/variables.scss'],
+      theme: {
+        themes: deltaresThemes,
+      },
+    }],
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
   ],
-
-  // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
-  vuetify: {
-    customVariables: ['~/assets/variables.scss'],
-    theme: {
-      themes: deltaresThemes,
-    },
-  },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
