@@ -1,7 +1,7 @@
 #import '../components/ResponsiveImage.fragment.graphql'
 
-query HomeQuery {
-  page: home {
+query PageQuery($slug: String) {
+  page(filter: {slug: {eq: $slug}}) {
     title
     _seoMetaTags { attributes, content, tag }
     seo {

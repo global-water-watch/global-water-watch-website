@@ -1,6 +1,7 @@
 <template>
   <VApp>
     <PreviewModeBar />
+    <AppHeader />
     <VMain>
       <VContainer>
         <Nuxt />

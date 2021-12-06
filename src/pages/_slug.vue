@@ -6,12 +6,13 @@
 </template>
 
 <script>
-import query from './index.query.graphql'
+import query from './_slug.query.graphql'
 
 export default {
-  async asyncData ({ $datocms, $preview }) {
-    const { page } = await $datocms.fetchData({ query, preview: !!$preview })
-    return { page }
+  async asyncData ({ $datocms, $preview, params }) {
+    const variables = { slug: params.slug }
+    const { page } = await $datocms.fetchData({ query, variables, preview: !!$preview })
+    return { page, variables }
   },
   head () {
     return this.$datocms.toHead(this.page._seoMetaTags)
@@ -20,6 +21,7 @@ export default {
     if (this.$nuxt.isPreview) {
       this.$datocms.subscribeToData({
         query,
+        variables: this.variables,
         onData: ({ page }) => { this.page = page },
       })
     }
