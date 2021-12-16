@@ -19,8 +19,8 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s - Global Water Watch Website',
-    title: 'Global Water Watch Website',
+    titleTemplate: '%s',
+    title: 'Global Water Watch',
     htmlAttrs: {
       lang: 'en',
     },
@@ -43,6 +43,7 @@ export default {
   plugins: [
     { src: '~plugins/preview-mode.client.js' },
     { src: '~plugins/datocms.js' },
+    { src: '~plugins/vue-fragment.js' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

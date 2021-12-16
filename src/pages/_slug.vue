@@ -18,13 +18,11 @@ export default {
     return this.$datocms.toHead(this.page._seoMetaTags)
   },
   mounted () {
-    if (this.$nuxt.isPreview) {
-      this.$datocms.subscribeToData({
-        query,
-        variables: this.variables,
-        onData: ({ page }) => { this.page = page },
-      })
-    }
+    this.$datocms.subscribeToData({
+      query,
+      variables: this.variables,
+      onData: ({ page }) => { this.page = page },
+    })
   },
 }
 </script>

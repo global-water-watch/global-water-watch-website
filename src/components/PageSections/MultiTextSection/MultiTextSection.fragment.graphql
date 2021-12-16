@@ -1,0 +1,12 @@
+fragment multiTextSectionFragment on MultiTextSectionRecord {
+  id
+  _modelApiKey
+  title
+  items {
+    id
+    title
+    text {
+      value
+    }
+  }
+}

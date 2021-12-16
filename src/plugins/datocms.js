@@ -90,7 +90,9 @@ export default ({ $config, app }, inject) => {
       return response.data
     },
 
-    async subscribeToData ({ query, variables = {}, onData }) {
+    async subscribeToData ({ query, variables = {}, onData, isEnabled = app.context.$preview }) {
+      if (!isEnabled) { return false }
+
       const unsubscribe = await subscribeToQuery({
         baseUrl: 'https://graphql-listen.datocms.com',
         token: $config.datocmsReadonlyToken,

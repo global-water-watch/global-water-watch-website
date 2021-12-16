@@ -1,8 +1,8 @@
 <template>
-  <div>
-    <h1>{{ page.title }}</h1>
-    <DatocmsImage :data="page.seo.image.responsiveImage" />
-  </div>
+  <Fragment>
+    <PageHeroes :sections="page.heroes" />
+    <PageSections :sections="page.sections" />
+  </Fragment>
 </template>
 
 <script>
@@ -17,12 +17,10 @@ export default {
     return this.$datocms.toHead(this.page._seoMetaTags)
   },
   mounted () {
-    if (this.$nuxt.isPreview) {
-      this.$datocms.subscribeToData({
-        query,
-        onData: ({ page }) => { this.page = page },
-      })
-    }
+    this.$datocms.subscribeToData({
+      query,
+      onData: ({ page }) => { this.page = page },
+    })
   },
 }
 </script>

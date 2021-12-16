@@ -1,3 +1,4 @@
+#import '../components/PageSections/MultiTextSection/MultiTextSection.fragment.graphql'
 #import '../components/ResponsiveImage.fragment.graphql'
 
 query HomeQuery {
@@ -12,6 +13,18 @@ query HomeQuery {
           ...responsiveImageFragment
         }
       }
+    }
+    heroes {
+      # @todo: move to fragments bundled with related component
+      ... on BrandHeroRecord { id _modelApiKey title }
+    }
+    sections {
+      # @todo: move to fragments bundled with related component
+      ... on LogoSectionRecord { id, _modelApiKey }
+      ... on MultiTextSectionRecord { ...multiTextSectionFragment }
+      ... on NewsletterSectionRecord { id, _modelApiKey }
+      ... on PeopleSectionRecord { id, _modelApiKey }
+      ... on TimelineSectionRecord { id, _modelApiKey }
     }
   }
 }
