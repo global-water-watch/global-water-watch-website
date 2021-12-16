@@ -122,7 +122,8 @@ Finally you can view unpublished content by enabling preview mode. Navigate to `
 
 `yarn ...` | task
 --- | ---
-`dev` | starts development server on [`localhost:7647`](http://localhost:4999) (is "GWWW" in "T9")
+`dev` | starts development server on [`localhost:4999`](http://localhost:4999) (is "GWWW" in "T9")
+`dev:netlify` | starts development server in Netlify setup on [`localhost:4999`](http://localhost:4999), more realistic, less DX.
 `analyze` | analyzes and visualizes output bundles
 `build` | creates optimised production build
 `start` | starts local server to test production build
