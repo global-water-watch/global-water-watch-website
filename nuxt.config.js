@@ -6,7 +6,6 @@ import deltaresThemes from '@deltares/vuetify-theme'
 export default {
   publicRuntimeConfig: {
     datocmsReadonlyToken: process.env.DATOCMS_READONLY_TOKEN,
-    previewModeSecret: process.env.PREVIEW_SECRET,
   },
 
   srcDir: 'src/',
@@ -41,7 +40,7 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    { src: '~plugins/preview-mode.client.js' },
+    // { src: '~plugins/preview-mode.client.js' },
     { src: '~plugins/datocms.js' },
     { src: '~plugins/vue-fragment.js' },
   ],
@@ -68,7 +67,13 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
+    '@voorhoede/nuxt-preview-mode-module',
   ],
+
+  // Preview mode: https://github.com/voorhoede/nuxt-preview-mode-module
+  previewMode: {
+    previewSecret: process.env.PREVIEW_SECRET,
+  },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {

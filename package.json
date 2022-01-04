@@ -21,6 +21,7 @@
     "@deltares/vue-components": "^0.5.0",
     "@deltares/vuetify-theme": "^0.5.0",
     "@nuxtjs/composition-api": "^0.31.0",
+    "@voorhoede/nuxt-preview-mode-module": "^1.0.4",
     "@vue/composition-api": "^1.4.1",
     "core-js": "^3.15.1",
     "datocms-listen": "^0.1.6",

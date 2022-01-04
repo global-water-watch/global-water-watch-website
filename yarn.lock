@@ -2835,6 +2835,11 @@
     resolve-from "^5.0.0"
     rollup-pluginutils "^2.8.2"
 
+"@voorhoede/nuxt-preview-mode-module@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@voorhoede/nuxt-preview-mode-module/-/nuxt-preview-mode-module-1.0.4.tgz#77609a2cc76f6405b1543668b08270a4d7ebf4c8"
+  integrity sha512-y35iZNUyO5OHa+i2vIRjospBIJ+9b1Ys5FQq0mSMEiTbJZx78Hp5D1NfZdEo+yyB5Fi/aOjT1No6b6RUPHbGIw==
+
 "@vue/babel-helper-vue-jsx-merge-props@^1.2.1":
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/@vue/babel-helper-vue-jsx-merge-props/-/babel-helper-vue-jsx-merge-props-1.2.1.tgz#31624a7a505fb14da1d58023725a4c5f270e6a81"
