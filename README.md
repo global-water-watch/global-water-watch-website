@@ -1,4 +1,5 @@
 # Global Water Watch Website
+![Website](https://img.shields.io/website?url=http%3A%2F%2Fwww.globalwaterwatch.io%2F)
 
 **...**
 ## Getting started
