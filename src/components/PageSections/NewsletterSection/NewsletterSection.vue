@@ -1,6 +1,8 @@
 <template>
-  <section :id="id">
-    <h2>@todo: newsletter section</h2>
+  <section :id="id" class="layout-section layout-section--lined layout-section--padded">
+    <div class="layout-container layout-container--medium">
+      <h2>@todo: newsletter section</h2>
+    </div>
   </section>
 </template>
 

@@ -1,11 +1,13 @@
 <template>
   <header role="banner" class="app-header">
-    <nav>
-      <NuxtLink to="/">
-        {{ title }}
-        {{ subtitle }}
-      </NuxtLink>
-    </nav>
+    <div class="layout-container">
+      <nav>
+        <NuxtLink to="/">
+          {{ title }}
+          {{ subtitle }}
+        </NuxtLink>
+      </nav>
+    </div>
   </header>
 </template>
 
@@ -18,9 +20,15 @@ export default {
 }
 </script>
 
-<style>
-.app-header {
-  background: black;
-  color: white;
-}
+<style lang="scss">
+  .app-header {
+    position: sticky;
+    top: 0;
+    left: 0;
+    z-index: $layer-header;
+    padding: 20px;
+
+    background: $color-white;
+    color: black;
+  }
 </style>

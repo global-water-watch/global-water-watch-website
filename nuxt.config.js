@@ -1,4 +1,4 @@
-import deltaresThemes from '@deltares/vuetify-theme'
+import themes from './src/assets/theme/themes'
 
 /**
  * @type {import('@nuxt/types').NuxtOptions}
@@ -66,8 +66,10 @@ export default {
     // https://go.nuxtjs.dev/vuetify
     ['@nuxtjs/vuetify', {
       customVariables: ['~/assets/scss/variables.scss'],
+      treeShake: true,
       theme: {
-        themes: deltaresThemes,
+        dark: true,
+        themes,
       },
     }],
   ],

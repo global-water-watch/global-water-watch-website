@@ -1,4 +1,40 @@
+
+// colors
+$color-white: #ffffff;
+$color-black: #000A13;
+$color-blue: #002993;
+$border-alpha-color: rgba(white, .2);
+$gradient-top: #022935;
+$gradient-bottom: $color-black;
+$gradient-dark: linear-gradient(173.75deg, $gradient-top 0.15%, $gradient-bottom 100%);
+
+// z-index
+$layer-header: 50;
+$layer-grid-lines: 40;
+
+// sizes
+$max-width-large: 1150px;
+$max-width-medium: 760px;
+
+$space-xlarge: 50px;
+$space-large: 30px;
+$space-default: 20px;
+$space-medium: 10px;
+
+// text
+$font-weight-bold: 550;
+$font-weight-normal: 300;
+
+
+// Overwrites existing variables
 // Ref: https://github.com/nuxt-community/vuetify-module#customvariables
-//
-// The variables you want to modify
-// $font-size-root: 20px;
+
+$body-font-family: 'Readex Pro', 'Roboto', sans-serif;
+
+$material-light: (
+  'background': $gradient-dark center center / cover,
+);
+
+$material-dark: (
+  'background': $gradient-dark center center / cover,
+);
