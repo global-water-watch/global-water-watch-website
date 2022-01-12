@@ -1,3 +1,4 @@
+import path from 'path'
 import themes from './src/assets/theme/themes'
 
 /**
@@ -82,6 +83,11 @@ export default {
   // Preview mode: https://github.com/voorhoede/nuxt-preview-mode-module
   previewMode: {
     previewSecret: process.env.PREVIEW_SECRET,
+  },
+
+  // Alias: https://nuxtjs.org/docs/configuration-glossary/configuration-alias
+  alias: {
+    '@': path.resolve(__dirname, 'src/'),
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
