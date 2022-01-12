@@ -2,10 +2,10 @@
   <footer role="contentinfo" class="layout-section layout-section--force-lined app-footer">
     <div class="layout-container app-footer__inner">
       <Wave class="app-footer__wave" />
-      <h2>{{ title }}</h2>
-
+      <h2 class="h2">
+        {{ title }}
+      </h2>
       <p>{{ subtitle }}</p>
-
       <div class="app-footer__bottom app-footer__flex-center">
         <p class="small">
           Copyright {{ year }} Deltares
@@ -14,21 +14,20 @@
         <nav class="small">
           <ul class="app-footer__legals app-footer__flex-center">
             <li v-for="link in links" :key="link.id">
-              <!-- @todo: turn InternalLink and ExternalLink into components -->
-              <a
+              <AppLink
                 v-if="link._modelApiKey === 'external_link'"
                 :href="link.url"
                 rel="noopener"
                 target="_blank"
               >
                 {{ link.title }}
-              </a>
-              <NuxtLink
+              </AppLink>
+              <AppLink
                 v-if="link._modelApiKey === 'internal_link'"
                 :to="pageUrl(link.page)"
               >
                 {{ link.title }}
-              </NuxtLink>
+              </AppLink>
             </li>
           </ul>
         </nav>
@@ -38,18 +37,32 @@
 </template>
 
 <script>
-export default {
-  props: {
-    title: { type: String, required: true },
-    subtitle: { type: String, required: true },
-    links: { type: Array, default () { return [] } },
-  },
-  computed: {
-    year () { return (new Date()).getFullYear() },
-  },
-  methods: {
-    pageUrl (page) {
-      switch (page._modelApiKey) {
+  import AppLink from '@/components/AppLink/AppLink'
+
+  export default {
+    components: { AppLink },
+    props: {
+      title: {
+        type: String,
+        required: true,
+      },
+      subtitle: {
+        type: String,
+        required: true,
+      },
+      links: {
+        type: Array,
+        default () { return [] },
+      },
+    },
+    computed: {
+      year () {
+        return (new Date()).getFullYear()
+      },
+    },
+    methods: {
+      pageUrl (page) {
+        switch (page._modelApiKey) {
         case 'home':
           return '/'
         case 'page':
@@ -58,10 +71,10 @@ export default {
           // eslint-disable-next-line no-console
           console.warn('unknown page._modelApiKey', page)
           return '/'
-      }
+        }
+      },
     },
-  },
-}
+  }
 </script>
 
 <style lang="scss">
@@ -86,12 +99,13 @@ export default {
     display: flex;
 
     > * + * {
-      margin-left: $space-medium;
+      margin-left: $space-large;
     }
   }
 
   .app-footer__bottom {
     justify-content: center;
+    margin-top: 100px;
   }
 
   .app-footer .app-footer__legals {
