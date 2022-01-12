@@ -12,7 +12,12 @@
 }
 
 .h3 {
-  font-size: 23px;
+  font-size: 1.2rem;
+  line-height: 1.3;
+
+  @media screen and (min-width: 800px) {
+    font-size: 1.5rem;
+  }
 }
 
 .small {
