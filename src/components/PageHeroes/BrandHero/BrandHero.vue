@@ -23,14 +23,14 @@
 </template>
 
 <script>
-export default {
-  props: {
-    id: { type: String, required: true },
-    title: { type: String, required: true },
-    subtitle: { type: String, required: true },
-    backgroundImage: { type: Object, required: true },
-  },
-}
+  export default {
+    props: {
+      id: { type: String, required: true },
+      title: { type: String, required: true },
+      subtitle: { type: String, required: true },
+      backgroundImage: { type: Object, required: true },
+    },
+  }
 </script>
 
 <style src="./BrandHero.scss" lang="scss"></style>
