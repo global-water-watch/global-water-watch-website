@@ -1,0 +1,12 @@
+// overwrites the default text color shipped by Vuetify
+.theme--light.v-application {
+  color: black;
+}
+
+.theme--dark.v-application {
+  color: $color-white;
+}
+
+.v-application {
+  font-weight: $font-weight-normal;
+}

@@ -3,11 +3,10 @@
     <PreviewModeBar />
     <AppHeader v-bind="app.header" />
     <VMain>
-      <VContainer>
-        <Nuxt />
-      </VContainer>
+      <Nuxt />
     </VMain>
     <AppFooter v-bind="app.footer" />
+    <GridLines />
   </VApp>
 </template>
 

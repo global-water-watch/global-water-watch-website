@@ -1,6 +1,8 @@
 <template>
-  <section :id="id">
-    <h2>@todo: timeline section</h2>
+  <section :id="id" class="layout-section layout-section--padded layout-section--blue">
+    <div class="layout-container">
+      <h2>@todo: timeline section</h2>
+    </div>
   </section>
 </template>
 
