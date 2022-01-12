@@ -1,38 +1,45 @@
 <template>
-  <footer role="contentinfo" class="layout-section layout-section--force-lined app-footer">
-    <div class="layout-container app-footer__inner">
-      <Wave class="app-footer__wave" />
-      <h2 class="h2">
-        {{ title }}
-      </h2>
-      <p>{{ subtitle }}</p>
-      <div class="app-footer__bottom app-footer__flex-center">
-        <p class="small">
-          Copyright {{ year }} Deltares
-        </p>
-
-        <nav class="small">
-          <ul class="app-footer__legals app-footer__flex-center">
-            <li v-for="link in links" :key="link.id">
-              <AppLink
-                v-if="link._modelApiKey === 'external_link'"
-                :href="link.url"
-                rel="noopener"
-                target="_blank"
-              >
-                {{ link.title }}
-              </AppLink>
-              <AppLink
-                v-if="link._modelApiKey === 'internal_link'"
-                :to="pageUrl(link.page)"
-              >
-                {{ link.title }}
-              </AppLink>
-            </li>
-          </ul>
-        </nav>
-      </div>
-    </div>
+  <footer role="contentinfo" class="app-footer layout-section layout-section--force-lined">
+    <v-container>
+      <v-row no-gutters>
+        <v-col>
+          <Wave class="app-footer__wave" />
+          <h2 class="h2">
+            {{ title }}
+          </h2>
+          <p>{{ subtitle }}</p>
+        </v-col>
+      </v-row>
+      <v-row no-gutters>
+        <v-col>
+          <div class="app-footer__bottom app-footer__flex-center">
+            <p class="small">
+              Copyright {{ year }} Deltares
+            </p>
+            <nav class="small">
+              <ul class="app-footer__legals app-footer__flex-center">
+                <li v-for="link in links" :key="link.id">
+                  <AppLink
+                    v-if="link._modelApiKey === 'external_link'"
+                    :href="link.url"
+                    rel="noopener"
+                    target="_blank"
+                  >
+                    {{ link.title }}
+                  </AppLink>
+                  <AppLink
+                    v-if="link._modelApiKey === 'internal_link'"
+                    :to="pageUrl(link.page)"
+                  >
+                    {{ link.title }}
+                  </AppLink>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </v-col>
+      </v-row>
+    </v-container>
   </footer>
 </template>
 
@@ -77,39 +84,4 @@
   }
 </script>
 
-<style lang="scss">
-  .app-footer {
-    text-align: center;
-  }
-
-  .app-footer__inner {
-    position: relative;
-    padding-top: $space-xlarge;
-    padding-bottom: $space-default;
-  }
-
-  .app-footer__wave {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-  }
-
-  .app-footer__flex-center {
-    display: flex;
-
-    > * + * {
-      margin-left: $space-large;
-    }
-  }
-
-  .app-footer__bottom {
-    justify-content: center;
-    margin-top: 100px;
-  }
-
-  .app-footer .app-footer__legals {
-    padding: 0;
-    list-style: none;
-  }
-</style>
+<style src="./AppFooter.scss" lang="scss"></style>
