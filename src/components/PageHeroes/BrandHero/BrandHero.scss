@@ -15,7 +15,7 @@
   padding-top: 15vw;
   padding-bottom: 20vw;
 
-  @media screen and (min-width: 1000px) {
+  @media screen and (min-width: $breakpoint-large) {
     padding-top: 130px;
     padding-bottom: 220px;
   }
@@ -26,11 +26,11 @@
   font-size: 10vw;
   line-height: 1.2;
 
-  @media screen and (min-width: 800px) {
+  @media screen and (min-width: $breakpoint-medium) {
     font-size: 7.5vw;
   }
 
-  @media screen and (min-width: 1000px) {
+  @media screen and (min-width: $breakpoint-large) {
     font-size: 4.5rem;
   }
 }

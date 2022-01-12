@@ -29,32 +29,32 @@
 </template>
 
 <script>
-export default {
-  props: {
-    image: {
-      type: Object,
-      required: true,
+  export default {
+    props: {
+      image: {
+        type: Object,
+        required: true,
+      },
+      cover: {
+        type: Boolean,
+        required: false,
+        default: false,
+      },
     },
-    cover: {
-      type: Boolean,
-      required: false,
-      default: false,
-    },
-  },
 
-  computed: {
-    altText () {
-      // image must never have a missing alt text as then assistive tech will read its full url
-      return this.image.alt || ''
+    computed: {
+      altText () {
+        // image must never have a missing alt text as then assistive tech will read its full url
+        return this.image.alt || ''
+      },
+      width () {
+        return this.image.format === 'svg' ? this.image.width : this.image.responsiveImage.width
+      },
+      height () {
+        return this.image.format === 'svg' ? this.image.height : this.image.responsiveImage.height
+      },
     },
-    width () {
-      return this.image.format === 'svg' ? this.image.width : this.image.responsiveImage.width
-    },
-    height () {
-      return this.image.format === 'svg' ? this.image.height : this.image.responsiveImage.height
-    },
-  },
-}
+  }
 </script>
 
 <style lang="scss">

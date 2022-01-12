@@ -51,7 +51,7 @@
       margin-top: $space-xlarge;
     }
 
-    @media screen and (min-width: 1000px) {
+    @media screen and (min-width: $breakpoint-large) {
       display: grid;
       gap: $space-large;
     }

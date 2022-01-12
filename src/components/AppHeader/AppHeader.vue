@@ -39,11 +39,11 @@
     display: block;
     width: 160px;
 
-    @media screen and (min-width: 800px) {
+    @media screen and (min-width: $breakpoint-medium) {
       width: 220px;
     }
 
-    @media screen and (min-width: 1100px) {
+    @media screen and (min-width: $breakpoint-large) {
       width: 300px;
     }
   }

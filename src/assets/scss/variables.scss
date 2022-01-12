@@ -25,6 +25,10 @@ $space-medium: 10px;
 $font-weight-bold: 500;
 $font-weight-normal: 300;
 
+// breakpoints
+$breakpoint-medium: 800px;
+$breakpoint-large: 1100px;
+
 
 // Overwrites existing variables
 // Ref: https://github.com/nuxt-community/vuetify-module#customvariables
