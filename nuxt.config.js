@@ -14,7 +14,7 @@ export default {
   target: 'static',
 
   // Serve smaller modern bundles to modern browsers
-  modern: 'client',
+  modern: process.env.NODE_ENV === 'production' ? 'client' : false,
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
