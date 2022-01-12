@@ -2,9 +2,12 @@
   <header role="banner" class="app-header">
     <div class="layout-container">
       <nav>
-        <NuxtLink to="/">
-          {{ title }}
-          {{ subtitle }}
+        <NuxtLink to="/" :aria-label="`${title} - Back to home`" class="app-header__home-link">
+          <img
+            class="app-header__logo"
+            src="~assets/images/global-water-watch-logo.svg"
+            :alt="`${title} | ${subtitle}`"
+          >
         </NuxtLink>
       </nav>
     </div>
@@ -26,9 +29,28 @@ export default {
     top: 0;
     left: 0;
     z-index: $layer-header;
-    padding: 20px;
+    padding: $space-default;
 
     background: $color-white;
-    color: black;
+    color: $color-black;
+  }
+
+  .app-header__home-link {
+    display: block;
+    width: 160px;
+
+    @media screen and (min-width: 800px) {
+      width: 220px;
+    }
+
+    @media screen and (min-width: 1100px) {
+      width: 300px;
+    }
+  }
+
+  .app-header__logo {
+    display: block;
+    width: 100%;
+    height: auto;
   }
 </style>
