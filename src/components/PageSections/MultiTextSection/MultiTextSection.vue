@@ -21,24 +21,24 @@
 </template>
 
 <script>
-export default {
-  props: {
-    id: { type: String, required: true },
-    title: { type: String, required: true },
-    items: { type: Array, required: true },
-  },
-
-  computed: {
-    columnClass () {
-      const { length } = this.items
-      const baseClasses = 'multi-text__columns multi-text__columns--'
-      if (length > 1) {
-        return length > 2 ? baseClasses + 3 : baseClasses + 2
-      }
-      return 'layout-container layout-container--medium'
+  export default {
+    props: {
+      id: { type: String, required: true },
+      title: { type: String, required: true },
+      items: { type: Array, required: true },
     },
-  },
-}
+
+    computed: {
+      columnClass () {
+        const { length } = this.items
+        const baseClasses = 'multi-text__columns multi-text__columns--'
+        if (length > 1) {
+          return length > 2 ? baseClasses + 3 : baseClasses + 2
+        }
+        return 'layout-container layout-container--medium'
+      },
+    },
+  }
 </script>
 
 <style lang="scss">
@@ -51,7 +51,7 @@ export default {
       margin-top: $space-xlarge;
     }
 
-    @media screen and (min-width: 1000px) {
+    @media screen and (min-width: $breakpoint-large) {
       display: grid;
       gap: $space-large;
     }

@@ -1,17 +1,14 @@
-# fragment matching vue-datocms's Image component
-# see https://github.com/datocms/vue-datocms#progressiveresponsive-image
-
 fragment responsiveImageFragment on ResponsiveImage {
   # HTML5 src/srcset/sizes attributes
   srcSet
   webpSrcSet
   sizes
   src
+  aspectRatio
 
   # size information (post-transformations)
   width
   height
-  aspectRatio
 
   # SEO attributes
   alt

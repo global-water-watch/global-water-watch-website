@@ -92,7 +92,7 @@ export default {
 Where a simple `index.query.graphql` could look like:
 
 ```graphql
-#import '../components/ResponsiveImage.fragment.graphql'
+#import '../components/ResponsiveImage/ResponsiveImage.fragment.graphql'
 
 query ExampleQuery($locale: SiteLocale) {
   page: examplePage(locale: $locale) {

@@ -108,18 +108,18 @@
 </template>
 
 <script>
-export default {
-  props: {
-    color: {
-      type: String,
-      default: '#ffffff',
+  export default {
+    props: {
+      color: {
+        type: String,
+        default: '#ffffff',
+      },
+      opacity: {
+        type: Number,
+        default: 0.2,
+      },
     },
-    opacity: {
-      type: Number,
-      default: 0.2,
-    },
-  },
-}
+  }
 </script>
 
 <style lang="scss">
