@@ -38,18 +38,18 @@
 </template>
 
 <script>
-export default {
-  props: {
-    title: { type: String, required: true },
-    subtitle: { type: String, required: true },
-    links: { type: Array, default () { return [] } },
-  },
-  computed: {
-    year () { return (new Date()).getFullYear() },
-  },
-  methods: {
-    pageUrl (page) {
-      switch (page._modelApiKey) {
+  export default {
+    props: {
+      title: { type: String, required: true },
+      subtitle: { type: String, required: true },
+      links: { type: Array, default () { return [] } },
+    },
+    computed: {
+      year () { return (new Date()).getFullYear() },
+    },
+    methods: {
+      pageUrl (page) {
+        switch (page._modelApiKey) {
         case 'home':
           return '/'
         case 'page':
@@ -58,10 +58,10 @@ export default {
           // eslint-disable-next-line no-console
           console.warn('unknown page._modelApiKey', page)
           return '/'
-      }
+        }
+      },
     },
-  },
-}
+  }
 </script>
 
 <style lang="scss">
