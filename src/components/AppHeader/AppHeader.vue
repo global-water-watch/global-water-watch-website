@@ -15,12 +15,12 @@
 </template>
 
 <script>
-export default {
-  props: {
-    title: { type: String, required: true },
-    subtitle: { type: String, required: true },
-  },
-}
+  export default {
+    props: {
+      title: { type: String, required: true },
+      subtitle: { type: String, required: true },
+    },
+  }
 </script>
 
 <style lang="scss">
@@ -39,11 +39,11 @@ export default {
     display: block;
     width: 160px;
 
-    @media screen and (min-width: 800px) {
+    @media screen and (min-width: $breakpoint-medium) {
       width: 220px;
     }
 
-    @media screen and (min-width: 1100px) {
+    @media screen and (min-width: $breakpoint-large) {
       width: 300px;
     }
   }

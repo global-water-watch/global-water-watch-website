@@ -4,7 +4,7 @@
       <h2 v-if="title" class="h2">
         {{ title }}
       </h2>
-      <div class="multi-text__items" :class="[columnClass]">
+      <div class="multi-text__columns" :class="[columnClass]">
         <div
           v-for="item in items"
           :key="item.id"
@@ -21,51 +21,30 @@
 </template>
 
 <script>
-export default {
-  props: {
-    id: { type: String, required: true },
-    title: { type: String, required: true },
-    items: { type: Array, required: true },
-  },
-
-  computed: {
-    columnClass () {
-      const { length } = this.items
-      const baseClasses = 'multi-text__columns multi-text__columns--'
-      if (length > 1) {
-        return length > 2 ? baseClasses + 3 : baseClasses + 2
-      }
-      return 'layout-container layout-container--medium'
+  export default {
+    props: {
+      id: {
+        type: String,
+        required: true,
+      },
+      title: {
+        type: String,
+        default: undefined,
+      },
+      items: {
+        type: Array,
+        required: true,
+      },
     },
-  },
-}
+
+    computed: {
+      columnClass () {
+        const { length } = this.items
+        const baseClass = 'multi-text__columns--'
+        return length > 2 ? baseClass + 3 : baseClass + 2
+      },
+    },
+  }
 </script>
 
-<style lang="scss">
-  .multi-text {
-    text-align: center;
-  }
-
-  .multi-text__columns {
-    &:not(:first-child) {
-      margin-top: $space-xlarge;
-    }
-
-    @media screen and (min-width: 1000px) {
-      display: grid;
-      gap: $space-large;
-    }
-  }
-
-  .multi-text__columns--2 {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .multi-text__columns--3 {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .multi-text__text:not(:first-child) {
-    margin-top: $space-default;
-  }
-</style>
+<style src="./MultiTextSection.scss" lang="scss"></style>

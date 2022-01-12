@@ -1,4 +1,5 @@
-#import '../components/ResponsiveImage.fragment.graphql'
+#import '../components/ResponsiveImage/Image.fragment.graphql'
+#import '../components/ResponsiveImage/ResponsiveImage.fragment.graphql'
 
 query PageQuery($slug: String) {
   page(filter: {slug: {eq: $slug}}) {
@@ -6,6 +7,7 @@ query PageQuery($slug: String) {
     _seoMetaTags { attributes, content, tag }
     seo {
       image {
+        ...imageFragment
         responsiveImage(
           imgixParams: { fit: crop, w: 300, h: 300, auto: format }
         ) {

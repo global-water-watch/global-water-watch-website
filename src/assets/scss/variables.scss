@@ -3,6 +3,7 @@
 $color-white: #FFFFFF;
 $color-black: #000A13;
 $color-blue: #002993;
+$color-blue-light: #0AB6FF;
 $border-alpha-color: rgba(white, .2);
 $gradient-top: #022935;
 $gradient-bottom: $color-black;
@@ -22,8 +23,12 @@ $space-default: 20px;
 $space-medium: 10px;
 
 // text
-$font-weight-bold: 550;
+$font-weight-bold: 500;
 $font-weight-normal: 300;
+
+// breakpoints
+$breakpoint-medium: 800px;
+$breakpoint-large: 1100px;
 
 
 // Overwrites existing variables

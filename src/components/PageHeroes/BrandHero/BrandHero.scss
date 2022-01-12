@@ -1,0 +1,53 @@
+.brand-hero {
+  position: relative;
+}
+
+.brand-hero .brand-hero__background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  opacity: .4;
+}
+
+.brand-hero__inner {
+  position: relative;
+  padding-top: 15vw;
+  padding-bottom: 20vw;
+
+  @media screen and (min-width: $breakpoint-large) {
+    padding-top: 130px;
+    padding-bottom: 220px;
+  }
+}
+
+.brand-hero__title {
+  font-weight: $font-weight-bold;
+  font-size: 10vw;
+  line-height: 1.2;
+
+  @media screen and (min-width: $breakpoint-medium) {
+    font-size: 7.5vw;
+  }
+
+  @media screen and (min-width: $breakpoint-large) {
+    font-size: 4.5rem;
+  }
+}
+
+.brand-hero__subtitle {
+  line-height: 1.7;
+}
+
+.brand-hero__title span {
+  padding: .1em .4em .1em $space-default;
+}
+
+.brand-hero__subtitle span {
+  padding: .3em .8em .3em $space-default;
+}
+
+.brand-hero__decoration {
+  background: $color-blue;
+  box-decoration-break: clone;
+}
