@@ -1,0 +1,15 @@
+#import '../../ResponsiveImage/Image.fragment.graphql'
+#import '../../ResponsiveImage/ResponsiveImage.fragment.graphql'
+
+fragment brandHeroFragment on BrandHeroRecord {
+  id
+  _modelApiKey
+  title
+  subtitle
+  backgroundImage {
+    ...imageFragment
+    responsiveImage(imgixParams: { w: 1200, auto: format }) {
+      ...responsiveImageFragment
+    }
+  }
+}

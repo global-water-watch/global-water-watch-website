@@ -1,5 +1,7 @@
 #import '../components/PageSections/MultiTextSection/MultiTextSection.fragment.graphql'
-#import '../components/ResponsiveImage.fragment.graphql'
+#import '../components/ResponsiveImage/Image.fragment.graphql'
+#import '../components/ResponsiveImage/ResponsiveImage.fragment.graphql'
+#import '../components/PageHeroes/BrandHero/BrandHero.fragment.graphql'
 
 query HomeQuery {
   page: home {
@@ -7,6 +9,7 @@ query HomeQuery {
     _seoMetaTags { attributes, content, tag }
     seo {
       image {
+        ...imageFragment
         responsiveImage(
           imgixParams: { fit: crop, w: 300, h: 300, auto: format }
         ) {
@@ -16,7 +19,9 @@ query HomeQuery {
     }
     heroes {
       # @todo: move to fragments bundled with related component
-      ... on BrandHeroRecord { id _modelApiKey title }
+      ... on BrandHeroRecord {
+        ...brandHeroFragment
+       }
     }
     sections {
       # @todo: move to fragments bundled with related component
