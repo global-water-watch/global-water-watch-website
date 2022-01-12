@@ -1,4 +1,5 @@
 #import '../components/PageSections/MultiTextSection/MultiTextSection.fragment.graphql'
+#import '../components/PageSections/LogoSection/LogoSection.fragment.graphql'
 #import '../components/ResponsiveImage/Image.fragment.graphql'
 #import '../components/ResponsiveImage/ResponsiveImage.fragment.graphql'
 #import '../components/PageHeroes/BrandHero/BrandHero.fragment.graphql'
@@ -25,7 +26,7 @@ query HomeQuery {
     }
     sections {
       # @todo: move to fragments bundled with related component
-      ... on LogoSectionRecord { id, _modelApiKey }
+      ... on LogoSectionRecord { ...logoSectionFragment }
       ... on MultiTextSectionRecord { ...multiTextSectionFragment }
       ... on NewsletterSectionRecord { id, _modelApiKey }
       ... on PeopleSectionRecord { id, _modelApiKey }

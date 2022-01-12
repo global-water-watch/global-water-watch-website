@@ -1,0 +1,18 @@
+#import '../../ResponsiveImage/Image.fragment.graphql'
+#import '../../ResponsiveImage/ResponsiveImage.fragment.graphql'
+
+fragment logoSectionFragment on LogoSectionRecord {
+  id
+  _modelApiKey
+  title
+  text {
+    value
+  }
+  images {
+    ...imageFragment
+    responsiveImage {
+      ...responsiveImageFragment
+    }
+  }
+  logoOnWhiteBackground
+}
