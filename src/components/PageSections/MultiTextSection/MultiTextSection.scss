@@ -1,0 +1,33 @@
+.multi-text {
+  text-align: center;
+}
+
+.multi-text__columns {
+  &:not(:first-child) {
+    margin-top: $space-xlarge;
+  }
+
+  @media screen and (min-width: 1000px) {
+    display: grid;
+    gap: $space-large;
+  }
+}
+
+.multi-text__columns--2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.multi-text__columns--3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.multi-text__item {
+  @media screen and (min-width: 1000px) {
+    padding-right: $space-default;
+    padding-left: $space-default;
+  }
+}
+
+.multi-text__text:not(:first-child) {
+  margin-top: $space-default;
+}

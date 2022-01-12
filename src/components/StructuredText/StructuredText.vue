@@ -1,5 +1,5 @@
 <template>
-  <DatocmsStructuredText :data="text" />
+  <DatocmsStructuredText :data="text" class="structured-text" />
 </template>
 
 <script>
@@ -9,3 +9,5 @@
     },
   }
 </script>
+
+<style src="./StructuredText.scss" lang="scss"></style>
