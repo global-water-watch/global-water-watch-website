@@ -1,8 +1,7 @@
 .app-link {
   text-decoration: none;
+}
 
-  // output: a.app-link { ... }
-  &#{&} {
-    color: $color-white;
-  }
+a.app-link {
+  color: $color-white;
 }

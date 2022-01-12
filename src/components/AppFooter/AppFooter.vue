@@ -19,18 +19,7 @@
             <nav class="small">
               <ul class="app-footer__legals app-footer__flex-center">
                 <li v-for="link in links" :key="link.id">
-                  <AppLink
-                    v-if="link._modelApiKey === 'external_link'"
-                    :href="link.url"
-                    rel="noopener"
-                    target="_blank"
-                  >
-                    {{ link.title }}
-                  </AppLink>
-                  <AppLink
-                    v-if="link._modelApiKey === 'internal_link'"
-                    :to="pageUrl(link.page)"
-                  >
+                  <AppLink :link="link">
                     {{ link.title }}
                   </AppLink>
                 </li>
@@ -65,20 +54,6 @@
     computed: {
       year () {
         return (new Date()).getFullYear()
-      },
-    },
-    methods: {
-      pageUrl (page) {
-        switch (page._modelApiKey) {
-        case 'home':
-          return '/'
-        case 'page':
-          return `/${page.slug}`
-        default:
-          // eslint-disable-next-line no-console
-          console.warn('unknown page._modelApiKey', page)
-          return '/'
-        }
       },
     },
   }

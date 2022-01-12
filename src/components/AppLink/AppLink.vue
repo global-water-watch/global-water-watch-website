@@ -1,9 +1,11 @@
 <template>
   <component
-    :is="to ? 'router-link' : 'a'"
-    :to="to ? to : null"
+    :is="element"
     class="app-link"
-    v-bind="$attrs"
+    :to="to"
+    :href="href"
+    :rel="rel"
+    :target="target"
   >
     <slot />
   </component>
@@ -12,20 +14,54 @@
 <script>
   export default {
     props: {
-      to: {
-        type: [String, Object],
-        validator (value) {
-          if (!value || typeof value === 'string') {
-            return true
-          }
-
-          return (
-            value.name && (value.params)
-              ? Object.keys(value.params).length > 0
-              : true
-          )
-        },
-        default: '',
+      link: {
+        type: Object,
+        required: true,
+        default: () => {},
+      },
+    },
+    computed: {
+      element () {
+        return this.to ? 'router-link' : 'a'
+      },
+      href () {
+        return this.isExternalLink && this.link?.url
+          ? this.link?.url
+          : null
+      },
+      isExternalLink () {
+        return this.link?._modelApiKey === 'external_link'
+      },
+      isInternalLink () {
+        return this.link?._modelApiKey === 'internal_link'
+      },
+      pageUrl () {
+        const { _modelApiKey, slug } = this.link?.page
+        switch (_modelApiKey) {
+        case 'home':
+          return '/'
+        case 'page':
+          return `/${slug}`
+        default:
+          // eslint-disable-next-line no-console
+          console.warn('Unknown page._modelApiKey', _modelApiKey)
+          return '/'
+        }
+      },
+      rel () {
+        return this.href
+          ? 'noopener'
+          : null
+      },
+      target () {
+        return this.href
+          ? '_blank'
+          : null
+      },
+      to () {
+        return this.isInternalLink && this.pageUrl
+          ? this.pageUrl
+          : null
       },
     },
   }
