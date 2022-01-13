@@ -41,7 +41,7 @@
               >
                 <v-icon
                   :size="iconSize"
-                  color="black"
+                  :color="iconColor"
                 >
                   {{ `mdi-${option.icon}` }}
                 </v-icon>
@@ -60,14 +60,14 @@
                 <v-icon
                   v-if="copied"
                   :size="iconSize"
-                  color="green"
+                  color="success"
                 >
                   mdi-check
                 </v-icon>
                 <v-icon
                   v-else
                   :size="iconSize"
-                  color="black"
+                  :color="iconColor"
                 >
                   mdi-content-copy
                 </v-icon>
@@ -101,6 +101,7 @@
         shareOptions,
         copied: false,
         shareUrl: undefined,
+        iconColor: '#000A13',
       }
     },
 
