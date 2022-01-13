@@ -25,6 +25,8 @@
     "@vue/composition-api": "^1.4.1",
     "core-js": "^3.15.1",
     "datocms-listen": "^0.1.6",
+    "focus-trap": "^6.7.2",
+    "focus-trap-vue": "^1.1.1",
     "isomorphic-unfetch": "^3.1.0",
     "nuxt": "^2.15.7",
     "vue-cookie-law": "^1.13.3",

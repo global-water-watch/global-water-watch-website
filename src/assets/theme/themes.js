@@ -5,7 +5,7 @@ export default {
     accent: '#F0E68C',
     error: '#F0E68C',
     info: '#F0E68C',
-    success: '#F0E68C',
+    success: '#28a745',
     warning: '#F0E68C',
   },
   dark: {
@@ -14,7 +14,7 @@ export default {
     accent: '#F0E68C',
     error: '#F0E68C',
     info: '#F0E68C',
-    success: '#F0E68C',
+    success: '#28a745',
     warning: '#F0E68C',
   },
 }

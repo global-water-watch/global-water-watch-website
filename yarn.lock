@@ -6870,6 +6870,18 @@ fn.name@1.x.x:
   resolved "https://registry.yarnpkg.com/fn.name/-/fn.name-1.1.0.tgz#26cad8017967aea8731bc42961d04a3d5988accc"
   integrity sha512-GRnmB5gPyJpAhTQdSZTSp9uaPSvl09KoYcMQtsB9rQoOmzs9dH6ffeccH+Z+cv6P68Hu5bC6JjRh4Ah/mHSNRw==
 
+focus-trap-vue@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/focus-trap-vue/-/focus-trap-vue-1.1.1.tgz#d29d2de3c64457cc708657682a6670af73982355"
+  integrity sha512-N+M4d4uYymCogct417gUL7wWSMIW/oUcCicfg3eRdo+gz7jlQnIGwUwViFxPkKV7iyzpc81g6JeSxRWiYWU3eQ==
+
+focus-trap@^6.7.2:
+  version "6.7.2"
+  resolved "https://registry.yarnpkg.com/focus-trap/-/focus-trap-6.7.2.tgz#02e63b12f4d4b3d00bfac4309cfd223e9b4ed44e"
+  integrity sha512-mRVv9QPCXITaDreu+pNXiPk1Rpn0WQtGvGrDo3Z/s2kdwtzFw/WOPfbLkdxWWvcahoInm9eRztuQOr1RNyQGrw==
+  dependencies:
+    tabbable "^5.2.1"
+
 folder-walker@^3.2.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/folder-walker/-/folder-walker-3.2.0.tgz#98e00e59773f43416a6dcf0926d4c9436f65121d"
@@ -13393,6 +13405,11 @@ symbol-observable@^1.1.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/symbol-observable/-/symbol-observable-1.2.0.tgz#c22688aed4eab3cdc2dfeacbb561660560a00804"
   integrity sha512-e900nM8RRtGhlV36KGEU9k65K3mPb1WV70OdjfxlG2EAuM1noi/E/BaW/uMhL7bPEssK8QV57vN3esixjUvcXQ==
+
+tabbable@^5.2.1:
+  version "5.2.1"
+  resolved "https://registry.yarnpkg.com/tabbable/-/tabbable-5.2.1.tgz#e3fda7367ddbb172dcda9f871c0fdb36d1c4cd9c"
+  integrity sha512-40pEZ2mhjaZzK0BnI+QGNjJO8UYx9pP5v7BGe17SORTO0OEuuaAwQTkAp8whcZvqon44wKFOikD+Al11K3JICQ==
 
 table@^6.0.9:
   version "6.7.5"

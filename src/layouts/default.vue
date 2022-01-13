@@ -4,6 +4,7 @@
     <AppHeader v-bind="app.header" />
     <VMain>
       <Nuxt />
+      <SocialShare />
     </VMain>
     <AppFooter v-bind="app.footer" />
     <GridLines />
