@@ -1,10 +1,9 @@
-<!-- eslint-disable vue/attributes-order -->
 <template>
   <Fragment>
     <Component
+      :is="item.Component"
       v-for="item in items"
       :key="item.key"
-      :is="item.Component"
       v-bind="item.props"
     />
   </Fragment>
@@ -12,32 +11,35 @@
 
 <script>
 // @todo: consider NuxtDynamic https://dynamic.blokwise.io/usage#nuxtdynamic
-  import LogoSection from './LogoSection/LogoSection.vue'
-  import MultiTextSection from './MultiTextSection/MultiTextSection.vue'
-  import NewsletterSection from './NewsletterSection/NewsletterSection.vue'
-  import PeopleSection from './PeopleSection/PeopleSection.vue'
-  import TimelineSection from './TimelineSection/TimelineSection.vue'
+  import LogoSection from '@/components/PageSections/LogoSection/LogoSection'
+  import MultiTextSection from '@/components/PageSections/MultiTextSection/MultiTextSection'
+  import NewsletterSection from '@/components/PageSections/NewsletterSection/NewsletterSection'
+  import PeopleSection from '@/components/PageSections/PeopleSection/PeopleSection'
+  import TabsSection from '@/components/PageSections/TabsSection/TabsSection'
+  import TimelineSection from '@/components/PageSections/TimelineSection/TimelineSection'
 
   const componentsByType = {
     logo_section: LogoSection,
     multi_text_section: MultiTextSection,
     newsletter_section: NewsletterSection,
     people_section: PeopleSection,
+    tabs_section: TabsSection,
     timeline_section: TimelineSection,
   }
   const supportedTypes = Object.keys(componentsByType)
 
   export default {
-    // components: Object.values(componentsByType).reduce((out, Component) => ({ ...out, Component }), {}),
     components: {
       LogoSection,
       MultiTextSection,
       NewsletterSection,
       PeopleSection,
+      TabsSection,
       TimelineSection,
     },
     props: {
       sections: {
+        type: Array,
         required: true,
         validator (sections) {
           if (!Array.isArray(sections)) { return false }

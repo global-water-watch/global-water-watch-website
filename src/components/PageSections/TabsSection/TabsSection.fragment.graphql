@@ -1,0 +1,27 @@
+#import '../../ResponsiveImage/Image.fragment.graphql'
+#import '../../ResponsiveImage/ResponsiveImage.fragment.graphql'
+
+fragment tabsSectionFragment on TabsSectionRecord {
+  id
+  _modelApiKey
+  items {
+    id
+    handle
+    image {
+      ...imageFragment
+      responsiveImage {
+        ...responsiveImageFragment
+      }
+    }
+    text {
+      title
+      text {
+        value
+      }
+    }
+  }
+  theme {
+    title
+    slug
+  }
+}
