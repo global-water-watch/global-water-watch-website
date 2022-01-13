@@ -7,6 +7,7 @@ import themes from './src/assets/theme/themes'
 export default {
   publicRuntimeConfig: {
     datocmsReadonlyToken: process.env.DATOCMS_READONLY_TOKEN,
+    gtmCode: process.env.GTM_CODE,
   },
 
   srcDir: 'src/',
@@ -32,6 +33,9 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      // Google
+      { rel: 'dns-prefetch', href: '//www.googletagmanager.com' },
+      { rel: 'dns-prefetch', href: '//www.google-analytics.com' },
     ],
   },
 
@@ -51,6 +55,7 @@ export default {
     // { src: '~plugins/preview-mode.client.js' },
     { src: '~plugins/datocms.js' },
     { src: '~plugins/vue-fragment.js' },
+    { src: '~plugins/google-analytics.client.js' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -71,6 +76,16 @@ export default {
       theme: {
         dark: true,
         themes,
+      },
+      breakpoint: {
+        // https://vuetifyjs.com/en/features/breakpoints/#thresholds
+        // Note: these values should match $grid-breakpoints in variables.scss.
+        thresholds: {
+          xs: 600,
+          sm: 800,
+          md: 1100,
+          lg: 1900,
+        },
       },
     }],
   ],

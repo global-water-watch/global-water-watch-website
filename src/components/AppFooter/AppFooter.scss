@@ -23,14 +23,14 @@
   display: flex;
   flex-direction: column;
 
-  @media screen and (min-width: 600px) {
+  @media screen and (min-width: $breakpoint-small) {
     flex-direction: row;
   }
 
   > * + * {
     margin-top: $space-medium;
 
-    @media screen and (min-width: 600px) {
+    @media screen and (min-width: $breakpoint-small) {
       margin-top: 0;
       margin-left: $space-large;
     }
@@ -42,7 +42,7 @@
   margin-top: 100px;
   margin-bottom: 50px;
 
-  @media screen and (min-width: 600px) {
+  @media screen and (min-width: $breakpoint-small) {
     margin-bottom: 0;
   }
 }

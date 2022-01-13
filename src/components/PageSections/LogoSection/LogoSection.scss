@@ -9,7 +9,7 @@ $breakpoint-logo-section: 400px;
   padding-left: 0;
   list-style: none;
 
-  @media screen and (min-width: 400px) {
+  @media screen and (min-width: $breakpoint-logo-section) {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
