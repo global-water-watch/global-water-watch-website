@@ -1,3 +1,4 @@
+@import '~vuetify/src/styles/styles.sass';
 
 // colors
 $color-white: #FFFFFF;
@@ -14,26 +15,28 @@ $layer-header: 50;
 $layer-grid-lines: 40;
 
 // sizes
-$max-width-large: 1150px;
 $max-width-medium: 760px;
+$max-width-large: 1150px;
 
-$space-xlarge: 50px;
-$space-large: 30px;
-$space-default: 20px;
 $space-medium: 10px;
+$space-default: 20px;
+$space-large: 30px;
+$space-xlarge: 50px;
 
 // text
-$font-weight-bold: 500;
 $font-weight-normal: 300;
+$font-weight-bold: 500;
 
 // breakpoints
-$breakpoint-large: 1100px;
+$breakpoint-small: 600px;
 $breakpoint-medium: 800px;
+$breakpoint-large: 1100px;
+$breakpoint-xlarge: 1900px;
 
 $border-radius-small: 4px;
 
 
-// Overwrites existing variables
+// Overwrites Vuetify variables
 // Ref: https://github.com/nuxt-community/vuetify-module#customvariables
 
 $body-font-family: 'Readex Pro', 'Roboto', sans-serif;
@@ -44,4 +47,19 @@ $material-light: (
 
 $material-dark: (
   'background': $gradient-dark center center / cover,
+);
+
+// https://vuetifyjs.com/en/features/breakpoints/#thresholds
+$grid-breakpoints: (
+  'xs': 0,
+  'sm': $breakpoint-small,
+  'md': $breakpoint-medium,
+  'lg': $breakpoint-large,
+  'xl': $breakpoint-xlarge,
+);
+
+$container-max-widths: (
+  'md': $max-width-medium,
+  'lg': $max-width-large,
+  'xl': $max-width-large,
 );
