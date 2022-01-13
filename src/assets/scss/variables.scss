@@ -1,3 +1,4 @@
+@import '~vuetify/src/styles/styles.sass';
 
 // colors
 $color-white: #FFFFFF;
@@ -27,11 +28,13 @@ $font-weight-bold: 500;
 $font-weight-normal: 300;
 
 // breakpoints
+$breakpoint-small: 600px;
 $breakpoint-medium: 800px;
 $breakpoint-large: 1100px;
+$breakpoint-extra-large: 1900px;
 
 
-// Overwrites existing variables
+// Overwrites Vuetify variables
 // Ref: https://github.com/nuxt-community/vuetify-module#customvariables
 
 $body-font-family: 'Readex Pro', 'Roboto', sans-serif;
@@ -42,4 +45,19 @@ $material-light: (
 
 $material-dark: (
   'background': $gradient-dark center center / cover,
+);
+
+// https://vuetifyjs.com/en/features/breakpoints/#thresholds
+$grid-breakpoints: (
+  'xs': 0,
+  'sm': $breakpoint-small,
+  'md': $breakpoint-medium,
+  'lg': $breakpoint-large,
+  'xl': $breakpoint-extra-large,
+);
+
+$container-max-widths: (
+  'md': $max-width-large,
+  'lg': $max-width-large,
+  'xl': $max-width-large,
 );

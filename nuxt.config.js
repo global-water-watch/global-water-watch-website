@@ -72,6 +72,16 @@ export default {
         dark: true,
         themes,
       },
+      breakpoint: {
+        // https://vuetifyjs.com/en/features/breakpoints/#thresholds
+        // Note: these values should match $grid-breakpoints in variables.scss.
+        thresholds: {
+          xs: 600,
+          sm: 800,
+          md: 1100,
+          lg: 1900,
+        },
+      },
     }],
   ],
 
