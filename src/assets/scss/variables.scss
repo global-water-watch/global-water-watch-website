@@ -31,7 +31,7 @@ $font-weight-bold: 500;
 $breakpoint-small: 600px;
 $breakpoint-medium: 800px;
 $breakpoint-large: 1100px;
-$breakpoint-extra-large: 1900px;
+$breakpoint-xlarge: 1900px;
 
 
 // Overwrites Vuetify variables
@@ -53,11 +53,11 @@ $grid-breakpoints: (
   'sm': $breakpoint-small,
   'md': $breakpoint-medium,
   'lg': $breakpoint-large,
-  'xl': $breakpoint-extra-large,
+  'xl': $breakpoint-xlarge,
 );
 
 $container-max-widths: (
-  'md': $max-width-large,
+  'md': $max-width-medium,
   'lg': $max-width-large,
   'xl': $max-width-large,
 );
