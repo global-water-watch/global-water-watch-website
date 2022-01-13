@@ -9,7 +9,10 @@
       v-model="open"
       :escape-deactivates="true"
     >
-      <aside class="social-share" :class="{ open: open, enhanced: enhanced }">
+      <aside
+        class="social-share"
+        :class="{ open: open, enhanced: enhanced }"
+      >
         <button
           type="button"
           :aria-expanded="open"
@@ -33,7 +36,7 @@
               :key="option.icon"
             >
               <a
-                :href="option.url"
+                :href="`${option.url}${encodeURI(shareUrl)}`"
                 target="_blank"
                 rel="noopnener noreferrer"
                 class="social-share__option"
@@ -48,7 +51,7 @@
               </a>
             </li>
 
-            <li v-if="shareUrl">
+            <li>
               <input
                 ref="shareUrlHolder"
                 type="text"
@@ -84,9 +87,9 @@
   import { FocusTrap } from 'focus-trap-vue'
 
   const shareOptions = [
-    { name: 'Facebook', url: 'https://twitter.com', icon: 'facebook' },
-    { name: 'Twitter', url: 'https://twitter.com', icon: 'twitter' },
-    { name: 'Linkedin', url: 'https://twitter.com', icon: 'linkedin' },
+    { name: 'Facebook', url: 'https://www.facebook.com/sharer.php?u=', icon: 'facebook' },
+    { name: 'Twitter', url: 'https://twitter.com/intent/tweet?&url=', icon: 'twitter' },
+    { name: 'Linkedin', url: 'https://www.linkedin.com/sharing/share-offsite/?url=', icon: 'linkedin' },
   ]
 
   export default {
