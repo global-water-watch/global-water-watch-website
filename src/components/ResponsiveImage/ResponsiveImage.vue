@@ -1,7 +1,7 @@
 <template>
-  <div class="responsive-image" :class="{ 'is-cover': cover }">
+  <div class="responsive-image" :class="{ 'is-cover': cover, 'is-contain': contain }">
     <span
-      v-if="!cover"
+      v-if="!cover && !contain"
       :style="`padding-top: ${height / width * 100}%`"
       class="responsive-image__aspect-ratio"
     />
@@ -37,7 +37,10 @@
       },
       cover: {
         type: Boolean,
-        required: false,
+        default: false,
+      },
+      contain: {
+        type: Boolean,
         default: false,
       },
     },
@@ -57,29 +60,4 @@
   }
 </script>
 
-<style lang="scss">
-  .responsive-image {
-    position: relative;
-    width: 100%;
-  }
-
-  .responsive-image__aspect-ratio {
-    display: block;
-  }
-
-  .responsive-image.is-cover .responsive-image__img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-  }
-
-  .responsive-image:not(.is-cover) .responsive-image__img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: auto;
-  }
-</style>
+<style src="./ResponsiveImage.scss" lang="scss"></style>

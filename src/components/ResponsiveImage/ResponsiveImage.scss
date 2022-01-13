@@ -1,0 +1,32 @@
+.responsive-image {
+  position: relative;
+  width: 100%;
+}
+
+.responsive-image__aspect-ratio {
+  display: block;
+}
+
+.responsive-image.is-contain .responsive-image__img,
+.responsive-image.is-cover .responsive-image__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-position: center;
+}
+
+.responsive-image.is-contain .responsive-image__img {
+  object-fit: contain;
+}
+
+.responsive-image.is-cover .responsive-image__img {
+  object-fit: cover;
+}
+
+.responsive-image:not(.is-cover):not(.is-contain) .responsive-image__img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+}
