@@ -31,6 +31,7 @@ query HomeQuery {
       ... on NewsletterSectionRecord { id, _modelApiKey }
       ... on PeopleSectionRecord { id, _modelApiKey }
       ... on TimelineSectionRecord { id, _modelApiKey }
+      ... on TabsSectionRecord { id, _modelApiKey }
     }
   }
 }
