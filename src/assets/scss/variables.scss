@@ -1,16 +1,18 @@
 
 // colors
 $color-white: #FFFFFF;
+$color-white-alpha: rgba($color-white, .2);
 $color-black: #000A13;
+$color-black-alpha: rgba($color-black, .2);
 $color-blue: #002993;
 $color-blue-light: #0AB6FF;
-$border-alpha-color: rgba(white, .2);
 $gradient-top: #022935;
 $gradient-bottom: $color-black;
 $gradient-dark: linear-gradient(173.75deg, $gradient-top 0.15%, $gradient-bottom 100%);
 
 // z-index
 $layer-header: 50;
+$layer-social-share: 45;
 $layer-grid-lines: 40;
 
 // sizes

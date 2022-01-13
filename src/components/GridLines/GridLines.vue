@@ -18,9 +18,9 @@
   .grid-lines__inner {
     height: 100%;
     background-image:
-      linear-gradient($border-alpha-color, $border-alpha-color),
-      linear-gradient($border-alpha-color, $border-alpha-color),
-      linear-gradient($border-alpha-color, $border-alpha-color);
+      linear-gradient($color-white-alpha, $color-white-alpha),
+      linear-gradient($color-white-alpha, $color-white-alpha),
+      linear-gradient($color-white-alpha, $color-white-alpha);
     background-repeat: no-repeat;
     background-size: 1px 100%;
     background-position: 0 0, center 0, right 0;
