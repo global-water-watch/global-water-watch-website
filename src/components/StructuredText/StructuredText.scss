@@ -1,3 +1,11 @@
+.structured-text p {
+  margin-bottom: 0;
+}
+
+.structured-text > * + * {
+  margin-top: $space-default;
+}
+
 .structured-text strong {
   font-weight: $font-weight-bold;
 }

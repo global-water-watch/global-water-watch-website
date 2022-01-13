@@ -1,0 +1,16 @@
+fragment timelineSectionFragment on TimelineSectionRecord {
+  id
+  _modelApiKey
+  title
+  items {
+    id
+    title
+    text {
+      value
+    }
+  }
+  theme {
+    title
+    slug
+  }
+}
