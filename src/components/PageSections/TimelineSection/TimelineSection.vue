@@ -39,14 +39,15 @@
       },
       theme: {
         type: Object,
-        default: undefined,
+        default: () => {},
       },
     },
 
     computed: {
       themeClass () {
-        // todo: check with Jasper on Theme model in dato
-        return 'layout-section--blue'
+        return (this.theme && this.theme.slug === 'highlight')
+          ? 'layout-section--blue'
+          : 'layout-section--lined'
       },
     },
   }
