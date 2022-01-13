@@ -7,41 +7,57 @@
     </VMain>
     <AppFooter v-bind="app.footer" />
     <GridLines />
+    <client-only>
+      <cookie-law
+        v-if="showCookieBanner"
+        button-class="v-btn v-btn--has-bg theme--light elevation-0 v-size--large primary"
+        button-text="Accepteer"
+        button-link="https://www.rijkswaterstaat.nl/cookies"
+        button-link-text="Meer info"
+        :button-link-new-tab="true"
+        theme="dark-lime"
+      />
+    </client-only>
   </VApp>
 </template>
 
 <script>
-import query from './app.query.graphql'
+  import query from './app.query.graphql'
+  import config from '@/static/config/webconfig.json'
+  const CookieLaw = () => (process.client ? import('vue-cookie-law') : null)
 
-/**
- * app header & footer are implemented as modular content (array) for editor experience
- * but the app object should only have a single header & footer, so transforming it
- */
-const transformAppData = appData => ({
-  header: appData.header[0],
-  footer: appData.footer[0],
-})
+  /**
+   * app header & footer are implemented as modular content (array) for editor experience
+   * but the app object should only have a single header & footer, so transforming it
+   */
+  const transformAppData = appData => ({
+    header: appData.header[0],
+    footer: appData.footer[0],
+  })
 
-export default {
-  data () {
-    return {
-      app: {
-        header: {},
-        footer: {},
-      },
-    }
-  },
-  async fetch () {
-    const { app } = await this.$datocms.fetchData({ query, preview: !!this.$preview })
-    this.app = transformAppData(app)
-  },
-  mounted () {
-    this.$datocms.subscribeToData({
-      query,
-      onData: ({ app }) => {
-        this.app = transformAppData(app)
-      },
-    })
-  },
-}
+  export default {
+    components: { CookieLaw },
+    data () {
+      return {
+        showCookieBanner: false,
+        app: {
+          header: {},
+          footer: {},
+        },
+      }
+    },
+    async fetch () {
+      const { app } = await this.$datocms.fetchData({ query, preview: !!this.$preview })
+      this.app = transformAppData(app)
+    },
+    mounted () {
+      this.showCookieBanner = config?.COOKIE_BANNER || false
+      this.$datocms.subscribeToData({
+        query,
+        onData: ({ app }) => {
+          this.app = transformAppData(app)
+        },
+      })
+    },
+  }
 </script>
