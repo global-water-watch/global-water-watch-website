@@ -37,11 +37,11 @@
       },
       cover: {
         type: Boolean,
-        default: undefined,
+        default: false,
       },
       contain: {
         type: Boolean,
-        default: undefined,
+        default: false,
       },
     },
 

@@ -9,13 +9,13 @@
 
       <ul
         class="logo-section__logos"
-        :class="{ 'logo-section__logos--white': logoOnWhiteBackground}"
+        :class="{ 'logo-section__logos--white': logoOnWhiteBackground }"
       >
         <li
           v-for="logo in images"
           :key="logo.id"
           class="logo-section__logo"
-          :class="{'logo-section__logo--fill': images.length === 1 }"
+          :class="{ 'logo-section__logo--fill': images.length === 1 }"
         >
           <ResponsiveImage
             :image="logo"
@@ -41,7 +41,7 @@
       },
       text: {
         type: Object,
-        default: undefined,
+        default: () => {},
       },
       images: {
         type: Array,
@@ -49,7 +49,7 @@
       },
       logoOnWhiteBackground: {
         type: Boolean,
-        default: undefined,
+        default: false,
       },
     },
   }
