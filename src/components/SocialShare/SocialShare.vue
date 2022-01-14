@@ -18,7 +18,7 @@
           :aria-expanded="open"
           :aria-label="open ? 'Close options' : 'Show options'"
           class="social-share__toggle"
-          @click="() => open = !open"
+          @click="shareHandler"
         >
           Share page
           <v-icon
@@ -105,6 +105,7 @@
         copied: false,
         shareUrl: undefined,
         iconColor: '#000A13',
+        nativeShare: false,
       }
     },
 
@@ -118,6 +119,7 @@
 
     mounted () {
       this.shareUrl = window.location.href
+      this.nativeShare = navigator.share
 
       if (this.$refs.collapsible) {
         this.enhanced = this.$refs.collapsible.animate !== undefined
@@ -125,6 +127,16 @@
     },
 
     methods: {
+      shareHandler () {
+        if (this.nativeShare) {
+          navigator.share({
+            url: this.shareUrl,
+          })
+        } else {
+          this.open = !this.open
+        }
+      },
+
       copyToClipBoard () {
         this.copied = true
 
