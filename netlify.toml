@@ -29,3 +29,22 @@
       public,
       max-age=31536000,
       immutable'''
+
+# Redirect aliases to primary domain
+[[redirects]]
+  from = "https://globalwater.watch/*"
+  to = "https://www.globalwaterwatch.io/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://www.globalwater.watch/*"
+  to = "https://www.globalwaterwatch.io/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://global-water-watch-website.netlify.app/*"
+  to = "https://www.globalwaterwatch.io/:splat"
+  status = 301
+  force = true
