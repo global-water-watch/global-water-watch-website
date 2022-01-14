@@ -1,13 +1,15 @@
 # Global Water Watch Website
 ![Website](https://img.shields.io/website?url=http%3A%2F%2Fwww.globalwaterwatch.io%2F)
 
+Netlify preview available on [https://global-water-watch-website.netlify.app](https://global-water-watch-website.netlify.app)
+
 **...**
 ## Getting started
 
 This project requires [Node.js](https://nodejs.org/) and [Yarn](https://yarnpkg.com/) to be installed. To get started:
 
 ```bash
-# create env file, and set the variables 
+# create env file, and set the variables
 cp .env.example .env
 
 # install dependencies
@@ -48,7 +50,7 @@ src/
     _param/
       index.vue
       index.query.graphql
-  
+
   static/
     fonts/
     images/
