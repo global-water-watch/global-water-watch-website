@@ -1,13 +1,18 @@
 # Global Water Watch Website
-![Website](https://img.shields.io/website?url=http%3A%2F%2Fwww.globalwaterwatch.io%2F)
 
-**...**
+[![Website](https://img.shields.io/website?url=http%3A%2F%2Fwww.globalwaterwatch.io%2F)](https://www.globalwaterwatch.io/)
+
+- [**Landing page**](https://www.globalwaterwatch.io/) (start 2022)
+- **Full-fledged site** (later in 2022)
+- **Interactive geo app** (tbd)
+
+
 ## Getting started
 
 This project requires [Node.js](https://nodejs.org/) and [Yarn](https://yarnpkg.com/) to be installed. To get started:
 
 ```bash
-# create env file, and set the variables 
+# create env file, and set the variables
 cp .env.example .env
 
 # install dependencies
@@ -21,7 +26,7 @@ See [available scripts](#scripts) (like `yarn dev`) below.
 
 ## Architecture
 
-The site is created as lightweight isomorphic website connected to a headless CMS:
+The site is created as lightweight isomorphic website connected to a headless CMS, so that it can grow from a landing page to a full-fledged site including a geo app. The setup includes:
 
 - [Nuxt](https://nuxtjs.org) - a meta framework based on Vue - is used to structure the project. This framework is selected as it's very suitable for both the highly interactive parts as well as mostly static pages. Since the framework is based on Vue many integrations and libraries are available to speed up development.
 - [DatoCMS](https://www.datocms.com/) - the site content is managed in a [headless DatoCMS instance](https://global-water-watch-website.admin.datocms.com/) (on Deltares account). DatoCMS is selected for its modular and structured content options, advanced image service, multi-language support and GraphQL API. [`vue-datocms`](https://github.com/datocms/vue-datocms) provides handy Vue components and utilties for DatoCMS data.
@@ -48,7 +53,7 @@ src/
     _param/
       index.vue
       index.query.graphql
-  
+
   static/
     fonts/
     images/
