@@ -14,21 +14,21 @@
 </template>
 
 <script>
-export default {
-  computed: {
-    status () {
-      return this.$datocms.state.status
+  export default {
+    computed: {
+      status () {
+        return this.$datocms.state.status
+      },
+      statusMessage () {
+        return this.$datocms.state.error
+          ? 'An error occurred.'
+          : this.$datocms.state.statusMessage
+      },
     },
-    statusMessage () {
-      return this.$datocms.state.error
-        ? 'An error occurred.'
-        : this.$datocms.state.statusMessage
+    methods: {
+      exitPreview () {
+        this.$previewMode.exit()
+      },
     },
-  },
-  methods: {
-    exitPreview () {
-      this.$previewMode.exit()
-    },
-  },
-}
+  }
 </script>
