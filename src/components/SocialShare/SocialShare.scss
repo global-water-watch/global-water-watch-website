@@ -1,0 +1,84 @@
+$social-share-durtion: .2s;
+$social-share-border-radius: 18px;
+$social-share-size: 26px;
+
+.social-share {
+  position: fixed;
+  z-index: $layer-social-share;
+  bottom: $space-default;
+  left: $space-default;
+  display: flex;
+  flex-direction: column;
+
+  border-radius: $social-share-border-radius;
+  background-color: $color-white;
+}
+
+.social-share__toggle {
+  order: 2;
+  padding: .4em $space-default;
+
+  border-radius: $social-share-border-radius;
+  color: $color-black;
+}
+
+.social-share__collapsible {
+  order: 1;
+  width: 100%;
+
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  transition: visibility 0s $social-share-durtion;
+
+  .open & {
+    visibility: visible;
+    transition: visibility 0s 0s;
+  }
+
+  .social-share.open:not(.enhanced) & {
+    height: auto;
+  }
+}
+
+.social-share .social-share__options {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: $space-default;
+  list-style: none;
+}
+
+.social-share__options::after {
+  content: '';
+  position: absolute;
+  bottom: 3px;
+  left: $space-default;
+  width: calc(100% - #{$space-default * 2});
+  height: 1px;
+  background-color: $color-black-alpha;
+}
+
+.social-share__option {
+  display: block;
+  width: $social-share-size;
+  height: $social-share-size;
+
+  text-decoration: none;
+}
+
+.social-share__hitarea {
+  position: fixed;
+  z-index: $layer-social-share;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.social-share__input {
+  opacity: 0;
+  width: 1px;
+  position: absolute;
+}

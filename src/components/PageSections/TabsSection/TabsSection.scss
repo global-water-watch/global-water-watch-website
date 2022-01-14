@@ -1,0 +1,41 @@
+.tabs-section {
+  display: block;
+}
+
+.tabs-section .v-tabs,
+.tabs-section .theme--dark.v-tabs-items,
+.tabs-section .theme--light.v-tabs-items {
+  background-color: transparent;
+}
+
+.tabs-section .tabs-section__tab {
+  padding: $space-default 0;
+
+  @media screen and (min-width: $breakpoint-medium) {
+    padding: $space-large;
+  }
+}
+
+.tabs-section .v-tabs-items .container {
+  padding: 0;
+}
+
+.tabs-section__tab .responsive-image {
+  padding: 0 0 $space-default;
+
+  @media screen and (min-width: $breakpoint-medium) {
+    padding: 0 $space-large 0 0;
+    perspective: 200px;
+  }
+}
+
+.tabs-section__tab .responsive-image__img {
+  @media screen and (min-width: $breakpoint-medium) {
+    position: relative;
+    transform: rotateY(5deg) translateZ(-30px);
+  }
+}
+
+.tabs-section__tab .structured-text {
+  margin-top: $space-default;
+}

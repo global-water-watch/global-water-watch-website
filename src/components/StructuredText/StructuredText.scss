@@ -1,0 +1,22 @@
+.structured-text p {
+  margin-bottom: 0;
+}
+
+.structured-text > * + * {
+  margin-top: $space-default;
+}
+
+.structured-text strong {
+  font-weight: $font-weight-bold;
+}
+
+.structured-text em {
+  font-family: 'Fira Sans', 'Roboto', sans-serif;
+  font-style: italic;
+  font-weight: 400;
+}
+
+.structured-text mark {
+  background-color: $color-blue-light;
+  color: $color-white;
+}

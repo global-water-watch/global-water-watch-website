@@ -1,4 +1,5 @@
-import deltaresThemes from '@deltares/vuetify-theme'
+import path from 'path'
+import themes from './src/assets/theme/themes'
 
 /**
  * @type {import('@nuxt/types').NuxtOptions}
@@ -6,6 +7,7 @@ import deltaresThemes from '@deltares/vuetify-theme'
 export default {
   publicRuntimeConfig: {
     datocmsReadonlyToken: process.env.DATOCMS_READONLY_TOKEN,
+    gtmCode: process.env.GTM_CODE,
   },
 
   srcDir: 'src/',
@@ -14,7 +16,7 @@ export default {
   target: 'static',
 
   // Serve smaller modern bundles to modern browsers
-  modern: 'client',
+  modern: process.env.NODE_ENV === 'production' ? 'client' : false,
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -31,18 +33,29 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      // Google
+      { rel: 'dns-prefetch', href: '//www.googletagmanager.com' },
+      { rel: 'dns-prefetch', href: '//www.google-analytics.com' },
     ],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
+    '@/assets/scss/index.scss',
   ],
+
+  styleResources: {
+    scss: [
+      '@/assets/scss/variables.scss',
+    ],
+  },
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     // { src: '~plugins/preview-mode.client.js' },
     { src: '~plugins/datocms.js' },
     { src: '~plugins/vue-fragment.js' },
+    { src: '~plugins/google-analytics.client.js' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -58,9 +71,21 @@ export default {
     }],
     // https://go.nuxtjs.dev/vuetify
     ['@nuxtjs/vuetify', {
-      customVariables: ['~/assets/variables.scss'],
+      customVariables: ['~/assets/scss/variables.scss'],
+      treeShake: true,
       theme: {
-        themes: deltaresThemes,
+        dark: true,
+        themes,
+      },
+      breakpoint: {
+        // https://vuetifyjs.com/en/features/breakpoints/#thresholds
+        // Note: these values should match $grid-breakpoints in variables.scss.
+        thresholds: {
+          xs: 600,
+          sm: 800,
+          md: 1100,
+          lg: 1900,
+        },
       },
     }],
   ],
@@ -73,6 +98,11 @@ export default {
   // Preview mode: https://github.com/voorhoede/nuxt-preview-mode-module
   previewMode: {
     previewSecret: process.env.PREVIEW_SECRET,
+  },
+
+  // Alias: https://nuxtjs.org/docs/configuration-glossary/configuration-alias
+  alias: {
+    '@': path.resolve(__dirname, 'src/'),
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build

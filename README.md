@@ -12,7 +12,7 @@
 This project requires [Node.js](https://nodejs.org/) and [Yarn](https://yarnpkg.com/) to be installed. To get started:
 
 ```bash
-# create env file, and set the variables 
+# create env file, and set the variables
 cp .env.example .env
 
 # install dependencies
@@ -53,7 +53,7 @@ src/
     _param/
       index.vue
       index.query.graphql
-  
+
   static/
     fonts/
     images/
@@ -97,7 +97,7 @@ export default {
 Where a simple `index.query.graphql` could look like:
 
 ```graphql
-#import '../components/ResponsiveImage.fragment.graphql'
+#import '../components/ResponsiveImage/ResponsiveImage.fragment.graphql'
 
 query ExampleQuery($locale: SiteLocale) {
   page: examplePage(locale: $locale) {

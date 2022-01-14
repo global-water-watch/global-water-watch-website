@@ -1,0 +1,67 @@
+@import '~vuetify/src/styles/styles.sass';
+
+// colors
+$color-white: #FFFFFF;
+$color-white-alpha: rgba($color-white, .2);
+$color-black: #000A13;
+$color-black-alpha: rgba($color-black, .2);
+$color-blue: #002993;
+$color-blue-light: #0AB6FF;
+$gradient-top: #022935;
+$gradient-bottom: $color-black;
+$gradient-dark: linear-gradient(173.75deg, $gradient-top 0.15%, $gradient-bottom 100%);
+
+// z-index
+$layer-header: 50;
+$layer-social-share: 45;
+$layer-grid-lines: 40;
+
+// sizes
+$max-width-medium: 760px;
+$max-width-large: 1150px;
+
+$space-medium: 10px;
+$space-default: 20px;
+$space-large: 30px;
+$space-xlarge: 50px;
+
+// text
+$font-weight-normal: 300;
+$font-weight-bold: 500;
+
+// breakpoints
+$breakpoint-small: 600px;
+$breakpoint-medium: 800px;
+$breakpoint-large: 1100px;
+$breakpoint-xlarge: 1900px;
+
+$border-radius-small: 4px;
+
+
+// Overwrites Vuetify variables
+// Ref: https://github.com/nuxt-community/vuetify-module#customvariables
+
+$body-font-family: 'Readex Pro', 'Roboto', sans-serif;
+
+$material-light: (
+  'background': $gradient-dark center center / cover,
+);
+
+$material-dark: (
+  'background': $gradient-dark center center / cover,
+);
+
+// https://vuetifyjs.com/en/features/breakpoints/#thresholds
+$grid-breakpoints: (
+  'xs': 0,
+  'sm': $breakpoint-small,
+  'md': $breakpoint-medium,
+  'lg': $breakpoint-large,
+  'xl': $breakpoint-xlarge,
+);
+
+$container-max-widths: (
+  'md': $max-width-medium,
+  'lg': $max-width-large,
+  'xl': $max-width-large,
+);

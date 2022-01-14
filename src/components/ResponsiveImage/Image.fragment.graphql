@@ -1,0 +1,9 @@
+fragment imageFragment on FileField {
+  id
+  format
+  url
+  width
+  height
+  alt
+  title
+}

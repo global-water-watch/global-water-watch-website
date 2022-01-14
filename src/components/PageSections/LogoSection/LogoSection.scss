@@ -1,0 +1,47 @@
+$breakpoint-logo-section: 400px;
+
+.logo-section__text:not(:first-child) {
+  margin-top: $space-default;
+}
+
+.logo-section .logo-section__logos {
+  margin-top: $space-xlarge;
+  padding-left: 0;
+  list-style: none;
+
+  @media screen and (min-width: $breakpoint-logo-section) {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+  }
+}
+
+.logo-section__logos--white {
+  background-color: $color-white;
+}
+
+.logo-section__logo {
+  height: 90px;
+  padding: $space-medium;
+
+  @media screen and (max-width: ($breakpoint-logo-section - 1px)) {
+    max-width: 200px;
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  @media screen and (min-width: $breakpoint-logo-section) {
+    flex-basis: 25%;
+  }
+}
+
+.logo-section__logo--fill {
+  @media screen and (min-width: $breakpoint-logo-section) {
+    min-width: 250px;
+  }
+}
+
+.logo-section__logo-image {
+  height: 100%;
+}
