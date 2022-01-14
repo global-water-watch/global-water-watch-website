@@ -18,7 +18,7 @@
           :aria-expanded="open"
           :aria-label="open ? 'Close options' : 'Show options'"
           class="social-share__toggle"
-          @click="() => open = !open"
+          @click="share"
         >
           Share page
           <v-icon
@@ -125,6 +125,16 @@
     },
 
     methods: {
+      share () {
+        if (navigator.share) {
+          navigator.share({
+            url: this.shareUrl,
+          })
+        } else {
+          this.open = !this.open
+        }
+      },
+
       copyToClipBoard () {
         this.copied = true
 
