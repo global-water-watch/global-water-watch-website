@@ -42,3 +42,9 @@
   to = "https://www.globalwaterwatch.io/:splat"
   status = 301
   force = true
+
+[[redirects]]
+  from = "https://global-water-watch-website.netlify.app/*"
+  to = "https://www.globalwaterwatch.io/:splat"
+  status = 301
+  force = true
