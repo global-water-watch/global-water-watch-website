@@ -26,13 +26,25 @@
   @media screen and (min-width: $breakpoint-medium) {
     padding: 0 $space-large 0 0;
     perspective: 200px;
+    perspective-origin: 50% 30%;
   }
 }
 
 .tabs-section__tab .responsive-image__img {
   @media screen and (min-width: $breakpoint-medium) {
     position: relative;
-    transform: rotateY(5deg) translateZ(-30px);
+    transform: rotateY(2deg) translateZ(-10px);
+
+    &::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 10%;
+      height: 20px;
+      width: 80%;
+      border-radius: 100%;
+      box-shadow: 0 10px 30px rgba(black, .4);
+    }
   }
 }
 
