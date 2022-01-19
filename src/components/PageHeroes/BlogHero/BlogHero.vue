@@ -5,8 +5,9 @@
         <h1 class="h1">
           {{ title }}
         </h1>
-        <p v-if="summary" class="blog-hero__summary">
-          {{ summary }}
+
+        <p v-if="text" class="blog-hero__summary">
+          {{ text }}
         </p>
 
         <Person
@@ -37,7 +38,7 @@
         type: String,
         required: true,
       },
-      summary: {
+      text: {
         type: String,
         default: undefined,
       },
