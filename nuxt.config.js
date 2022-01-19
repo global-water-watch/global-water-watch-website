@@ -54,8 +54,9 @@ export default {
   plugins: [
     // { src: '~plugins/preview-mode.client.js' },
     { src: '~plugins/datocms.js' },
-    { src: '~plugins/vue-fragment.js' },
     { src: '~plugins/google-analytics.client.js' },
+    { src: '~plugins/vue-dato-video.js' },
+    { src: '~plugins/vue-fragment.js' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

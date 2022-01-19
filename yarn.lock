@@ -2194,7 +2194,7 @@
     is-module "^1.0.0"
     resolve "^1.19.0"
 
-"@rollup/pluginutils@^3.0.8", "@rollup/pluginutils@^3.1.0":
+"@rollup/pluginutils@^3.0.0", "@rollup/pluginutils@^3.0.8", "@rollup/pluginutils@^3.1.0":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@rollup/pluginutils/-/pluginutils-3.1.0.tgz#706b4524ee6dc8b103b3c995533e5ad680c02b9b"
   integrity sha512-GksZ6pr6TpIjHm8h9lSQ8pi8BE9VeubNT0OMJ3B5uZJ8pz73NPiqOtCog/x2/QzM1ENChPKxMDhiQuRHsqc+lg==
@@ -2839,6 +2839,26 @@
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/@voorhoede/nuxt-preview-mode-module/-/nuxt-preview-mode-module-1.0.4.tgz#77609a2cc76f6405b1543668b08270a4d7ebf4c8"
   integrity sha512-y35iZNUyO5OHa+i2vIRjospBIJ+9b1Ys5FQq0mSMEiTbJZx78Hp5D1NfZdEo+yyB5Fi/aOjT1No6b6RUPHbGIw==
+
+"@voorhoede/vue-dato-video@^1.0.7":
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/@voorhoede/vue-dato-video/-/vue-dato-video-1.0.7.tgz#2a54b646ff412d7e1083d9ebbff05661b309f122"
+  integrity sha512-OeUP2idcNOG3tI//kWxuHJfeGmb1DYdNxnQVoxxVgviRqsu8TYiyOubA0WQ5tRLNqM4sH4GryKGHtmdjuOPkkQ==
+  dependencies:
+    "@voorhoede/vue-fixed-ratio" "^1.2.2"
+    "@voorhoede/vue-lazy-load" "^1.2.7"
+    query-string "^6.12.1"
+    rollup-plugin-css-only "^2.0.0"
+
+"@voorhoede/vue-fixed-ratio@^1.2.2":
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/@voorhoede/vue-fixed-ratio/-/vue-fixed-ratio-1.2.2.tgz#01761d0da5381a437d5886fb6b90cc4fe50c4b4d"
+  integrity sha512-yIhYjfd3DgVVIcJ5pXxJkavUaK4Ep8ryZ7HPYz6VPp+iS61BkL5S9Sc3FHVX/ataOvHbmK++nFh/QuWU/ydsuA==
+
+"@voorhoede/vue-lazy-load@^1.2.7":
+  version "1.2.9"
+  resolved "https://registry.yarnpkg.com/@voorhoede/vue-lazy-load/-/vue-lazy-load-1.2.9.tgz#9070ee154ae89b393a331ca5dd6186ae20d20a79"
+  integrity sha512-EjxsqBEI0sEYJdIE1VV+aphd+skWmmVr2bSN8s4ecDmt6peUNIHEi8LABB040rus5g6/zZs9QvQBOnli2xRqFg==
 
 "@vue/babel-helper-vue-jsx-merge-props@^1.2.1":
   version "1.2.1"
@@ -6963,7 +6983,7 @@ fs-extra@^8.1, fs-extra@^8.1.0:
     jsonfile "^4.0.0"
     universalify "^0.1.0"
 
-fs-extra@^9.0, fs-extra@^9.1.0:
+fs-extra@^9.0, fs-extra@^9.0.0, fs-extra@^9.1.0:
   version "9.1.0"
   resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-9.1.0.tgz#5954460c764a8da2094ba3554bf839e6b9a7c86d"
   integrity sha512-hcg3ZmepS30/7BSFqRvoo3DOMQu7IjqxO5nCDt+zM9XWjb33Wg7ziNT+Qvqbuc3+gWpzO02JubVyk2G4Zvo1OQ==
@@ -11966,7 +11986,7 @@ query-string@^5.0.1:
     object-assign "^4.1.0"
     strict-uri-encode "^1.0.0"
 
-query-string@^6.13.8:
+query-string@^6.12.1, query-string@^6.13.8:
   version "6.14.1"
   resolved "https://registry.yarnpkg.com/query-string/-/query-string-6.14.1.tgz#7ac2dca46da7f309449ba0f86b1fd28255b0c86a"
   integrity sha512-XDxAeVmpfu1/6IjyT/gXHOl+S0vQ9owggJ30hhWKdHAsNPOcasn5o9BW0eejZqL2e4vMjhAxoW3jVHcD6mbcYw==
@@ -12428,6 +12448,14 @@ ripemd160@^2.0.0, ripemd160@^2.0.1:
   dependencies:
     hash-base "^3.0.0"
     inherits "^2.0.1"
+
+rollup-plugin-css-only@^2.0.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-css-only/-/rollup-plugin-css-only-2.1.0.tgz#b9e8505eb01c5257b5eab65bd51eec9050bed9a3"
+  integrity sha512-pfdcqAWEmRMFy+ABXAQPA/DKyPqLuBTOf+lWSOgtrVs1v/q7DSXzYa9QZg4myd8/1F7NHcdvPkWnfWqMxq9vrw==
+  dependencies:
+    "@rollup/pluginutils" "^3.0.0"
+    fs-extra "^9.0.0"
 
 rollup-plugin-inject@^3.0.0:
   version "3.0.2"
