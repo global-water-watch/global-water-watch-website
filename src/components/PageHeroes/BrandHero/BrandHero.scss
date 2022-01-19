@@ -51,3 +51,15 @@
   background: $color-blue;
   box-decoration-break: clone;
 }
+
+.brand-hero .brand-hero__wave {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  height: 150px;
+  transform: translateY(-50%);
+
+  @media screen and (min-width: $breakpoint-medium) {
+    height: 300px;
+  }
+}

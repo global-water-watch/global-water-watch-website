@@ -18,7 +18,7 @@
       </p>
     </div>
 
-    <Wave color="#0AB6FF" :opacity="1" />
+    <Wave color="#0AB6FF" :opacity="1" class="brand-hero__wave" />
   </header>
 </template>
 
