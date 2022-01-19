@@ -20,8 +20,12 @@
           <v-container fluid>
             <v-row no-gutters>
               <v-col class="col-12 col-md-6">
-                <ResponsiveImage v-if="Boolean(item.image)" :image="item.image" :contain="true" />
                 <ResponsiveVideo v-if="Boolean(item.video)" :video="item.video" />
+                <ResponsiveImage
+                  v-if="Boolean(item.image)"
+                  :image="item.image"
+                  :contain="true"
+                />
               </v-col>
 
               <v-col class="col-12 col-md-6">
