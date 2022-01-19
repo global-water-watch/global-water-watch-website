@@ -1,4 +1,3 @@
-
 import Program from './Program'
 import WebglBuffer from './WebglBuffer'
 import vertexShader from './vertexShader'
