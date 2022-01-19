@@ -6,9 +6,6 @@ fragment responsiveVideoFragment on VideoField {
   height
   width
 
-  # SEO attributes
-  title
-
   # provider information
   provider
   providerUid
