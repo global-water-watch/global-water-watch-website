@@ -9,15 +9,8 @@ $social-share-size: 26px;
   bottom: $space-default;
   left: $space-default;
   flex-direction: column;
-  transform: translate(0, -84px); // cookie bar height
-  transition: transform .35s ease-in;
-
   border-radius: $social-share-border-radius;
   background-color: $color-white;
-
-  .v-application--cookies-accepted & {
-    transform: translate(0, 0);
-  }
 }
 
 .social-share__toggle {
