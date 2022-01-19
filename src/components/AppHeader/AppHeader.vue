@@ -23,34 +23,4 @@
   }
 </script>
 
-<style lang="scss">
-  .app-header {
-    position: sticky;
-    top: 0;
-    left: 0;
-    z-index: $layer-header;
-    padding: $space-default;
-
-    background: $color-white;
-    color: $color-black;
-  }
-
-  .app-header__home-link {
-    display: block;
-    width: 160px;
-
-    @media screen and (min-width: $breakpoint-medium) {
-      width: 220px;
-    }
-
-    @media screen and (min-width: $breakpoint-large) {
-      width: 300px;
-    }
-  }
-
-  .app-header__logo {
-    display: block;
-    width: 100%;
-    height: auto;
-  }
-</style>
+<style src="./AppHeader.scss" lang="scss"></style>
