@@ -1,6 +1,6 @@
 <template>
   <div class="responsive-video">
-    <vue-dato-video
+    <VueDatoVideo
       :autoplay="autoplay"
       :loop="loop"
       :mute="mute"
