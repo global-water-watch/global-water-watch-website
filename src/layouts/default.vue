@@ -1,5 +1,5 @@
 <template>
-  <VApp>
+  <VApp :class="{ 'v-application--cookies-accepted': cookiesAccepted }">
     <PreviewModeBar />
     <AppHeader v-bind="app.header" />
     <VMain>
@@ -10,19 +10,21 @@
     <GridLines />
     <client-only>
       <cookie-law
-        v-if="showCookieBanner"
+        v-if="showCookieBanner && !cookiesAccepted"
         button-class="v-btn v-btn--has-bg theme--light elevation-0 v-size--large primary"
         :button-text="app.cookiesAcceptLabel"
         :button-link="app.cookiesInfoUrl"
         :button-link-text="app.cookiesInfoLabel"
         :button-link-new-tab="true"
         theme="dark-lime"
+        @accept="onAccept"
       />
     </client-only>
   </VApp>
 </template>
 
 <script>
+  import { mapState, mapActions } from 'vuex'
   import query from './app.query.graphql'
   import config from '@/static/config/webconfig.json'
   const CookieLaw = () => (process.client ? import('vue-cookie-law') : null)
@@ -51,14 +53,25 @@
       const { app } = await this.$datocms.fetchData({ query, preview: !!this.$preview })
       this.app = transformAppData(app)
     },
+    computed: {
+      ...mapState(['cookiesAccepted']),
+    },
     mounted () {
       this.showCookieBanner = config?.COOKIE_BANNER || false
+      this.setCookiesAccepted({ cookiesAccepted: !this.showCookieBanner })
+
       this.$datocms.subscribeToData({
         query,
         onData: ({ app }) => {
           this.app = transformAppData(app)
         },
       })
+    },
+    methods: {
+      ...mapActions(['setCookiesAccepted']),
+      onAccept () {
+        this.setCookiesAccepted({ cookiesAccepted: true })
+      },
     },
   }
 </script>
