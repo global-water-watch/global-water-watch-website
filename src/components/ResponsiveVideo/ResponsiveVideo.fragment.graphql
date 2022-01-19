@@ -1,0 +1,15 @@
+fragment responsiveVideoFragment on VideoField {
+  thumbnailUrl
+  url
+
+  # size information (post-transformations)
+  height
+  width
+
+  # SEO attributes
+  title
+
+  # provider information
+  provider
+  providerUid
+}

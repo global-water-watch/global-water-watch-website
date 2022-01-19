@@ -1,5 +1,6 @@
 #import '../../ResponsiveImage/Image.fragment.graphql'
 #import '../../ResponsiveImage/ResponsiveImage.fragment.graphql'
+#import '../../ResponsiveVideo/ResponsiveVideo.fragment.graphql'
 
 fragment tabsSectionFragment on TabsSectionRecord {
   id
@@ -12,6 +13,9 @@ fragment tabsSectionFragment on TabsSectionRecord {
       responsiveImage {
         ...responsiveImageFragment
       }
+    }
+    video {
+      ...responsiveVideoFragment
     }
     text {
       title
