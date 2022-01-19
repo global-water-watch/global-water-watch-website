@@ -1,9 +1,9 @@
 <template>
   <div class="responsive-video">
     <vue-dato-video
-      :loop="true"
-      :autoplay="true"
-      :mute="true"
+      :autoplay="autoplay"
+      :loop="loop"
+      :mute="mute"
       :video="video"
     />
   </div>
@@ -12,6 +12,18 @@
 <script>
   export default {
     props: {
+      autoplay: {
+        type: Boolean,
+        required: true,
+      },
+      loop: {
+        type: Boolean,
+        required: true,
+      },
+      mute: {
+        type: Boolean,
+        required: true,
+      },
       video: {
         type: Object,
         required: true,
