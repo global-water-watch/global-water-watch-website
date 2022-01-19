@@ -1,11 +1,12 @@
 #import '../../components/ResponsiveImage/Image.fragment.graphql'
 #import '../../components/ResponsiveImage/ResponsiveImage.fragment.graphql'
-#import '../../components/Person/Person.fragment.graphql'
+#import '../../components/PageHeroes/BlogHero/BlogHero.fragment.graphql'
 
 query BlogQuery($slug: String) {
   blog(filter: {slug: {eq: $slug}}) {
     title
     _seoMetaTags { attributes, content, tag }
+
     seo {
       image {
         ...imageFragment
@@ -16,17 +17,11 @@ query BlogQuery($slug: String) {
         }
       }
     }
-    summary
-    author {
-      ...personFragment
-    }
-    image {
-      ...imageFragment
-      responsiveImage(
-        imgixParams: { fit: crop, w: 1200, h: 400, auto: format }
-      ) {
-        ...responsiveImageFragment
-      }
+
+    heroes {
+      ... on BlogHeroRecord {
+        ...blogHeroFragment
+       }
     }
   }
 }

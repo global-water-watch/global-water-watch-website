@@ -1,0 +1,19 @@
+#import '../../ResponsiveImage/Image.fragment.graphql'
+#import '../../ResponsiveImage/ResponsiveImage.fragment.graphql'
+#import '../../Person/Person.fragment.graphql'
+
+fragment blogHeroFragment on BlogHeroRecord {
+  id
+  _modelApiKey
+  title
+  text
+  author {
+    ...personFragment
+  }
+  image {
+    ...imageFragment
+    responsiveImage(imgixParams: { fit: crop, w: 1200, h: 400, auto: format }) {
+      ...responsiveImageFragment
+    }
+  }
+}
