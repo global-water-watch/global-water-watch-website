@@ -1,0 +1,33 @@
+.app-header {
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: $layer-header;
+  padding: 15px $space-default;
+
+  background: $color-white;
+  color: $color-black;
+
+  @media screen and (min-width: $breakpoint-large) {
+    padding: $space-medium $space-default;
+  }
+}
+
+.app-header__home-link {
+  display: block;
+  width: 160px;
+
+  @media screen and (min-width: $breakpoint-medium) {
+    width: 220px;
+  }
+
+  @media screen and (min-width: $breakpoint-large) {
+    width: 260px;
+  }
+}
+
+.app-header__logo {
+  display: block;
+  width: 100%;
+  height: auto;
+}
