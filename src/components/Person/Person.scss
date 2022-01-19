@@ -1,0 +1,13 @@
+.person {
+  display: grid;
+  grid-template-columns: 75px 1fr;
+  gap: $space-default;
+
+  text-align: left;
+  line-height: 1.4;
+}
+
+.person__image {
+  border-radius: 50%;
+  overflow: hidden;
+}

@@ -1,0 +1,10 @@
+#import '../../Person/Person.fragment.graphql'
+
+fragment peopleSectionFragment on PeopleSectionRecord {
+  id
+  _modelApiKey
+  title
+  persons {
+    ...personFragment
+  }
+}

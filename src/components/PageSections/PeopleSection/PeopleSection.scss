@@ -1,0 +1,30 @@
+.people-section {
+  text-align: center;
+}
+
+.people-section .people-section__list {
+  display: grid;
+  gap: $space-xlarge;
+  padding-left: 0;
+  list-style: none;
+
+  &:not(:first-child) {
+    margin-top: $space-xlarge;
+  }
+
+  @media screen and (max-width: ($breakpoint-small - 1px)) {
+    max-width: 300px;
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  @media screen and (min-width: $breakpoint-small) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: $space-xlarge 0;
+  }
+
+  @media screen and (min-width: $breakpoint-large) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: $space-xlarge;
+  }
+}
