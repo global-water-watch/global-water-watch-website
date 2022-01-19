@@ -22,6 +22,16 @@
 }
 
 .multi-text__item {
+  @media screen and (max-width: ($breakpoint-large - 1px)) {
+    max-width: 600px;
+    margin-right: auto;
+    margin-left: auto;
+
+    & + & {
+      margin-top: $space-xlarge;
+    }
+  }
+
   @media screen and (min-width: $breakpoint-large) {
     padding-right: $space-default;
     padding-left: $space-default;
