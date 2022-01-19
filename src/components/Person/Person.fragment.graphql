@@ -1,0 +1,15 @@
+#import '../ResponsiveImage/Image.fragment.graphql'
+#import '../ResponsiveImage/ResponsiveImage.fragment.graphql'
+
+fragment personFragment on PersonRecord {
+  id
+  image {
+    ...imageFragment
+    responsiveImage(imgixParams: { fit: crop, w: 100, h: 100, auto: format, sat: -100 }) {
+      ...responsiveImageFragment
+    }
+  }
+  name
+  organisation
+  role
+}
