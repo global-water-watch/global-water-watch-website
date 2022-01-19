@@ -18,33 +18,17 @@
       </p>
     </div>
 
-    <!--<Wave color="#0AB6FF" :opacity="1" />-->
-    <div ref="container" class="brand-hero__wave" />
+    <Wave color="#0AB6FF" :opacity="1" class="brand-hero__wave" />
   </header>
 </template>
 
 <script>
-  import Wave from '../../webgl/Wave'
-
   export default {
     props: {
       id: { type: String, required: true },
       title: { type: String, required: true },
       subtitle: { type: String, required: true },
       backgroundImage: { type: Object, required: true },
-    },
-
-    mounted () {
-      this.wave = new Wave({
-        container: this.$refs.container,
-        color: '#0AB6FF',
-      })
-    },
-
-    beforeDestroy () {
-      if (this.wave) {
-        this.wave.destroy()
-      }
     },
   }
 </script>

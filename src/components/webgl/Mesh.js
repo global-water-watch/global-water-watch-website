@@ -1,7 +1,6 @@
 
 import Program from './Program'
 import WebglBuffer from './WebglBuffer'
-// import { vertexShaderSource, fragmentShaderSource } from './shaderSource'
 import vertexShader from './vertexShader'
 import fragmentShader from './fragmentShader'
 
@@ -41,14 +40,26 @@ export default function Mesh ({
       count: instanceCount,
     })
     const vertices = getVertices({ rectangleWidth: size, canvasWidth: width })
-    const indexes = [...Array(instanceCount).keys()]
 
     vertexCount = vertices.length / 2
 
     buffers.push(
-      new WebglBuffer({ gl, extension, program, data: instanceOffsets, name: 'a_offset', size: 1, instancedAttribute: true }),
-      new WebglBuffer({ gl, program, data: vertices, name: 'a_vertex', size: 2 }),
-      new WebglBuffer({ gl, extension, program, data: indexes, name: 'a_index', size: 1, instancedAttribute: true }),
+      new WebglBuffer({
+        gl,
+        extension,
+        program,
+        data: instanceOffsets,
+        name: 'a_offset',
+        size: 1,
+        instancedAttribute: true,
+      }),
+      new WebglBuffer({
+        gl,
+        program,
+        data: vertices,
+        name: 'a_vertex',
+        size: 2,
+      }),
     )
   }
 

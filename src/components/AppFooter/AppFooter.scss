@@ -1,4 +1,5 @@
 .app-footer {
+  position: relative;
   text-align: center;
 }
 
@@ -50,4 +51,12 @@
 .app-footer .app-footer__legals {
   padding: 0;
   list-style: none;
+}
+
+.app-footer .app-footer__wave {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 300px;
+  transform: translateY(-50%);
 }

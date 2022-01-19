@@ -1,7 +1,6 @@
 <template>
   <footer role="contentinfo" class="layout-section layout-section--force-lined app-footer">
     <div class="layout-container app-footer__inner">
-      <Wave class="app-footer__wave" />
       <h2 class="h2">
         {{ title }}
       </h2>
@@ -23,6 +22,8 @@
         </nav>
       </div>
     </div>
+
+    <Wave class="app-footer__wave" />
   </footer>
 </template>
 

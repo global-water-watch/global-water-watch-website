@@ -4,11 +4,11 @@ import hex2rgba from './hex2rgba.js'
 
 /**
  * @param {object} container - dom node
- * @param {number} speed - decimal float
+ * @param {number} speed - float
  * @param {string} color - hex string with 6 characters
- * @param {number} opacity - decimal float 0-1
+ * @param {number} opacity - float 0-1
  */
-function Wave ({
+function WebglWave ({
   container,
   speed = 0.0005,
   color = '#0AB6FF',
@@ -118,4 +118,4 @@ function Wave ({
   }
 }
 
-export default Wave
+export default WebglWave
