@@ -47,9 +47,9 @@
         },
       },
     },
-    data () {
-      return {
-        items: this.sections
+    computed: {
+      items () {
+        return this.sections
           .filter(section => componentsByType[section._modelApiKey])
           .map((section, index) => {
             const id = `section-${section.id || index}`
@@ -58,8 +58,8 @@
               Component: componentsByType[section._modelApiKey],
               props: { ...section, id },
             }
-          }),
-      }
+          })
+      },
     },
   }
 </script>
