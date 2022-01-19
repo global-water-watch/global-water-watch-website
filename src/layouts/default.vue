@@ -12,9 +12,9 @@
       <cookie-law
         v-if="showCookieBanner"
         button-class="v-btn v-btn--has-bg theme--light elevation-0 v-size--large primary"
-        button-text="Accepteer"
-        button-link="https://www.rijkswaterstaat.nl/cookies"
-        button-link-text="Meer info"
+        :button-text="app.cookiesAcceptLabel"
+        :button-link="app.cookiesInfoUrl"
+        :button-link-text="app.cookiesInfoLabel"
         :button-link-new-tab="true"
         theme="dark-lime"
       />

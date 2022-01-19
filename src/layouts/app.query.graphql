@@ -1,6 +1,9 @@
 # @todo: split into fragments and bundle with components
 query AppQuery {
   app {
+    cookiesAcceptLabel
+    cookiesInfoLabel
+    cookiesInfoUrl
     header {
       title
       subtitle
