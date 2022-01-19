@@ -52,13 +52,6 @@
             </li>
 
             <li>
-              <input
-                ref="shareUrlHolder"
-                type="text"
-                readonly
-                :value="shareUrl"
-                class="social-share__input"
-              >
               <button type="button" aria-label="Copy to clipboard" @click="copyToClipBoard">
                 <v-icon
                   v-if="copied"
@@ -135,16 +128,18 @@
         }
       },
 
-      copyToClipBoard () {
+      async copyToClipBoard () {
         this.copied = true
 
-        this.$refs.shareUrlHolder.select()
-        document.execCommand('copy')
-        window.getSelection().removeAllRanges()
-
-        setTimeout(() => {
-          this.copied = false
-        }, 2000)
+        try {
+          await navigator.clipboard.writeText(this.shareUrl)
+        } catch (err) {
+          throw new Error('Error: Copy to clipboard')
+        } finally {
+          setTimeout(() => {
+            this.copied = false
+          }, 2000)
+        }
       },
 
       animate () {
