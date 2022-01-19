@@ -12,9 +12,9 @@
       <cookie-law
         v-if="showCookieBanner && !cookiesAccepted"
         button-class="v-btn v-btn--has-bg theme--light elevation-0 v-size--large primary"
-        :button-text="app.cookiesAcceptLabel"
-        :button-link="app.cookiesInfoUrl"
-        :button-link-text="app.cookiesInfoLabel"
+        :button-text="app.cookies.acceptLabel"
+        :button-link="app.cookies.infoUrl"
+        :button-link-text="app.cookies.infoLabel"
         :button-link-new-tab="true"
         theme="dark-lime"
         @accept="onAccept"
@@ -36,6 +36,11 @@
   const transformAppData = appData => ({
     header: appData.header[0],
     footer: appData.footer[0],
+    cookies: {
+      acceptLabel: appData.cookiesAcceptLabel,
+      infoLabel: appData.cookiesInfoLabel,
+      infoUrl: appData.cookiesInfoUrl,
+    },
   })
 
   export default {
