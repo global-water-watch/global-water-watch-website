@@ -1,5 +1,5 @@
 <template>
-  <article class="person">
+  <div class="person">
     <ResponsiveImage :image="image" class="person__image" />
     <div>
       <h3 class="p bold">
@@ -8,7 +8,7 @@
       <span>{{ role }},</span><br>
       <span>{{ organisation }}</span>
     </div>
-  </article>
+  </div>
 </template>
 
 <script>
