@@ -8,6 +8,7 @@
         class="newsletter-section__text"
         :text="text"
         :render-link-to-record="renderLinkToRecord"
+        :custom-rules="customRules"
       />
 
       <div class="newsletter-section__form">
@@ -16,6 +17,7 @@
           class="newsletter-section__email-text small"
           :text="emailText"
           :render-link-to-record="renderLinkToRecord"
+          :custom-rules="customRules"
         />
       </div>
     </div>
@@ -24,6 +26,8 @@
 
 <script>
   import { h } from 'vue-demi'
+  import { renderRule } from 'vue-datocms'
+  import { isLink } from 'datocms-structured-text-utils'
   import NewsletterForm from '@/components/NewsletterForm/NewsletterForm'
 
   export default {
@@ -47,6 +51,13 @@
         type: String,
         required: true,
       },
+    },
+    computed: {
+      customRules: () => ([
+        renderRule(isLink, ({ adapter: { renderNode: h }, node, children }) => {
+          return h('a', { href: node.url, target: '_blank' }, children)
+        }),
+      ]),
     },
     methods: {
       renderLinkToRecord: ({ record, children }) => {
