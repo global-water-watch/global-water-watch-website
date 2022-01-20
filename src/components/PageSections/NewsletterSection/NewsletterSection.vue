@@ -54,6 +54,14 @@
         type: String,
         required: true,
       },
+      mailchimpActionUrl: {
+        type: String,
+        required: true,
+      },
+      mailchimpHoneypotName: {
+        type: String,
+        required: true,
+      },
     },
     computed: {
       customRules: () => ([
