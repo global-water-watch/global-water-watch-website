@@ -53,7 +53,7 @@
         switch (record.__typename) {
         case 'HomeRecord':
           return h('NuxtLink', { attrs: { to: '/' } }, children)
-        case 'PageRecord':
+        case 'ArticleRecord':
           return h('NuxtLink', { attrs: { to: `/${record.slug}` } }, children)
         default:
           return null

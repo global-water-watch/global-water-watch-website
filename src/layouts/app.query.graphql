@@ -21,11 +21,6 @@ query AppQuery {
               id
               _modelApiKey
             }
-            ... on PageRecord {
-              id
-              slug
-              _modelApiKey
-            }
           }
         }
         ... on ExternalLinkRecord {
