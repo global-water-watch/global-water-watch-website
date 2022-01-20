@@ -1,6 +1,7 @@
 #import '../components/PageHeroes/BrandHero/BrandHero.fragment.graphql'
 #import '../components/PageSections/LogoSection/LogoSection.fragment.graphql'
 #import '../components/PageSections/MultiTextSection/MultiTextSection.fragment.graphql'
+#import '../components/PageSections/NewsletterSection/NewsletterSection.fragment.graphql'
 #import '../components/PageSections/TabsSection/TabsSection.fragment.graphql'
 #import '../components/PageSections/TimelineSection/TimelineSection.fragment.graphql'
 #import '../components/PageSections/PeopleSection/PeopleSection.fragment.graphql'
@@ -30,7 +31,7 @@ query HomeQuery {
       # @todo: move to fragments bundled with related component
       ... on LogoSectionRecord { ...logoSectionFragment }
       ... on MultiTextSectionRecord { ...multiTextSectionFragment }
-      ... on NewsletterSectionRecord { id, _modelApiKey }
+      ... on NewsletterSectionRecord { ...newsletterSectionFragment }
       ... on PeopleSectionRecord { ...peopleSectionFragment }
       ... on TabsSectionRecord { ...tabsSectionFragment }
       ... on TimelineSectionRecord { ...timelineSectionFragment }

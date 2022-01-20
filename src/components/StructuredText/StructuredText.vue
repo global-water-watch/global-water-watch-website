@@ -1,9 +1,14 @@
 <template>
-  <DatocmsStructuredText :data="text" class="structured-text" />
+  <DatocmsStructuredText
+    class="structured-text"
+    v-bind="$attrs"
+    :data="text"
+  />
 </template>
 
 <script>
   export default {
+    inheritAttrs: false,
     props: {
       text: { type: Object, required: true },
     },
