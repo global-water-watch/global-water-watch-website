@@ -5,7 +5,9 @@
 
 .newsletter-section__form {
   max-width: 425px;
-  margin: $space-xlarge auto 0;
+  margin-top: $space-xlarge;
+  margin-right: auto;
+  margin-left: auto;
 }
 
 .newsletter-section__email-text {
