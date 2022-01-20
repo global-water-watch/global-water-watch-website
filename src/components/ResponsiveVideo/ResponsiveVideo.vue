@@ -14,15 +14,15 @@
     props: {
       autoplay: {
         type: Boolean,
-        required: true,
+        default: false,
       },
       loop: {
         type: Boolean,
-        required: true,
+        default: false,
       },
       mute: {
         type: Boolean,
-        required: true,
+        default: true,
       },
       video: {
         type: Object,
