@@ -22,4 +22,6 @@ fragment newsletterSectionFragment on NewsletterSectionRecord {
       }
     }
   }
+  mailchimpActionUrl
+  mailchimpHoneypotName
 }

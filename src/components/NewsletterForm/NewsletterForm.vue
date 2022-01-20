@@ -2,7 +2,7 @@
   <form
     ref="newsletterForm"
     class="newsletter-form"
-    action="https://deltares.us20.list-manage.com/subscribe/post?u=deb635f708fd27f0bdbd6b656&amp;id=c838c5e2dd"
+    :action="actionUrl"
     name="mc-embedded-subscribe-form"
     method="post"
     target="_blank"
@@ -23,10 +23,19 @@
 
     <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups -->
     <div style="position: absolute; left: -5000px;" aria-hidden="true">
-      <input type="text" name="b_deb635f708fd27f0bdbd6b656_c838c5e2dd" tabindex="-1" value="">
+      <input
+        type="text"
+        :name="honeypotName"
+        tabindex="-1"
+        value=""
+      >
     </div>
 
-    <v-btn type="submit" color="primary" :disabled="!formIsValid">
+    <v-btn
+      type="submit"
+      color="primary"
+      :disabled="!formIsValid"
+    >
       Send
     </v-btn>
   </form>
@@ -34,6 +43,16 @@
 
 <script>
   export default {
+    props: {
+      actionUrl: {
+        type: String,
+        required: true,
+      },
+      honeypotName: {
+        type: String,
+        required: true,
+      },
+    },
     data () {
       return {
         formIsValid: false,

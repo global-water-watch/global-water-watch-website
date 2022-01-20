@@ -12,7 +12,10 @@
       />
 
       <div class="newsletter-section__form">
-        <NewsletterForm />
+        <NewsletterForm
+          :action-url="mailchimpActionUrl"
+          :honeypot-name="mailchimpHoneypotName"
+        />
         <StructuredText
           class="newsletter-section__email-text small"
           :text="emailText"
