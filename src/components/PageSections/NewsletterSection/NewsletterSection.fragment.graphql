@@ -1,0 +1,37 @@
+fragment newsletterSectionFragment on NewsletterSectionRecord {
+  id
+  _modelApiKey
+  title
+  emailText {
+    value
+    links {
+      ... on HomeRecord {
+        __typename
+        id
+        title
+      }
+      ... on PageRecord {
+        __typename
+        id
+        title
+        slug
+      }
+    }
+  }
+  text {
+    value
+    links {
+      ... on HomeRecord {
+        __typename
+        id
+        title
+      }
+      ... on PageRecord {
+        __typename
+        id
+        title
+        slug
+      }
+    }
+  }
+}
