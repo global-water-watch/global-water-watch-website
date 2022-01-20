@@ -1,5 +1,10 @@
 <template>
-  <PageHeroes :sections="page.heroes" />
+  <Fragment>
+    <NuxtLink to="/blog">
+      Back to overview
+    </NuxtLink>
+    <PageHeroes :sections="page.heroes" />
+  </Fragment>
 </template>
 
 <script>
@@ -8,8 +13,8 @@
   export default {
     async asyncData ({ $datocms, $preview, params }) {
       const variables = { slug: params.slug }
-      const { blog } = await $datocms.fetchData({ query, variables, preview: !!$preview })
-      return { page: blog, variables }
+      const { article } = await $datocms.fetchData({ query, variables, preview: !!$preview })
+      return { page: article, variables }
     },
 
     head () {

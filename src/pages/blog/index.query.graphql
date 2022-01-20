@@ -1,12 +1,14 @@
 #import '../../components/ResponsiveImage/Image.fragment.graphql'
 #import '../../components/ResponsiveImage/ResponsiveImage.fragment.graphql'
-#import '../../components/PageHeroes/BlogHero/BlogHero.fragment.graphql'
 
-query ArticleQuery($slug: String) {
-  article(filter: {slug: {eq: $slug}}) {
+query BlogQuery {
+  page: blog {
     title
-    _seoMetaTags { attributes, content, tag }
-
+    _seoMetaTags {
+      attributes
+      content
+      tag
+    }
     seo {
       image {
         ...imageFragment
@@ -17,11 +19,11 @@ query ArticleQuery($slug: String) {
         }
       }
     }
-
-    heroes {
-      ... on BlogHeroRecord {
-        ...blogHeroFragment
-       }
+    articles {
+      __typename
+      id
+      title
+      slug
     }
   }
 }
