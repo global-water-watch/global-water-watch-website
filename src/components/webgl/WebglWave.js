@@ -1,5 +1,4 @@
 import Mesh from './Mesh'
-import clamp from './clamp.js'
 import hex2rgba from './hex2rgba.js'
 
 /**
@@ -34,7 +33,7 @@ function WebglWave ({
 
   let width = 30
   let height = 30
-  let spread = 1
+  let spread = 0 // 1
   let isPlaying = true
   let resizeTimeout
   let frame
@@ -69,6 +68,9 @@ function WebglWave ({
     gl.clear(gl.COLOR_BUFFER_BIT)
 
     if (mesh) {
+      if (spread < 1) {
+        spread += 0.005
+      }
       mesh.draw({ delta: timeStamp * speed, spread })
     }
 
@@ -111,10 +113,6 @@ function WebglWave ({
       cancelAnimationFrame(frame)
       frame = null
     }
-  }
-
-  this.setSpread = (value) => {
-    spread = clamp(value, 0, 1)
   }
 }
 
