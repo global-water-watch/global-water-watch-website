@@ -10,8 +10,15 @@
     @input="checkFormValidity"
   >
     <div class="newsletter-form__input">
-      <label class="sr-only" for="newsletter-form-email">Email address</label>
-      <input id="newsletter-form-email" class="newsletter-form__input-field" type="email" name="email" required>
+      <label class="sr-only" for="mce-EMAIL">Email address</label>
+      <input
+        id="mce-EMAIL"
+        type="email"
+        class="newsletter-form__input-field"
+        name="EMAIL"
+        placeholder="email@email.com"
+        required
+      >
     </div>
 
     <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups -->
