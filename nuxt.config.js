@@ -10,11 +10,6 @@ export default {
     gtmCode: process.env.GTM_CODE,
   },
 
-  serverMiddleware: [
-    // Server-side redirects
-    '~/serverMiddleware/redirects',
-  ],
-
   srcDir: 'src/',
 
   // Target: https://go.nuxtjs.dev/config-target
