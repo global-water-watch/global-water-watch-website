@@ -14,9 +14,11 @@
 // @todo: consider NuxtDynamic https://dynamic.blokwise.io/usage#nuxtdynamic
 // @todo: consider shared PageModules component to be used by PageHeroes & PageSections
   import BrandHero from './BrandHero/BrandHero.vue'
+  import BlogHero from './BlogHero/BlogHero.vue'
 
   const componentsByType = {
     brand_hero: BrandHero,
+    blog_hero: BlogHero,
   }
   const supportedTypes = Object.keys(componentsByType)
 
@@ -24,6 +26,7 @@
     // components: Object.values(componentsByType).reduce((out, Component) => ({ ...out, Component }), {}),
     components: {
       BrandHero,
+      BlogHero,
     },
     props: {
       sections: {

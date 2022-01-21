@@ -1,0 +1,36 @@
+.blog-hero {
+  padding-top: 60px;
+
+  @media screen and (min-width: $breakpoint-medium) {
+    padding-top: 100px;
+  }
+}
+
+.blog-hero__summary {
+  margin-top: $space-medium;
+}
+
+.blog-hero__author {
+  margin-top: $space-xlarge;
+}
+
+.blog-hero__image-wrapper {
+  position: relative;
+  margin-top: $space-large;
+}
+
+.blog-hero__image-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  background-size: cover;
+  background-position: center center;
+  opacity: .5;
+}
+
+.blog-hero__image {
+  position: relative;
+}
