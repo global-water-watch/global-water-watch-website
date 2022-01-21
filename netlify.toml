@@ -53,3 +53,14 @@
   from = "/*"
   to = "/404.html"
   status = 404
+
+# Redirect blog 'index' to our only blog article.
+[[redirects]]
+  from = "/blog/"
+  to = "/blog/the-quick-brown-fox-jumps/index.html"
+  status = 301
+
+[[redirects]]
+  from = "/blog"
+  to = "/blog/the-quick-brown-fox-jumps/index.html"
+  status = 301
