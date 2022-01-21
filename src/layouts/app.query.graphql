@@ -7,6 +7,11 @@ query AppQuery {
     header {
       title
       subtitle
+      blogLinks {
+        title
+        slug
+        id
+      }
     }
     footer {
       title
