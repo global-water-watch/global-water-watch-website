@@ -16,6 +16,7 @@
   import NewsletterSection from '@/components/PageSections/NewsletterSection/NewsletterSection'
   import PeopleSection from '@/components/PageSections/PeopleSection/PeopleSection'
   import TabsSection from '@/components/PageSections/TabsSection/TabsSection'
+  import TextSection from '@/components/PageSections/TextSection/TextSection'
   import TimelineSection from '@/components/PageSections/TimelineSection/TimelineSection'
 
   const componentsByType = {
@@ -24,6 +25,7 @@
     newsletter_section: NewsletterSection,
     people_section: PeopleSection,
     tabs_section: TabsSection,
+    blog_text_section: TextSection,
     timeline_section: TimelineSection,
   }
   const supportedTypes = Object.keys(componentsByType)
@@ -35,6 +37,7 @@
       NewsletterSection,
       PeopleSection,
       TabsSection,
+      TextSection,
       TimelineSection,
     },
     props: {

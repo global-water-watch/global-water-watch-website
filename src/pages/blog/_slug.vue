@@ -1,9 +1,7 @@
 <template>
   <Fragment>
-    <NuxtLink to="/blog">
-      Back to overview
-    </NuxtLink>
     <PageHeroes :sections="page.heroes" />
+    <PageSections :sections="page.sections" />
   </Fragment>
 </template>
 
