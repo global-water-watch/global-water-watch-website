@@ -1,11 +1,5 @@
 <template>
-  <Fragment>
-    <div v-for="article in page.articles" :key="article.id">
-      <NuxtLink :to="`/blog/${article.slug}`">
-        {{ article.title }}
-      </NuxtLink>
-    </div>
-  </Fragment>
+  <Fragment />
 </template>
 
 <script>
