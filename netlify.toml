@@ -51,12 +51,7 @@
 
 # Redirect blog 'index' to our only blog article.
 [[redirects]]
-  from = "/blog"
-  to = "/blog/the-quick-brown-fox-jumps/index.html"
-  status = 301
-
-[[redirects]]
-  from = "/blog/"
+  from = "/blog/index.html"
   to = "/blog/the-quick-brown-fox-jumps/index.html"
   status = 301
 
