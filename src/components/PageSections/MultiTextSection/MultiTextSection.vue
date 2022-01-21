@@ -13,7 +13,11 @@
           <h3 v-if="item.title" class="h3">
             {{ item.title }}
           </h3>
-          <StructuredText :text="item.text" class="multi-text__text" />
+          <StructuredText
+            class="multi-text__text"
+            :text="item.text"
+            :links="item.text.links"
+          />
         </div>
       </div>
     </div>

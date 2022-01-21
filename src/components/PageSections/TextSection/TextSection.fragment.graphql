@@ -1,0 +1,20 @@
+fragment textSectionFragment on BlogTextSectionRecord {
+  id
+  _modelApiKey
+  text {
+    value
+    links {
+      ... on HomeRecord {
+        __typename
+        id
+        title
+      }
+      ... on ArticleRecord {
+        __typename
+        id
+        title
+        slug
+      }
+    }
+  }
+}

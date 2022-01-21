@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <Fragment>
     <h1>{{ page.title }}</h1>
     <DatocmsImage :data="page.seo.image.responsiveImage" />
-  </div>
+  </Fragment>
 </template>
 
 <script>

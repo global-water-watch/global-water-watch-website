@@ -15,7 +15,10 @@
             {{ item.title }}
           </h3>
 
-          <StructuredText :text="item.text" />
+          <StructuredText
+            :text="item.text"
+            :links="item.text.links"
+          />
         </li>
       </ul>
     </div>

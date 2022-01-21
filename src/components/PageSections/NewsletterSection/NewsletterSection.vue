@@ -7,8 +7,7 @@
       <StructuredText
         class="newsletter-section__text"
         :text="text"
-        :render-link-to-record="renderLinkToRecord"
-        :custom-rules="customRules"
+        :links="text.links"
       />
 
       <div class="newsletter-section__form">
@@ -19,8 +18,7 @@
         <StructuredText
           class="newsletter-section__email-text small"
           :text="emailText"
-          :render-link-to-record="renderLinkToRecord"
-          :custom-rules="customRules"
+          :links="emailText.links"
         />
       </div>
     </div>
@@ -28,9 +26,6 @@
 </template>
 
 <script>
-  import { h } from 'vue-demi'
-  import { renderRule } from 'vue-datocms'
-  import { isLink } from 'datocms-structured-text-utils'
   import NewsletterForm from '@/components/NewsletterForm/NewsletterForm'
 
   export default {
@@ -61,25 +56,6 @@
       mailchimpHoneypotName: {
         type: String,
         required: true,
-      },
-    },
-    computed: {
-      customRules: () => ([
-        renderRule(isLink, ({ adapter: { renderNode: h }, node, children }) => {
-          return h('a', { href: node.url, target: '_blank' }, children)
-        }),
-      ]),
-    },
-    methods: {
-      renderLinkToRecord: ({ record, children }) => {
-        switch (record.__typename) {
-        case 'HomeRecord':
-          return h('NuxtLink', { attrs: { to: '/' } }, children)
-        case 'ArticleRecord':
-          return h('NuxtLink', { attrs: { to: `/${record.slug}` } }, children)
-        default:
-          return null
-        }
       },
     },
   }

@@ -32,7 +32,10 @@
                 <h3 class="h2">
                   {{ item.text[0].title }}
                 </h3>
-                <StructuredText :text="item.text[0].text" />
+                <StructuredText
+                  :text="item.text[0].text"
+                  :links="item.text[0].text.links"
+                />
               </v-col>
             </v-row>
           </v-container>
