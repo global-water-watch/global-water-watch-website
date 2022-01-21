@@ -5,7 +5,11 @@
         {{ title }}
       </h2>
 
-      <StructuredText :text="text" class="logo-section__text" />
+      <StructuredText
+        class="logo-section__text"
+        :text="text"
+        :links="text.links"
+      />
 
       <ul
         class="logo-section__logos"
