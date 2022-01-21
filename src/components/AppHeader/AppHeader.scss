@@ -51,9 +51,9 @@ ul.app-header__menu {
   @media screen and (min-width: $breakpoint-small) {
     padding-top: 0;
   }
-}
 
-a.app-header__link {
-  color: $color-black;
-  text-decoration: none;
+  a.app-header__link {
+    color: $color-black;
+    text-decoration: none;
+  }
 }
