@@ -54,6 +54,7 @@
   from = "/blog/"
   to = "/blog/the-quick-brown-fox-jumps"
   status = 301
+  force = true
 
 # Redirect anything else
 [[redirects]]
