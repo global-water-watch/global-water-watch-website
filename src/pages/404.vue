@@ -1,3 +1,9 @@
 <template>
-  <error-page />
+  <Fragment />
 </template>
+
+<script>
+  export default {
+    layout: 'error',
+  }
+</script>
