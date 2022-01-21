@@ -49,6 +49,12 @@
   status = 301
   force = true
 
+# Redirect blog 'index' to our only blog article.
+[[redirects]]
+  from = "/blog/"
+  to = "/blog/the-quick-brown-fox-jumps"
+  status = 301
+
 # Redirect anything else
 [[redirects]]
   from = "/*"
