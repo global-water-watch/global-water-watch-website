@@ -9,9 +9,9 @@
             :alt="`${title} | ${subtitle}`"
           >
         </NuxtLink>
-        <ul v-if="blogLinks.length" class="app-header__menu">
-          <li v-for="link in blogLinks" :key="link.id">
-            <NuxtLink class="app-header__link bold" :to="`/blog/${link.slug}`" :aria-label="link.title">
+        <ul v-if="links.length" class="app-header__menu">
+          <li v-for="link in links" :key="link.id">
+            <NuxtLink class="app-header__link bold" :to="`/${link._modelApiKey}/${link.slug}`" :aria-label="link.title">
               {{ link.title }}
             </NuxtLink>
           </li>
@@ -26,7 +26,7 @@
     props: {
       title: { type: String, required: true },
       subtitle: { type: String, required: true },
-      blogLinks: { type: Array, default: () => [] },
+      links: { type: Array, default: () => [] },
     },
   }
 </script>

@@ -1,0 +1,29 @@
+#import '../../components/ResponsiveImage/Image.fragment.graphql'
+#import '../../components/ResponsiveImage/ResponsiveImage.fragment.graphql'
+
+query PapersQuery {
+  page: papersOverview {
+    title
+    _seoMetaTags {
+      attributes
+      content
+      tag
+    }
+    seo {
+      image {
+        ...imageFragment
+        responsiveImage(
+          imgixParams: { fit: crop, w: 300, h: 300, auto: format }
+        ) {
+          ...responsiveImageFragment
+        }
+      }
+    }
+    papers {
+      __typename
+      id
+      title
+      slug
+    }
+  }
+}
