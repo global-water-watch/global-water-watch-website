@@ -2,7 +2,7 @@ fragment newsletterSectionFragment on NewsletterSectionRecord {
   id
   _modelApiKey
   title
-  emailText {
+  optInText {
     value
     links {
       ... on HomeRecord {
@@ -22,6 +22,5 @@ fragment newsletterSectionFragment on NewsletterSectionRecord {
       }
     }
   }
-  mailchimpActionUrl
-  mailchimpHoneypotName
+  sibActionUrl
 }

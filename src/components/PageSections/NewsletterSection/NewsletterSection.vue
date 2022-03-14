@@ -12,13 +12,8 @@
 
       <div class="newsletter-section__form">
         <NewsletterForm
-          :action-url="mailchimpActionUrl"
-          :honeypot-name="mailchimpHoneypotName"
-        />
-        <StructuredText
-          class="newsletter-section__email-text small"
-          :text="emailText"
-          :links="emailText.links"
+          :action-url="sibActionUrl"
+          :opt-in-text="optInText"
         />
       </div>
     </div>
@@ -37,7 +32,7 @@
         type: String,
         required: true,
       },
-      emailText: {
+      optInText: {
         type: Object,
         required: true,
       },
@@ -49,11 +44,7 @@
         type: String,
         required: true,
       },
-      mailchimpActionUrl: {
-        type: String,
-        required: true,
-      },
-      mailchimpHoneypotName: {
+      sibActionUrl: {
         type: String,
         required: true,
       },
