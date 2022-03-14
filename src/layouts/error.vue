@@ -1,5 +1,5 @@
 <template>
-  <section class="error layout-section layout-section--padded layout-section--lined">
+  <section class="error-page layout-section layout-section--padded layout-section--lined">
     <div class="layout-container">
       <h1 v-if="error.statusCode === 404" class="h1">
         404 - Not Found
@@ -25,3 +25,13 @@
     },
   }
 </script>
+
+<style lang="scss">
+  .error-page .layout-container {
+    text-align: center;
+  }
+
+  .error-page .v-btn {
+    margin-top: $space-default;
+  }
+</style>
