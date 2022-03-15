@@ -49,17 +49,10 @@
   status = 301
   force = true
 
-# Redirect paper 'index' to our only paper.
-[[redirects]]
-  from = "/paper/"
-  to = "/paper/research-paper"
-  status = 301
-  force = true
-
 # Redirect article 'index' to our only article.
 [[redirects]]
-  from = "/article/"
-  to = "/article/about-gww"
+  from = "/articles/"
+  to = "/articles/research-paper"
   status = 301
   force = true
 
