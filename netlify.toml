@@ -49,13 +49,6 @@
   status = 301
   force = true
 
-# Redirect article 'index' to our only article.
-[[redirects]]
-  from = "/articles/"
-  to = "/articles/research-paper"
-  status = 301
-  force = true
-
 # Redirect anything else
 [[redirects]]
   from = "/*"
