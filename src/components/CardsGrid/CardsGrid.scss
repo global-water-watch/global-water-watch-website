@@ -1,0 +1,15 @@
+.cards-grid__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-row-gap: $space-xlarge;
+
+  @media screen and (min-width: $breakpoint-small) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-column-gap: $space-large;
+  }
+
+  @media screen and (min-width: $breakpoint-large) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-row-gap: $space-xlarge * 2;
+  }
+}

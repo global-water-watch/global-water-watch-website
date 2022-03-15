@@ -1,5 +1,9 @@
 <template>
-  <Fragment />
+  <Fragment>
+    <PageHeroes :sections="page.heroes" />
+    <CardsGrid :items="items" />
+    <PageSections :sections="page.sections" />
+  </Fragment>
 </template>
 
 <script>
@@ -7,8 +11,8 @@
 
   export default {
     async asyncData ({ $datocms, $preview }) {
-      const { page } = await $datocms.fetchData({ query, preview: !!$preview })
-      return { page }
+      const { page, allPapers } = await $datocms.fetchData({ query, preview: !!$preview })
+      return { page, items: allPapers }
     },
     head () {
       return this.$datocms.toHead(this.page._seoMetaTags)
