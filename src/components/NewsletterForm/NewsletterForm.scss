@@ -1,12 +1,12 @@
-.newsletter-form {
+.newsletter-form__section {
   display: flex;
   flex-direction: row;
 }
 
 .newsletter-form__input {
+  flex-basis: auto;
   flex-grow: 1;
   flex-shrink: 1;
-  flex-basis: auto;
   margin-right: $space-medium;
 }
 
@@ -17,4 +17,20 @@
   border-radius: $border-radius-small;
   background-color: transparent;
   color: $color-white;
+}
+
+.newsletter-form__opt-in {
+  display: block;
+  position: relative;
+  margin-top: $space-medium;
+}
+
+.newsletter-form__opt-in-text {
+  display: inline;
+  position: absolute;
+  margin-left: $space-medium;
+
+  & > p {
+    display: inline;
+  }
 }

@@ -2,6 +2,7 @@
   display: grid;
   grid-template-columns: 75px 1fr;
   gap: $space-default;
+  align-items: start;
 
   text-align: left;
   line-height: 1.4;
