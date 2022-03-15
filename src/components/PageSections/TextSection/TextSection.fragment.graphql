@@ -9,11 +9,23 @@ fragment textSectionFragment on BlogTextSectionRecord {
         id
         title
       }
-      ... on ArticleRecord {
+      ... on PageRecord {
         __typename
         id
-        title
         slug
+        title
+      }
+      ... on PaperRecord {
+        __typename
+        id
+        slug
+        title
+      }
+      ... on BlogpostRecord {
+        __typename
+        id
+        slug
+        title
       }
     }
   }

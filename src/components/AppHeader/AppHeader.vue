@@ -11,7 +11,7 @@
         </NuxtLink>
         <ul v-if="links.length" class="app-header__menu">
           <li v-for="link in links" :key="link.id">
-            <NuxtLink class="app-header__link bold" :to="`/${link._modelApiKey}/${link.slug}`" :aria-label="link.title">
+            <NuxtLink class="app-header__link bold" :to="createRoute(link)" :aria-label="link.title">
               {{ link.title }}
             </NuxtLink>
           </li>
@@ -27,6 +27,23 @@
       title: { type: String, required: true },
       subtitle: { type: String, required: true },
       links: { type: Array, default: () => [] },
+    },
+    methods: {
+      createRoute (link) {
+        const { _modelApiKey, slug } = link
+        switch (_modelApiKey) {
+        case 'blog':
+          return { name: 'blog' }
+        case 'page':
+          return { name: 'slug', params: { slug } }
+        case 'papers_overview':
+          return { name: 'articles' }
+        default:
+          /* eslint-disable no-console */
+          console.warn(`Cannot create route for '${_modelApiKey}'.`)
+          return false
+        }
+      },
     },
   }
 </script>

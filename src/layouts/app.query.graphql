@@ -8,16 +8,20 @@ query AppQuery {
       title
       subtitle
       links {
-        ... on ArticleRecord {
+        ... on BlogRecord {
+          _modelApiKey
+          id
+          title
+        }
+        ... on PageRecord {
           _modelApiKey
           id
           slug
           title
         }
-        ... on PaperRecord {
+        ... on PapersOverviewRecord {
           _modelApiKey
           id
-          slug
           title
         }
       }

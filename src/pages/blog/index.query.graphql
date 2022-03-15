@@ -1,8 +1,8 @@
 #import '../../components/ResponsiveImage/Image.fragment.graphql'
 #import '../../components/ResponsiveImage/ResponsiveImage.fragment.graphql'
 
-query ArticlesQuery {
-  page: articlesOverview {
+query BlogQuery {
+  page: blog {
     title
     _seoMetaTags {
       attributes
@@ -19,7 +19,7 @@ query ArticlesQuery {
         }
       }
     }
-    articles {
+    blogposts {
       __typename
       id
       title

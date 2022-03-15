@@ -44,6 +44,9 @@
 }
 
 ul.app-header__menu {
+  display: grid;
+  grid-auto-flow: column;
+  grid-gap: $space-default;
   padding-top: $space-default;
   padding-left: 0;
   list-style: none;

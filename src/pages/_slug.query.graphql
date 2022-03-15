@@ -1,5 +1,7 @@
 #import '../components/ResponsiveImage/Image.fragment.graphql'
 #import '../components/ResponsiveImage/ResponsiveImage.fragment.graphql'
+#import '../components/PageHeroes/BlogHero/BlogHero.fragment.graphql'
+#import '../components/PageSections/TextSection/TextSection.fragment.graphql'
 
 query PageQuery($slug: String) {
   page(filter: {slug: {eq: $slug}}) {
@@ -13,6 +15,16 @@ query PageQuery($slug: String) {
         ) {
           ...responsiveImageFragment
         }
+      }
+    }
+    heroes {
+      ... on BlogHeroRecord {
+        ...blogHeroFragment
+       }
+    }
+    sections {
+      ... on BlogTextSectionRecord {
+        ...textSectionFragment
       }
     }
   }

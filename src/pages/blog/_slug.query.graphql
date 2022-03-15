@@ -3,8 +3,8 @@
 #import '../../components/PageHeroes/BlogHero/BlogHero.fragment.graphql'
 #import '../../components/PageSections/TextSection/TextSection.fragment.graphql'
 
-query ArticleQuery($slug: String) {
-  article(filter: {slug: {eq: $slug}}) {
+query BlogpostQuery($slug: String) {
+  blogpost(filter: {slug: {eq: $slug}}) {
     title
     _seoMetaTags { attributes, content, tag }
     seo {
