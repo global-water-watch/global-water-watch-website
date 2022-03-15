@@ -11,7 +11,7 @@
         </NuxtLink>
         <ul v-if="blogLinks.length" class="app-header__menu">
           <li v-for="link in blogLinks" :key="link.id">
-            <NuxtLink class="app-header__link bold" :to="`/blog/${link.slug}`" :aria-label="link.title">
+            <NuxtLink class="app-header__link bold" :to="{ name: 'slug', params: { slug: link.slug }}" :aria-label="link.title">
               {{ link.title }}
             </NuxtLink>
           </li>

@@ -4,16 +4,23 @@ fragment textSectionFragment on BlogTextSectionRecord {
   text {
     value
     links {
-      ... on HomeRecord {
+      ... on PageRecord {
         __typename
         id
+        slug
         title
       }
-      ... on ArticleRecord {
+      ... on PaperRecord {
         __typename
         id
-        title
         slug
+        title
+      }
+      ... on BlogpostRecord {
+        __typename
+        id
+        slug
+        title
       }
     }
   }

@@ -49,13 +49,6 @@
   status = 301
   force = true
 
-# Redirect blog 'index' to our only blog article.
-[[redirects]]
-  from = "/blog/"
-  to = "/blog/about-gww"
-  status = 301
-  force = true
-
 # Redirect anything else
 [[redirects]]
   from = "/*"

@@ -1,7 +1,7 @@
 <template>
   <Fragment>
-    <h1>{{ page.title }}</h1>
-    <DatocmsImage :data="page.seo.image.responsiveImage" />
+    <PageHeroes :sections="page.heroes" />
+    <PageSections :sections="page.sections" />
   </Fragment>
 </template>
 
