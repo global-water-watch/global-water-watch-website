@@ -1,18 +1,18 @@
 <template>
   <NuxtLink :to="slugRoute" class="card-item">
     <ResponsiveImage :image="image" :contain="true" />
-    <h4 class="h3 card-item__title">
+    <h2 class="h3 card-item__title">
       {{ title }}
-    </h4>
+    </h2>
     <p class="card-item__text">
       {{ text }}
     </p>
     <div class="card-item__author">
       <ResponsiveImage class="card-item__author-image" :image="author.image" />
       <div>
-        <h3 class="p small bold">
+        <span class="p small bold">
           {{ author.name }}
-        </h3>
+        </span>
         <time class="p small" :datetime="createdAt">{{ parsedDate }}</time>
       </div>
     </div>

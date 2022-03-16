@@ -1,7 +1,9 @@
-.cards-grid__grid {
+ul.cards-grid__grid {
   display: grid;
   grid-template-columns: 1fr;
   grid-row-gap: $space-xlarge;
+  list-style: none;
+  padding-left: 0;
 
   @media screen and (min-width: $breakpoint-small) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
