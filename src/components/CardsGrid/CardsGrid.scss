@@ -1,17 +1,17 @@
 ul.cards-grid__grid {
   display: grid;
-  grid-template-columns: 1fr;
   grid-row-gap: $space-xlarge;
-  list-style: none;
+  grid-template-columns: 1fr;
   padding-left: 0;
+  list-style: none;
 
   @media screen and (min-width: $breakpoint-small) {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-column-gap: $space-large;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   @media screen and (min-width: $breakpoint-large) {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
     grid-row-gap: $space-xlarge * 2;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
