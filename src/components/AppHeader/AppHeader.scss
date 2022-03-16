@@ -1,4 +1,5 @@
 .app-header {
+  display: none;
   position: sticky;
   z-index: $layer-header;
   top: 0;
@@ -8,6 +9,10 @@
   background: $color-white;
   color: $color-black;
 
+  @media screen and (min-width: $breakpoint-small) {
+    display: block;
+  }
+
   @media screen and (min-width: $breakpoint-large) {
     padding: $space-medium $space-default;
   }
@@ -15,12 +20,10 @@
 
 .app-header__navigation {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
 
   @media screen and (min-width: $breakpoint-small) {
-    flex-direction: row;
     align-items: center;
-    justify-content: space-between;
   }
 }
 

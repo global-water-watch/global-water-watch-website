@@ -1,0 +1,61 @@
+.mobile-menu {
+  position: sticky;
+  z-index: $layer-header;
+  top: 0;
+  left: 0;
+  color: $color-black;
+
+  @media screen and (min-width: $breakpoint-small) {
+    display: none;
+  }
+
+  .layout-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px $space-default;
+    background-color: $color-white;
+  }
+
+  .mobile-menu__link {
+    color: $color-black;
+    text-decoration: none;
+  }
+}
+
+ul.mobile-menu__list {
+  padding-top: 15px;
+  padding-left: 0;
+  border-top: 1px solid $color-black-alpha;
+  list-style: none;
+
+  li + li {
+    margin-top: 5px;
+  }
+}
+
+.app-header__button {
+  position: absolute;
+  top: $space-medium;
+  right: $space-default;
+  width: 36px;
+  height: 36px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 20px;
+}
+
+.app-header__button--open {
+  background-image: url('/images/menu-open.svg');
+}
+
+.app-header__button--closed {
+  background-image: url('/images/menu-closed.svg');
+}
+
+.mobile-menu__wrapper {
+  position: absolute;
+  z-index: -1;
+  width: 100%;
+  padding: 0 15px $space-default;
+  background-color: $color-white;
+}
