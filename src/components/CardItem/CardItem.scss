@@ -20,6 +20,10 @@ a.card-item {
   text-align: left;
 }
 
+.card-item__author .p {
+  display: block;
+}
+
 .card-item__author-image {
   overflow: hidden;
   border-radius: 100%;
