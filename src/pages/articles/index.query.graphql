@@ -1,5 +1,6 @@
 #import '../../components/PageHeroes/BlogHero/BlogHero.fragment.graphql'
 #import '../../components/PageSections/NewsletterSection/NewsletterSection.fragment.graphql'
+#import '../../components/Person/Person.fragment.graphql'
 #import '../../components/ResponsiveImage/Image.fragment.graphql'
 #import '../../components/ResponsiveImage/ResponsiveImage.fragment.graphql'
 
@@ -38,13 +39,7 @@ query PapersQuery {
     title
     heroes {
       author {
-        name
-        image {
-          ...imageFragment
-          responsiveImage(imgixParams: { w: 360, auto: format }) {
-            ...responsiveImageFragment
-          }
-        }
+        ...personFragment
       }
       image {
         ...imageFragment
