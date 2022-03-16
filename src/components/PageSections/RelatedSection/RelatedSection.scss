@@ -17,3 +17,8 @@ ul.related-section__grid {
     margin-top: $space-large;
   }
 }
+
+ul.related-section__grid a.card-item {
+  color: $color-white;
+  text-decoration: none;
+}
