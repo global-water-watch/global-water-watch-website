@@ -10,7 +10,7 @@
 </template>
 
 <script>
-// @todo: consider NuxtDynamic https://dynamic.blokwise.io/usage#nuxtdynamic
+  // @todo: consider NuxtDynamic https://dynamic.blokwise.io/usage#nuxtdynamic
   import LogoSection from '@/components/PageSections/LogoSection/LogoSection'
   import MultiTextSection from '@/components/PageSections/MultiTextSection/MultiTextSection'
   import NewsletterSection from '@/components/PageSections/NewsletterSection/NewsletterSection'
