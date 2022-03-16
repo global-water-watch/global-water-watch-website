@@ -7,7 +7,7 @@
     <p class="card-item__text">
       {{ text }}
     </p>
-    <div class="card-item__author">
+    <address class="card-item__author">
       <ResponsiveImage class="card-item__author-image" :image="author.image" />
       <div>
         <span class="p small bold">
@@ -15,7 +15,7 @@
         </span>
         <time class="p small" :datetime="createdAt">{{ parsedDate }}</time>
       </div>
-    </div>
+    </address>
   </NuxtLink>
 </template>
 
