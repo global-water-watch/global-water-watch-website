@@ -34,6 +34,7 @@ query BlogQuery {
   }
   allBlogposts(orderBy: createdAt_ASC) {
     createdAt
+    _modelApiKey
     id
     slug
     title

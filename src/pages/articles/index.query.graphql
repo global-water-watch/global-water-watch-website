@@ -34,6 +34,7 @@ query PapersQuery {
   }
   allPapers(orderBy: createdAt_ASC) {
     createdAt
+    _modelApiKey
     id
     slug
     title

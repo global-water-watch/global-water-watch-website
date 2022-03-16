@@ -8,6 +8,7 @@
             :created-at="item.createdAt"
             :image="item.heroes[0].image"
             :slug="item.slug"
+            :model="item._modelApiKey"
             :text="item.heroes[0].text"
             :title="item.title"
           />

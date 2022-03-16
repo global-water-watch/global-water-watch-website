@@ -38,6 +38,10 @@
         type: String,
         required: true,
       },
+      model: {
+        type: String,
+        required: true,
+      },
       text: {
         type: String,
         required: true,
@@ -49,7 +53,16 @@
     },
     computed: {
       slugRoute () {
-        return { name: `${this.$route.name}-slug`, params: { slug: this.slug } }
+        switch (this.model) {
+        case 'blogpost':
+          return { name: 'blog-slug', params: { slug: this.slug } }
+        case 'paper':
+          return { name: 'articles-slug', params: { slug: this.slug } }
+        default:
+          /* eslint-disable no-console */
+          console.warn(`Cannot create route for '${this.model}'.`)
+          return false
+        }
       },
       parsedDate () {
         const date = new Date(this.createdAt)
