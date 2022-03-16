@@ -44,7 +44,7 @@ query PapersQuery {
       }
       image {
         ...imageFragment
-        responsiveImage(imgixParams: { w: 360, auto: format }) {
+        responsiveImage(imgixParams: { fit: crop, w: 360, h: 175, auto: format }) {
           ...responsiveImageFragment
         }
       }
