@@ -40,13 +40,12 @@ $social-share-size: 26px;
   }
 }
 
-.social-share .social-share__options {
+.social-share ul.social-share__options {
   position: relative;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   padding: $space-default;
-  list-style: none;
 }
 
 .social-share__options::after {
