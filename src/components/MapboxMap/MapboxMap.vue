@@ -27,7 +27,7 @@
       },
       center: {
         type: Array,
-        default: MAP_CENTER,
+        default: () => MAP_CENTER,
       },
       mapboxStyle: {
         type: String,
