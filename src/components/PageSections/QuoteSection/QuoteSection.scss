@@ -1,0 +1,47 @@
+$quote-size: 32px;
+
+.quote-section {
+  display: block;
+}
+
+.quote-section .h3 {
+  font-weight: normal;
+}
+
+.quote-section__quote {
+  quotes: '\201c' '\201d';
+  position: relative;
+  margin: $space-large 0;
+  font-size: 1.2rem;
+  line-height: 1.6;
+
+  @media screen and (min-width: $breakpoint-medium) {
+    font-size: 1.5rem;
+  }
+}
+
+.quote-section__quote::before,
+.quote-section__quote::after {
+  position: absolute;
+  width: $quote-size;
+  height: $quote-size;
+  font-size: 4rem;
+  line-height: 1;
+}
+
+.quote-section__quote::before {
+  content: open-quote;
+  top: -$quote-size;
+  left: 0;
+}
+
+.quote-section__quote::after {
+  content: close-quote;
+  right: 0;
+  bottom: -$quote-size;
+}
+
+.quote-section__quotee {
+  padding-top: 5px;
+  text-align: right;
+}

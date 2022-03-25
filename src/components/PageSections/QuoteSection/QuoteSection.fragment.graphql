@@ -1,0 +1,12 @@
+#import '../../Person/Person.fragment.graphql'
+
+fragment quoteSectionFragment on BlogQuoteRecord {
+  id
+  _modelApiKey
+  person {
+    ...personFragment
+  }
+  text {
+    value
+  }
+}
