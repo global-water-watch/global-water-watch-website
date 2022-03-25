@@ -18,6 +18,7 @@
   const NETHERLANDS_CENTER_LATITUDE = 52.1326
   const NETHERLANDS_CENTER_LONGITUDE = 5.2913
   const MAP_CENTER = [NETHERLANDS_CENTER_LONGITUDE, NETHERLANDS_CENTER_LATITUDE]
+  const MAPBOX_STYLE = 'mapbox://styles/mapbox/light-v9'
 
   export default {
     props: {
@@ -31,7 +32,7 @@
       },
       mapboxStyle: {
         type: String,
-        required: true,
+        default: MAPBOX_STYLE,
       },
       zoom: {
         type: Number,
