@@ -4,6 +4,11 @@ fragment textSectionFragment on BlogTextSectionRecord {
   text {
     value
     links {
+      ... on HomeRecord {
+        __typename
+        id
+        title
+      }
       ... on PageRecord {
         __typename
         id

@@ -1,0 +1,25 @@
+.card-item__title {
+  margin-top: $space-medium;
+}
+
+.card-item__text {
+  margin-top: 15px;
+}
+
+.card-item__author {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  gap: $space-medium;
+  align-items: start;
+  line-height: 1.2;
+  text-align: left;
+}
+
+.card-item__author .p {
+  display: block;
+}
+
+.card-item__author-image {
+  overflow: hidden;
+  border-radius: 100%;
+}

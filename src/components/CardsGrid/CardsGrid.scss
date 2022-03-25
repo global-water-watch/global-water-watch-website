@@ -1,0 +1,20 @@
+ul.cards-grid__grid {
+  display: grid;
+  grid-row-gap: $space-xlarge;
+  grid-template-columns: 1fr;
+
+  @media screen and (min-width: $breakpoint-small) {
+    grid-column-gap: $space-large;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media screen and (min-width: $breakpoint-large) {
+    grid-row-gap: $space-xlarge * 2;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+ul.cards-grid__grid a.card-item {
+  color: $color-white;
+  text-decoration: none;
+}

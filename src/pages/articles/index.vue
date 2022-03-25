@@ -1,28 +1,25 @@
 <template>
   <Fragment>
     <PageHeroes :sections="page.heroes" />
+    <CardsGrid :items="items" />
     <PageSections :sections="page.sections" />
   </Fragment>
 </template>
 
 <script>
-  import query from './_slug.query.graphql'
+  import query from './index.query.graphql'
 
   export default {
-    async asyncData ({ $datocms, $preview, params }) {
-      const variables = { slug: params.slug }
-      const { page } = await $datocms.fetchData({ query, variables, preview: !!$preview })
-      return { page, variables }
+    async asyncData ({ $datocms, $preview }) {
+      const { page, allPapers } = await $datocms.fetchData({ query, preview: !!$preview })
+      return { page, items: allPapers }
     },
-
     head () {
       return this.$datocms.toHead(this.page._seoMetaTags)
     },
-
     mounted () {
       this.$datocms.subscribeToData({
         query,
-        variables: this.variables,
         onData: ({ page }) => { this.page = page },
       })
     },

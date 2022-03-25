@@ -10,3 +10,9 @@
 .v-application {
   font-weight: $font-weight-normal;
 }
+
+.v-application .v-application--wrap ol,
+.v-application .v-application--wrap ul {
+  padding-left: 0;
+  list-style: none;
+}

@@ -7,10 +7,23 @@ query AppQuery {
     header {
       title
       subtitle
-      blogLinks {
-        title
-        slug
-        id
+      links {
+        ... on BlogRecord {
+          _modelApiKey
+          id
+          title
+        }
+        ... on PageRecord {
+          _modelApiKey
+          id
+          slug
+          title
+        }
+        ... on PapersOverviewRecord {
+          _modelApiKey
+          id
+          title
+        }
       }
     }
     footer {
@@ -18,21 +31,21 @@ query AppQuery {
       subtitle
       links {
         ... on InternalLinkRecord {
-          id
           _modelApiKey
+          id
           title
           page {
             ... on HomeRecord {
-              id
               _modelApiKey
+              id
             }
           }
         }
         ... on ExternalLinkRecord {
+          _modelApiKey
           id
           title
           url
-          _modelApiKey
         }
       }
     }
