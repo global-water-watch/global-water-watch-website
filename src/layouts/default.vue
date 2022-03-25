@@ -2,6 +2,7 @@
   <VApp>
     <PreviewModeBar />
     <AppHeader v-bind="app.header" />
+    <MobileMenu v-bind="app.header" />
     <VMain>
       <Nuxt />
       <SocialShare />

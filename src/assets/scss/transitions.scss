@@ -1,0 +1,29 @@
+.slide-enter-active {
+  animation: slide-in-from-top .3s cubic-bezier(.39, .575, .565, 1) both;
+}
+
+.slide-leave-active {
+  animation: slide-out-to-top .3s cubic-bezier(.25, .46, .45, .94) both;
+}
+
+@keyframes slide-in-from-top {
+  0% {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-out-to-top {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+}
