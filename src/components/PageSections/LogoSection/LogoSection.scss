@@ -6,8 +6,6 @@ $breakpoint-logo-section: 400px;
 
 .logo-section .logo-section__logos {
   margin-top: $space-xlarge;
-  padding-left: 0;
-  list-style: none;
 
   @media screen and (min-width: $breakpoint-logo-section) {
     display: flex;

@@ -11,8 +11,8 @@
   export default {
     async asyncData ({ $datocms, $preview, params }) {
       const variables = { slug: params.slug }
-      const { page } = await $datocms.fetchData({ query, variables, preview: !!$preview })
-      return { page, variables }
+      const { paper } = await $datocms.fetchData({ query, variables, preview: !!$preview })
+      return { page: paper, variables }
     },
 
     head () {
