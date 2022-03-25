@@ -8,6 +8,8 @@ export default {
   publicRuntimeConfig: {
     datocmsReadonlyToken: process.env.DATOCMS_READONLY_TOKEN,
     gtmCode: process.env.GTM_CODE,
+    mapBoxToken: process.env.MAPBOX_TOKEN,
+    mapBoxStyle: process.env.MAPBOX_STYLE,
   },
 
   srcDir: 'src/',
