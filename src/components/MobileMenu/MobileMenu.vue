@@ -21,8 +21,8 @@
     </div>
     <transition name="slide" mode="out-in">
       <nav v-if="menuIsOpen" class="mobile-menu__wrapper">
-        <ul v-if="blogLinks.length" class="mobile-menu__list">
-          <li v-for="link in blogLinks" :key="link.id">
+        <ul v-if="links.length" class="mobile-menu__list">
+          <li v-for="link in links" :key="link.id">
             <NuxtLink class="mobile-menu__link bold" :to="{ name: 'slug', params: { slug: link.slug }}" :aria-label="link.title">
               {{ link.title }}
             </NuxtLink>
@@ -38,7 +38,7 @@
     props: {
       title: { type: String, required: true },
       subtitle: { type: String, required: true },
-      blogLinks: { type: Array, default: () => [] },
+      links: { type: Array, default: () => [] },
     },
     data () {
       return {
