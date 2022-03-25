@@ -1,9 +1,9 @@
 <template>
   <div class="layout-section layout-section--padded layout-section--lined related-section">
     <div class="layout-container">
-      <h3 class="h2">
+      <h2 class="h2">
         {{ title }}
-      </h3>
+      </h2>
       <ul v-if="items.length" class="related-section__grid">
         <li v-for="item in items" :key="item.id">
           <CardItem
