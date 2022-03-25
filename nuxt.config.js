@@ -57,6 +57,7 @@ export default {
     { src: '~plugins/google-analytics.client.js' },
     { src: '~plugins/vue-dato-video.js' },
     { src: '~plugins/vue-fragment.js' },
+    { src: '~plugins/vue2mapbox-gl.client.js' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
