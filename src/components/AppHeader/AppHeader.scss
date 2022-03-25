@@ -48,8 +48,6 @@ ul.app-header__menu {
   grid-auto-flow: column;
   grid-gap: $space-default;
   padding-top: $space-default;
-  padding-left: 0;
-  list-style: none;
 
   @media screen and (min-width: $breakpoint-small) {
     padding-top: 0;

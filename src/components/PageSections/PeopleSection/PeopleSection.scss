@@ -5,8 +5,6 @@
 .people-section .people-section__list {
   display: grid;
   gap: $space-xlarge;
-  padding-left: 0;
-  list-style: none;
 
   &:not(:first-child) {
     margin-top: $space-xlarge;
