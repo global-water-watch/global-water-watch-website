@@ -19,3 +19,10 @@
     },
   }
 </script>
+
+<style lang="scss">
+  .social-share {
+    left: 6px;
+    bottom: 34px;
+  }
+</style>
