@@ -1,6 +1,5 @@
-#import '../../Person/Person.fragment.graphql'
-#import '../../ResponsiveImage/Image.fragment.graphql'
-#import '../../ResponsiveImage/ResponsiveImage.fragment.graphql'
+#import './RelatedBlogpost.fragment.graphql'
+#import './RelatedPaper.fragment.graphql'
 
 fragment relatedSectionFragment on RelatedSectionRecord {
   id
@@ -8,42 +7,10 @@ fragment relatedSectionFragment on RelatedSectionRecord {
   title
   items {
     ... on BlogpostRecord {
-      createdAt
-      id
-      _modelApiKey
-      slug
-      title
-      heroes {
-        author {
-          ...personFragment
-        }
-        image {
-          ...imageFragment
-          responsiveImage(imgixParams: { fit: crop, w: 360, h: 175, auto: format }) {
-            ...responsiveImageFragment
-          }
-        }
-        text
-      }
+      ...relatedBlogpostFragment
     }
     ... on PaperRecord {
-      createdAt
-      id
-      _modelApiKey
-      slug
-      title
-      heroes {
-        author {
-          ...personFragment
-        }
-        image {
-          ...imageFragment
-          responsiveImage(imgixParams: { fit: crop, w: 360, h: 175, auto: format }) {
-            ...responsiveImageFragment
-          }
-        }
-        text
-      }
+      ...relatedPaperFragment
     }
   }
 }
