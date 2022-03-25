@@ -1,6 +1,8 @@
 .wave {
   position: relative;
   width: 100%;
+  pointer-events: none;
+  user-select: none;
 }
 
 .wave canvas {
