@@ -16,6 +16,7 @@
   import NewsletterSection from '@/components/PageSections/NewsletterSection/NewsletterSection'
   import PeopleSection from '@/components/PageSections/PeopleSection/PeopleSection'
   import QuoteSection from '@/components/PageSections/QuoteSection/QuoteSection'
+  import RelatedSection from '@/components/PageSections/RelatedSection/RelatedSection'
   import TabsSection from '@/components/PageSections/TabsSection/TabsSection'
   import TextSection from '@/components/PageSections/TextSection/TextSection'
   import TimelineSection from '@/components/PageSections/TimelineSection/TimelineSection'
@@ -27,6 +28,7 @@
     multi_text_section: MultiTextSection,
     newsletter_section: NewsletterSection,
     people_section: PeopleSection,
+    related_section: RelatedSection,
     tabs_section: TabsSection,
     timeline_section: TimelineSection,
   }
@@ -38,6 +40,7 @@
       MultiTextSection,
       NewsletterSection,
       PeopleSection,
+      RelatedSection,
       TabsSection,
       TextSection,
       TimelineSection,

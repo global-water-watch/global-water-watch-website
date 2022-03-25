@@ -1,0 +1,16 @@
+#import './RelatedBlogpost.fragment.graphql'
+#import './RelatedPaper.fragment.graphql'
+
+fragment relatedSectionFragment on RelatedSectionRecord {
+  id
+  _modelApiKey
+  title
+  items {
+    ... on BlogpostRecord {
+      ...relatedBlogpostFragment
+    }
+    ... on PaperRecord {
+      ...relatedPaperFragment
+    }
+  }
+}
