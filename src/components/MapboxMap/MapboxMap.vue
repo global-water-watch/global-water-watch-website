@@ -9,6 +9,9 @@
       :zoom="zoom"
     >
       <slot />
+
+      <!-- Controls -->
+      <v-mapbox-navigation-control position="bottom-right" />
     </v-mapbox>
   </div>
 </template>
