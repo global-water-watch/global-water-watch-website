@@ -1,16 +1,14 @@
 <template>
-  <div class="mapbox-map">
-    <v-mapbox
-      class="mapbox-map__map"
-      :access-token="mapConfig.token"
-      :center="mapConfig.center"
-      :zoom="mapConfig.zoom"
-      :map-style="mapConfig.style"
-    >
-      <!-- Controls -->
-      <v-mapbox-navigation-control position="bottom-right" />
-    </v-mapbox>
-  </div>
+  <v-mapbox
+    class="mapbox-map"
+    :access-token="mapConfig.token"
+    :center="mapConfig.center"
+    :zoom="mapConfig.zoom"
+    :map-style="mapConfig.style"
+  >
+    <!-- Controls -->
+    <v-mapbox-navigation-control position="bottom-right" />
+  </v-mapbox>
 </template>
 
 <script>
