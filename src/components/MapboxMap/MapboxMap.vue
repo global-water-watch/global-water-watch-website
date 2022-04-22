@@ -1,15 +1,12 @@
 <template>
   <div class="mapbox-map">
     <v-mapbox
-      ref="vmapbox"
       class="mapbox-map__map"
-      :access-token="accessToken"
-      :center="center"
-      :map-style="mapboxStyle"
-      :zoom="zoom"
+      :access-token="mapConfig.token"
+      :center="mapConfig.center"
+      :zoom="mapConfig.zoom"
+      :map-style="mapConfig.style"
     >
-      <slot />
-
       <!-- Controls -->
       <v-mapbox-navigation-control position="bottom-right" />
     </v-mapbox>
@@ -24,42 +21,25 @@
   const MAPBOX_STYLE = 'mapbox://styles/mapbox/light-v9'
 
   export default {
-    props: {
-      accessToken: {
-        type: String,
-        required: true,
-      },
-      center: {
-        type: Array,
-        default: () => MAP_CENTER,
-      },
-      mapboxStyle: {
-        type: String,
-        default: MAPBOX_STYLE,
-      },
-      zoom: {
-        type: Number,
-        default: MAP_ZOOM,
-      },
+    data () {
+      return {
+        mapConfig: {
+          token: this.$config.mapBoxToken,
+          center: MAP_CENTER,
+          zoom: MAP_ZOOM,
+          style: this.$config.mapBoxStyle || MAPBOX_STYLE,
+        },
+      }
     },
-    mounted () {
-      const { map } = this.$refs.vmapbox
 
-      // Map events: https://docs.mapbox.com/mapbox-gl-js/api/map/#map-events
-      map.on('resize', event => this.$emit('resize', event))
-      map.on('remove', event => this.$emit('remove', event))
-
-      // Lifecycle events: https://docs.mapbox.com/mapbox-gl-js/api/map/#events-lifecycle
-      map.on('load', event => this.$emit('load', event))
-      map.on('render', event => this.$emit('render', event))
-      map.on('idle', event => this.$emit('idle', event))
-      map.on('error', event => this.$emit('error', event))
-
-      // Data loading events: https://docs.mapbox.com/mapbox-gl-js/api/map/#events-data-loading
-      map.on('data', event => this.$emit('data', event))
-      map.on('styledata', event => this.$emit('styledata', event))
-      map.on('sourcedata', event => this.$emit('sourcedata', event))
-    },
+    // Events
+    //
+    // Map events: https://docs.mapbox.com/mapbox-gl-js/api/map/#map-events
+    // resize, remove
+    // Lifecycle events: https://docs.mapbox.com/mapbox-gl-js/api/map/#events-lifecycle
+    // load, render, idle, error
+    // Data loading events: https://docs.mapbox.com/mapbox-gl-js/api/map/#events-data-loading
+    // data, styledata, sourcedata
   }
 </script>
 
