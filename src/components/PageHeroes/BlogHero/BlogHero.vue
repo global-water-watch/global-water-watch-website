@@ -10,6 +10,8 @@
           {{ text }}
         </p>
 
+        <BlogTags v-if="tags" :tags="tags" />
+
         <Person
           v-if="author"
           :image="author.image"
@@ -48,6 +50,10 @@
       },
       author: {
         type: Object,
+        default: undefined,
+      },
+      tags: {
+        type: Array,
         default: undefined,
       },
     },
