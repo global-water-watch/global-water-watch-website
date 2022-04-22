@@ -8,6 +8,8 @@ export default {
   publicRuntimeConfig: {
     datocmsReadonlyToken: process.env.DATOCMS_READONLY_TOKEN,
     gtmCode: process.env.GTM_CODE,
+    mapBoxToken: process.env.MAPBOX_TOKEN,
+    mapBoxStyle: process.env.MAPBOX_STYLE,
   },
 
   srcDir: 'src/',
@@ -57,6 +59,7 @@ export default {
     { src: '~plugins/google-analytics.client.js' },
     { src: '~plugins/vue-dato-video.js' },
     { src: '~plugins/vue-fragment.js' },
+    { src: '~plugins/vue2mapbox-gl.client.js' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
