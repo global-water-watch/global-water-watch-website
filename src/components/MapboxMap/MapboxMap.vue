@@ -5,6 +5,7 @@
     :center="mapConfig.center"
     :zoom="mapConfig.zoom"
     :map-style="mapConfig.style"
+    @mb-created="onMapCreated"
   >
     <!-- Controls -->
     <v-mapbox-navigation-control position="bottom-right" />
@@ -17,6 +18,7 @@
   const NETHERLANDS_CENTER_LONGITUDE = 5.2913
   const MAP_CENTER = [NETHERLANDS_CENTER_LONGITUDE, NETHERLANDS_CENTER_LATITUDE]
   const MAPBOX_STYLE = 'mapbox://styles/mapbox/light-v9'
+  const RESERVOIRS_LAYER = 'reservoirsv10'
 
   export default {
     data () {
@@ -28,6 +30,24 @@
           style: this.$config.mapBoxStyle || MAPBOX_STYLE,
         },
       }
+    },
+
+    methods: {
+      onMapCreated (map) {
+        map.on('click', ({ point }) => {
+          const reservoirs = map.queryRenderedFeatures(point)
+            .filter(({ layer }) => layer.id === RESERVOIRS_LAYER)
+            .map((reservoir) => {
+              console.log(reservoir)
+              return reservoir
+            })
+            .reduce((accObj, { properties: { name, fid } }) => ({
+              ...accObj,
+              [name]: fid,
+            }), {})
+          console.log(reservoirs)
+        })
+      },
     },
 
     // Events
