@@ -8,7 +8,7 @@ export const getters = {
 
 export const mutations = {
   SET_SELECTED_RESERVOIR (state, payload) {
-    state.selectedReservoir = payload
+    state.selectedReservoir = Object.freeze(payload)
   },
 }
 
