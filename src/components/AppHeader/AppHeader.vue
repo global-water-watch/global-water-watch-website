@@ -10,6 +10,14 @@
           >
         </NuxtLink>
         <ul v-if="links.length" class="app-header__menu">
+          <li>
+            <NuxtLink
+              class="app-header__link bold"
+              to="/map"
+            >
+              Map
+            </NuxtLink>
+          </li>
           <li v-for="link in links" :key="link.id">
             <NuxtLink class="app-header__link bold" :to="createRoute(link)" :aria-label="link.title">
               {{ link.title }}
