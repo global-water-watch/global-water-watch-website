@@ -11,7 +11,11 @@
     >
       <aside
         class="social-share"
-        :class="{ open: open, enhanced: enhanced }"
+        :class="{
+          open: open,
+          enhanced: enhanced,
+          'social-share--on-map': onMap,
+        }"
       >
         <button
           type="button"
@@ -87,6 +91,13 @@
 
   export default {
     components: { FocusTrap },
+
+    props: {
+      onMap: {
+        type: Boolean,
+        default: false,
+      },
+    },
 
     data () {
       return {

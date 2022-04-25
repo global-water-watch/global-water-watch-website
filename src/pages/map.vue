@@ -14,8 +14,6 @@
 
 <script>
   export default {
-    layout: 'map',
-
     computed: {
       reservoir () {
         return this.$store.getters['geo-data/selectedReservoir']

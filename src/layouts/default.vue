@@ -11,13 +11,13 @@
     />
     <VMain>
       <Nuxt />
-      <SocialShare />
+      <SocialShare :on-map="onMap" />
     </VMain>
     <AppFooter
-      v-if="appData"
+      v-if="!onMap && appData"
       v-bind="appData.footer"
     />
-    <GridLines />
+    <GridLines v-if="!onMap" />
     <client-only>
       <cookie-law
         v-if="showCookieBanner && appData"
@@ -49,6 +49,11 @@
     async fetch () {
       const { app } = await this.$datocms.fetchData({ query, preview: !!this.$preview })
       this.appData = transformAppData(app)
+    },
+    computed: {
+      onMap () {
+        return this.$route.name === 'map'
+      },
     },
     mounted () {
       this.showCookieBanner = config?.COOKIE_BANNER || false
