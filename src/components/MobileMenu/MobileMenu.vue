@@ -22,6 +22,14 @@
     <transition name="slide" mode="out-in">
       <nav v-if="menuIsOpen" class="mobile-menu__wrapper">
         <ul v-if="links.length" class="mobile-menu__list">
+          <li>
+            <NuxtLink
+              class="mobile-menu__link bold"
+              to="/map"
+            >
+              Map
+            </NuxtLink>
+          </li>
           <li v-for="link in links" :key="link.id">
             <NuxtLink class="mobile-menu__link bold" :to="{ name: 'slug', params: { slug: link.slug }}" :aria-label="link.title">
               {{ link.title }}

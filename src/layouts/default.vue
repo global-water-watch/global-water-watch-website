@@ -1,21 +1,30 @@
 <template>
   <VApp>
     <PreviewModeBar />
-    <AppHeader v-bind="app.header" />
-    <MobileMenu v-bind="app.header" />
+    <AppHeader
+      v-if="appData"
+      v-bind="appData.header"
+    />
+    <MobileMenu
+      v-if="appData"
+      v-bind="appData.header"
+    />
     <VMain>
       <Nuxt />
       <SocialShare />
     </VMain>
-    <AppFooter v-bind="app.footer" />
+    <AppFooter
+      v-if="appData"
+      v-bind="appData.footer"
+    />
     <GridLines />
     <client-only>
       <cookie-law
-        v-if="showCookieBanner"
+        v-if="showCookieBanner && appData"
         button-class="v-btn v-btn--has-bg theme--light elevation-0 v-size--large primary"
-        :button-text="app.cookies.acceptLabel"
-        :button-link="app.cookies.infoUrl"
-        :button-link-text="app.cookies.infoLabel"
+        :button-text="appData.cookies.acceptLabel"
+        :button-link="appData.cookies.infoUrl"
+        :button-link-text="appData.cookies.infoLabel"
         :button-link-new-tab="true"
         theme="dark-lime"
         @accept="onAccept"
@@ -28,43 +37,27 @@
   import { mapActions } from 'vuex'
   import query from './app.query.graphql'
   import config from '@/static/config/webconfig.json'
+  import { transformAppData } from '@/lib/content-helpers'
   const CookieLaw = () => (process.client ? import('vue-cookie-law') : null)
-
-  /**
-   * app header & footer are implemented as modular content (array) for editor experience
-   * but the app object should only have a single header & footer, so transforming it
-   */
-  const transformAppData = appData => ({
-    header: appData.header[0],
-    footer: appData.footer[0],
-    cookies: {
-      acceptLabel: appData.cookiesAcceptLabel,
-      infoLabel: appData.cookiesInfoLabel,
-      infoUrl: appData.cookiesInfoUrl,
-    },
-  })
 
   export default {
     components: { CookieLaw },
     data () {
       return {
         showCookieBanner: false,
-        app: {
-          header: {},
-          footer: {},
-        },
+        appData: undefined,
       }
     },
     async fetch () {
       const { app } = await this.$datocms.fetchData({ query, preview: !!this.$preview })
-      this.app = transformAppData(app)
+      this.appData = transformAppData(app)
     },
     mounted () {
       this.showCookieBanner = config?.COOKIE_BANNER || false
       this.$datocms.subscribeToData({
         query,
         onData: ({ app }) => {
-          this.app = transformAppData(app)
+          this.appData = transformAppData(app)
         },
       })
     },
