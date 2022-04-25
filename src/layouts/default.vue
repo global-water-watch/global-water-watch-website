@@ -27,14 +27,12 @@
         :button-link-text="appData.cookies.infoLabel"
         :button-link-new-tab="true"
         theme="dark-lime"
-        @accept="onAccept"
       />
     </client-only>
   </VApp>
 </template>
 
 <script>
-  import { mapActions } from 'vuex'
   import query from './app.query.graphql'
   import config from '@/static/config/webconfig.json'
   import { transformAppData } from '@/lib/content-helpers'
@@ -60,12 +58,6 @@
           this.appData = transformAppData(app)
         },
       })
-    },
-    methods: {
-      ...mapActions(['setCookiesAccepted']),
-      onAccept () {
-        this.setCookiesAccepted({ cookiesAccepted: true })
-      },
     },
   }
 </script>
