@@ -1,13 +1,19 @@
 <template>
-  <div class="blog-tags">
-    <ul class="blog-tags__tags">
-      <li v-for="tag in tags" :key="tag.tagSlug">
-        <NuxtLink :to="`/blog/tag/${tag.tagSlug}/`" class="blog-tags__tag">
-          {{ tag.tagTitle }}
-        </NuxtLink>
-      </li>
-    </ul>
-  </div>
+  <section class="layout-section layout-section--padded-small layout-section--lined blog-tags">
+    <div class="layout-container">
+      <h3 class="p normal">
+        Categories:
+      </h3>
+
+      <ul class="blog-tags__tags">
+        <li v-for="tag in tags" :key="tag.tagSlug">
+          <NuxtLink :to="`/blog/tag/${tag.tagSlug}/`" class="pill blog-tags__tag">
+            {{ tag.tagTitle }}
+          </NuxtLink>
+        </li>
+      </ul>
+    </div>
+  </section>
 </template>
 
 <script>
