@@ -37,15 +37,15 @@
         map.on('click', ({ point }) => {
           const reservoirs = map.queryRenderedFeatures(point)
             .filter(({ layer }) => layer.id === RESERVOIRS_LAYER)
-            .map((reservoir) => {
-              console.log(reservoir)
-              return reservoir
-            })
+            // .map((reservoir) => {
+            //   console.log(reservoir)
+            //   return reservoir
+            // })
             .reduce((accObj, { properties: { name, fid } }) => ({
               ...accObj,
               [name]: fid,
             }), {})
-          console.log(reservoirs)
+          return reservoirs
         })
       },
     },
