@@ -1,7 +1,7 @@
 <template>
   <Fragment>
     <PageHeroes :sections="page.heroes" />
-    <PageSections :sections="page.sections" />
+    <PageSections :sections="page.sections" :blog-tags="page.tags" />
   </Fragment>
 </template>
 

@@ -3,6 +3,7 @@
 #import '../../components/Person/Person.fragment.graphql'
 #import '../../components/ResponsiveImage/Image.fragment.graphql'
 #import '../../components/ResponsiveImage/ResponsiveImage.fragment.graphql'
+#import '../../components/BlogTags/BlogTags.fragment.graphql'
 
 query BlogQuery {
   page: blog {
@@ -50,5 +51,13 @@ query BlogQuery {
       }
       text
     }
+    tags {
+      ...blogTagsFragment
+    }
+  }
+  allBlogpostTags {
+    id
+    tagTitle
+    tagSlug
   }
 }

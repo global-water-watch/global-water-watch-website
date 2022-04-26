@@ -13,6 +13,11 @@
   }
 }
 
+.layout-section--padded-small {
+  padding-top: 50px;
+  padding-bottom: 80px;
+}
+
 .layout-section--force-lined,
 .layout-section--lined + .layout-section--lined {
   position: relative;
