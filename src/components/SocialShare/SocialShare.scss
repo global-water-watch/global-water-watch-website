@@ -13,6 +13,12 @@ $social-share-size: 26px;
   background-color: $color-white;
 }
 
+.social-share--on-map {
+  left: auto;
+  right: 49px;
+  bottom: 30px;
+}
+
 .social-share__toggle {
   order: 2;
   padding: .4em $space-default;

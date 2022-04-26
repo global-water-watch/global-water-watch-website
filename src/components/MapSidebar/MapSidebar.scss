@@ -1,0 +1,10 @@
+.map-sidebar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 370px;
+  height: 100%;
+  padding: $space-default;
+  background-color: $gradient-top;
+  z-index: 2;
+}

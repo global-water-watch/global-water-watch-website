@@ -11,13 +11,13 @@
     />
     <VMain>
       <Nuxt />
-      <SocialShare />
+      <SocialShare :on-map="onMap" />
     </VMain>
     <AppFooter
-      v-if="appData"
+      v-if="!onMap && appData"
       v-bind="appData.footer"
     />
-    <GridLines />
+    <GridLines v-if="!onMap" />
     <client-only>
       <cookie-law
         v-if="showCookieBanner && appData"
@@ -27,14 +27,12 @@
         :button-link-text="appData.cookies.infoLabel"
         :button-link-new-tab="true"
         theme="dark-lime"
-        @accept="onAccept"
       />
     </client-only>
   </VApp>
 </template>
 
 <script>
-  import { mapActions } from 'vuex'
   import query from './app.query.graphql'
   import config from '@/static/config/webconfig.json'
   import { transformAppData } from '@/lib/content-helpers'
@@ -52,6 +50,11 @@
       const { app } = await this.$datocms.fetchData({ query, preview: !!this.$preview })
       this.appData = transformAppData(app)
     },
+    computed: {
+      onMap () {
+        return this.$route.name === 'map'
+      },
+    },
     mounted () {
       this.showCookieBanner = config?.COOKIE_BANNER || false
       this.$datocms.subscribeToData({
@@ -60,12 +63,6 @@
           this.appData = transformAppData(app)
         },
       })
-    },
-    methods: {
-      ...mapActions(['setCookiesAccepted']),
-      onAccept () {
-        this.setCookiesAccepted({ cookiesAccepted: true })
-      },
     },
   }
 </script>
