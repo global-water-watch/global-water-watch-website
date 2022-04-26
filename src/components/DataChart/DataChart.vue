@@ -6,30 +6,52 @@
 </template>
 
 <script>
-  import * as echarts from 'echarts'
+  import { use, init } from 'echarts/core'
+  import { LineChart } from 'echarts/charts'
+  import {
+    TitleComponent,
+    TooltipComponent,
+    GridComponent,
+    DatasetComponent,
+    TransformComponent,
+  } from 'echarts/components'
+  import { LabelLayout, UniversalTransition } from 'echarts/features'
+  import { CanvasRenderer } from 'echarts/renderers'
+
+  use([
+    TitleComponent,
+    TooltipComponent,
+    GridComponent,
+    DatasetComponent,
+    TransformComponent,
+    LineChart,
+    LabelLayout,
+    UniversalTransition,
+    CanvasRenderer,
+  ])
 
   export default {
-    mounted () {
-      const { $chart } = this.$refs
-      const chart = echarts.init($chart)
+    props: {
+      option: {
+        type: Object,
+        required: true,
+      },
+    },
 
-      chart.setOption({
-        title: {
-          text: 'ECharts Getting Started Example',
-        },
-        tooltip: {},
-        xAxis: {
-          data: ['shirt', 'cardigan', 'chiffon', 'pants', 'heels', 'socks'],
-        },
-        yAxis: {},
-        series: [
-          {
-            name: 'sales',
-            type: 'bar',
-            data: [5, 20, 36, 10, 10, 20],
-          },
-        ],
-      })
+    watch: {
+      option (newVal) {
+        this.chart.setOption(newVal)
+      },
+    },
+
+    mounted () {
+      if (!this.option) { return }
+
+      const { $chart } = this.$refs
+      const chart = init($chart)
+      this.chart = chart
+
+      chart.setOption(this.option)
     },
   }
 </script>
