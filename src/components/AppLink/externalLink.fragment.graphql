@@ -1,0 +1,6 @@
+fragment externalLinkFragment on ExternalLinkRecord {
+  _modelApiKey
+  id
+  title
+  url
+}

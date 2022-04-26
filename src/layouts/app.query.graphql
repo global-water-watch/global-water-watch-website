@@ -1,3 +1,6 @@
+#import '../components/AppLink/externalLink.fragment.graphql'
+#import '../components/AppLink/internalLink.fragment.graphql'
+
 # @todo: split into fragments and bundle with components
 query AppQuery {
   app {
@@ -31,21 +34,10 @@ query AppQuery {
       subtitle
       links {
         ... on InternalLinkRecord {
-          _modelApiKey
-          id
-          title
-          page {
-            ... on HomeRecord {
-              _modelApiKey
-              id
-            }
-          }
+          ...internalLinkFragment
         }
         ... on ExternalLinkRecord {
-          _modelApiKey
-          id
-          title
-          url
+          ...externalLinkFragment
         }
       }
     }
