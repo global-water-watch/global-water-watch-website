@@ -45,6 +45,11 @@
       '$route' () {
         this.setActiveTags()
       },
+      activeTags (newValue) {
+        if (!newValue.length) {
+          this.removeQueryParams()
+        }
+      },
     },
 
     mounted () {
@@ -77,6 +82,10 @@
 
       clearFilters () {
         this.activeTags = []
+        this.removeQueryParams()
+      },
+
+      removeQueryParams () {
         this.$router.replace({ path: 'blog', query: { tags: undefined } })
       },
     },
