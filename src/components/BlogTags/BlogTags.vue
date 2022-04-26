@@ -7,7 +7,7 @@
 
       <ul class="blog-tags__tags">
         <li v-for="tag in tags" :key="tag.tagSlug">
-          <NuxtLink :to="`/blog/tag/${tag.tagSlug}/`" class="pill blog-tags__tag">
+          <NuxtLink :to="`/blog?tags=${tag.tagSlug}`" class="pill blog-tags__tag">
             {{ tag.tagTitle }}
           </NuxtLink>
         </li>
