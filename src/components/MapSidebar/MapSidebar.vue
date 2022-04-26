@@ -9,6 +9,7 @@
     <p class="p">
       Source: {{ reservoir.source_nam }}
     </p>
+    <data-chart />
   </aside>
 </template>
 
