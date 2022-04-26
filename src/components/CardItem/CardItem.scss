@@ -1,3 +1,30 @@
+.card-item__top {
+  display: grid;
+  grid-template-areas: 'top';
+}
+
+.card-item__top-area {
+  grid-area: top;
+}
+
+.card-item__tags {
+  position: relative;
+  align-self: start;
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  padding: 3px;
+}
+
+.card-item__tags > li {
+  margin-left: 3px;
+}
+
+.v-application .card-item__link {
+  color: $color-white;
+  text-decoration: none;
+}
+
 .card-item__title {
   margin-top: $space-medium;
 }

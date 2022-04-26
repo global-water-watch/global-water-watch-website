@@ -1,0 +1,14 @@
+.blog-tags {
+  text-align: right;
+}
+
+.blog-tags__tags {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.blog-tags__tag {
+  margin-top: .6em;
+  margin-left: .6em;
+}

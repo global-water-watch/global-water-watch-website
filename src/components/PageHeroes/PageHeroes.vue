@@ -36,6 +36,11 @@
           return sections.every(({ _modelApiKey: m }) => supportedTypes.includes(m))
         },
       },
+      tags: {
+        type: Array,
+        required: false,
+        default: () => ([]),
+      },
     },
     computed: {
       items () {
@@ -43,10 +48,12 @@
           .filter(section => componentsByType[section._modelApiKey])
           .map((section, index) => {
             const id = `section-${section.id || index}`
+            const tags = this.tags
+
             return {
               key: id,
               Component: componentsByType[section._modelApiKey],
-              props: { ...section, id },
+              props: { ...section, id, tags },
             }
           })
       },
