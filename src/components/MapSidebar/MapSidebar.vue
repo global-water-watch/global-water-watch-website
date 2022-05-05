@@ -9,10 +9,13 @@
     <p class="p">
       Source: {{ reservoir.source_nam }}
     </p>
-    <data-chart :option="chartOption" />
-    <button @click="testClick">
-      Click
-    </button>
+    <data-chart
+      :title="'Reservoir area'"
+      :x-axis="xAxis"
+      :y-axis="yAxis"
+      :data-sets="dataSets"
+      :show-tooltip="true"
+    />
   </aside>
 </template>
 
@@ -26,39 +29,22 @@
     },
 
     data: () => ({
-      chartOption: {
-        tooltip: {},
-        xAxis: {
-          data: ['shirt', 'cardigan', 'chiffon', 'pants', 'heels', 'socks'],
-        },
-        yAxis: {},
-        series: [
-          {
-            name: 'sales',
-            type: 'line',
-            data: [5, 20, 36, 10, 10, 20],
-          },
-        ],
+      xAxis: {
+        data: ['shirt', 'cardigan', 'chiffon', 'pants', 'heels', 'socks'],
       },
+      yAxis: {},
+      dataSets: [
+        {
+          name: 'sales',
+          type: 'line',
+          data: [5, 20, 36, 10, 10, 20],
+        },
+      ],
     }),
 
     computed: {
       title () {
         return this.reservoir?.name ?? 'Nameless reservoir'
-      },
-    },
-
-    methods: {
-      testClick () {
-        this.chartOption = {
-          ...this.chartOption,
-          series: [
-            {
-              ...this.chartOption.series[0],
-              data: [40, 20, 36, 10, 10, 20],
-            },
-          ],
-        }
       },
     },
   }

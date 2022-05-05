@@ -32,9 +32,82 @@
 
   export default {
     props: {
-      option: {
-        type: Object,
-        required: true,
+      title: {
+        type: String,
+        default: '',
+      },
+      xAxis: {
+        type: [Object, Array],
+        default: () => ({}),
+      },
+      yAxis: {
+        type: [Object, Array],
+        default: () => ({}),
+      },
+      dataSets: {
+        type: Array,
+        default: () => [],
+      },
+      showTooltip: {
+        type: Boolean,
+        default: false,
+      },
+    },
+
+    computed: {
+      option () {
+        const { title, showTooltip, xAxis, yAxis, dataSets } = this
+
+        return {
+          title: title && { text: title },
+          tooltip: showTooltip && {
+            trigger: 'axis',
+            axisPointer: {
+              type: 'cross',
+              animation: false,
+              // label: { backgroundColor: '#505765' },
+            },
+          },
+
+          // toolbox: {
+          //   feature: {
+          //     dataZoom: {
+          //       yAxisIndex: 'none',
+          //     },
+          //     restore: {},
+          //     saveAsImage: {},
+          //   },
+          // },
+
+          // grid: {
+          //   bottom: 80,
+          // },
+
+          // legend: {
+          //   data: ['Reservoir'],
+          //   left: 10,
+          // },
+
+          // Chart data
+          xAxis,
+          yAxis,
+          series: dataSets,
+
+          // dataZoom: [
+          //   {
+          //     show: true,
+          //     realtime: true,
+          //     start: 65,
+          //     end: 85,
+          //   },
+          //   {
+          //     type: 'inside',
+          //     realtime: true,
+          //     start: 65,
+          //     end: 85,
+          //   },
+          // ],
+        }
       },
     },
 
