@@ -20,6 +20,7 @@
   import TabsSection from '@/components/PageSections/TabsSection/TabsSection'
   import TextSection from '@/components/PageSections/TextSection/TextSection'
   import TimelineSection from '@/components/PageSections/TimelineSection/TimelineSection'
+  import ImageTextSection from '@/components/PageSections/ImageTextSection/ImageTextSection'
   import BlogTags from '@/components/BlogTags/BlogTags'
 
   const componentsByType = {
@@ -32,6 +33,7 @@
     related_section: RelatedSection,
     tabs_section: TabsSection,
     timeline_section: TimelineSection,
+    image_text_section: ImageTextSection,
   }
   const supportedTypes = Object.keys(componentsByType)
 
@@ -45,6 +47,7 @@
       TabsSection,
       TextSection,
       TimelineSection,
+      ImageTextSection,
       BlogTags,
     },
     props: {
