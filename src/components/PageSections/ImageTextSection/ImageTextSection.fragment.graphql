@@ -14,7 +14,7 @@ fragment imageTextSectionFragment on ImageTextSectionRecord {
   reverse
   image {
     ...imageFragment
-    responsiveImage {
+    responsiveImage(imgixParams: { w: 800, auto: format }) {
       ...responsiveImageFragment
     }
   }
