@@ -1,0 +1,50 @@
+.text-image-section {
+  display: block;
+}
+
+.text-image-section .v-tabs,
+.text-image-section .theme--dark.v-tabs-items,
+.text-image-section .theme--light.v-tabs-items {
+  background-color: transparent;
+}
+
+.text-image-section .container {
+  padding: 0;
+}
+
+.text-image-section__wrapper .responsive-image,
+.text-image-section__wrapper .responsive-video {
+  padding: 0 0 $space-default;
+
+  @media screen and (min-width: $breakpoint-medium) {
+    padding: 0 $space-large 0 0;
+  }
+}
+
+.text-image-section__wrapper .flex-row-reverse .responsive-image,
+.text-image-section__wrapper .flex-row-reverse .responsive-video {
+  @media screen and (min-width: $breakpoint-medium) {
+    padding: 0 0 0 $space-large;
+  }
+}
+
+.text-image-section__wrapper .text-image-section__text {
+  @media screen and (min-width: $breakpoint-medium) {
+    padding: 0 0 0 $space-large;
+  }
+}
+
+.text-image-section__wrapper .flex-row-reverse .text-image-section__text {
+  @media screen and (min-width: $breakpoint-medium) {
+    padding: 0 $space-large 0 0;
+  }
+}
+
+.text-image-section__wrapper .structured-text {
+  margin-top: $space-default;
+}
+
+.text-image-section__action {
+  margin-top: $space-xlarge;
+  text-align: center;
+}
