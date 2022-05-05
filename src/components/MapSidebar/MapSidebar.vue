@@ -13,13 +13,15 @@
       :title="'Reservoir area'"
       :x-axis="xAxis"
       :y-axis="yAxis"
-      :data-sets="dataSets"
+      :series="series"
       :show-tooltip="true"
     />
   </aside>
 </template>
 
 <script>
+  import reservoirRepo from '@/repo/reservoirRepo'
+
   export default {
     props: {
       reservoir: {
@@ -29,23 +31,22 @@
     },
 
     data: () => ({
-      xAxis: {
-        data: ['shirt', 'cardigan', 'chiffon', 'pants', 'heels', 'socks'],
-      },
-      yAxis: {},
-      dataSets: [
-        {
-          name: 'sales',
-          type: 'line',
-          data: [5, 20, 36, 10, 10, 20],
-        },
-      ],
+      xAxis: [],
+      yAxis: [],
+      series: [],
     }),
 
     computed: {
       title () {
         return this.reservoir?.name ?? 'Nameless reservoir'
       },
+    },
+
+    created () {
+      const timeSeries = reservoirRepo.getTimeSeries()
+      this.xAxis = Object.freeze(timeSeries.xAxis)
+      this.yAxis = Object.freeze(timeSeries.yAxis)
+      this.series = Object.freeze(timeSeries.series)
     },
   }
 </script>

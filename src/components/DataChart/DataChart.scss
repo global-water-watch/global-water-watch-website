@@ -1,4 +1,7 @@
 .data-chart {
+  // border-top: thin solid red;
+  // border-bottom: thin solid red;
+
   // Make chart absolute so it doesn't add any height
   > div {
     position: absolute !important;
@@ -9,6 +12,6 @@
     display: block;
     content: "";
     width: 100%;
-    padding-bottom: 66.67%;
+    padding-bottom: 75%;
   }
 }
