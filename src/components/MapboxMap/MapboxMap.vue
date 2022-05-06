@@ -39,6 +39,8 @@
             .filter(({ layer }) => layer.id === RESERVOIRS_LAYER)[0]
           this.$store.dispatch('geo-data/setSelectedReservoir', reservoir?.properties)
         })
+        map.removeControl(map._logoControl)
+        map.addControl(map._logoControl, 'top-right')
       },
     },
 

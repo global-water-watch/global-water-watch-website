@@ -11,7 +11,7 @@
     />
     <VMain>
       <Nuxt />
-      <SocialShare :on-map="onMap" />
+      <SocialShare />
     </VMain>
     <AppFooter
       v-if="!onMap && appData"
