@@ -16,6 +16,7 @@
     TransformComponent,
     DataZoomComponent,
     LegendComponent,
+    ToolboxComponent,
   } from 'echarts/components'
   import { LabelLayout, UniversalTransition } from 'echarts/features'
   import { CanvasRenderer } from 'echarts/renderers'
@@ -27,6 +28,7 @@
     DatasetComponent,
     TransformComponent,
     DataZoomComponent,
+    ToolboxComponent,
     LegendComponent,
     LineChart,
     LabelLayout,
@@ -60,21 +62,25 @@
         type: Boolean,
         default: false,
       },
+      useZoom: {
+        type: Boolean,
+        default: false,
+      },
+      useToolbox: {
+        type: Boolean,
+        default: false,
+      },
     },
 
     computed: {
       option () {
-        const { title, showTooltip, showLegend, xAxis, yAxis, series } = this
-        // console.log(xAxis)
-
-        // @TODO :: Make this a prop
-        const useZoom = true
+        const { title, showTooltip, showLegend, useZoom, useToolbox, xAxis, yAxis, series } = this
 
         const styledSeries = series.map(serie => ({
           ...serie,
           areaStyle: {},
           lineStyle: { width: 1 },
-          emphasis: { focus: 'series' },
+          // emphasis: { focus: 'series' },
 
           // markArea: {
           //   silent: true,
@@ -84,10 +90,10 @@
           //   data: [
           //     [
           //       {
-          //         xAxis: '2015-12-08\n18:35',
+          //         xAxis: '1984-04-29\n17:42',
           //       },
           //       {
-          //         xAxis: '2020-06-24\n18:34',
+          //         xAxis: '2018-06-06\n18:15',
           //       },
           //     ],
           //   ],
@@ -120,15 +126,16 @@
             right: 0,
           },
 
-          // toolbox: {
-          //   feature: {
-          //     dataZoom: {
-          //       yAxisIndex: 'none',
-          //     },
-          //     restore: {},
-          //     saveAsImage: {},
-          //   },
-          // },
+          toolbox: useToolbox && {
+            left: 'center',
+            feature: {
+              dataZoom: {
+                yAxisIndex: 'none',
+              },
+              restore: {},
+              saveAsImage: {},
+            },
+          },
 
           grid: {
             left: 80,
@@ -140,19 +147,20 @@
           /**
            * Properties for data zoom and zoom bar
           **/
-          dataZoom: [
+          dataZoom: useZoom && [
             {
               show: true,
               realtime: true,
               start: 80,
               end: 100,
             },
-            // {
-            //   type: 'inside',
-            //   realtime: true,
-            //   start: 65,
-            //   end: 85,
-            // },
+            // Used for mouse/touchpad zooming
+            {
+              type: 'inside',
+              realtime: true,
+              start: 65,
+              end: 85,
+            },
           ],
         }
       },
@@ -165,13 +173,8 @@
     },
 
     mounted () {
-      if (!this.option) { return }
-
       const { $chart } = this.$refs
-      const chart = init($chart, null, {
-        renderer: 'canvas',
-        useDirtyRect: false,
-      })
+      const chart = init($chart)
       this.chart = chart
 
       chart.setOption(this.option)

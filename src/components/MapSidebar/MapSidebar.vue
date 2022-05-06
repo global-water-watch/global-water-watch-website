@@ -15,7 +15,15 @@
       :y-axis="yAxis"
       :series="series"
       :show-tooltip="true"
+      :show-legend="true"
+      :use-zoom="true"
+      :use-toolbox="false"
     />
+
+    <br>
+    <VBtn type="button" @click="getMonthly">
+      See monthly data
+    </VBtn>
   </aside>
 </template>
 
@@ -47,6 +55,12 @@
       this.xAxis = Object.freeze(timeSeries.xAxis)
       this.yAxis = Object.freeze(timeSeries.yAxis)
       this.series = Object.freeze(timeSeries.series)
+    },
+
+    methods: {
+      getMonthly () {
+
+      },
     },
   }
 </script>
