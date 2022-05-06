@@ -91,6 +91,10 @@ export default {
           lg: 1900,
         },
       },
+      defaultAssets: {
+        font: false,
+        icons: 'mdi'
+      }
     }],
   ],
 
