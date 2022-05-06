@@ -1,0 +1,7 @@
+fragment tableSectionFragment on TableSectionRecord {
+  id
+  _modelApiKey
+  showCaption
+  caption
+  table
+}
