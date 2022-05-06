@@ -121,6 +121,7 @@ export default {
         loader: 'webpack-graphql-loader',
       })
     },
+    transpile: [/echarts/, /zrender/],
     html: {
       // disable unneeded CSS & JS minification in HTML for faster builds
       // @see https://www.voorhoede.nl/en/blog/10x-faster-nuxt-builds-on-netlify/#optimise-html-minification

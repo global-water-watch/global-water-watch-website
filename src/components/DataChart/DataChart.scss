@@ -1,0 +1,14 @@
+.data-chart {
+  // Make chart absolute so it doesn't add any height
+  > div {
+    position: absolute !important;
+  }
+
+  // Height is determined 'responsively'
+  &::after {
+    display: block;
+    content: "";
+    width: 100%;
+    padding-bottom: 75%;
+  }
+}
