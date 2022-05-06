@@ -1,0 +1,31 @@
+$table-border-size: 1px;
+
+.table-section {
+  display: block;
+}
+
+.table-section__container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.table-section__table {
+  width: 100%;
+  border-collapse: collapse;
+  border: $table-border-size solid $color-white;;
+}
+
+.table-section__caption {
+  margin-bottom: $space-large;
+}
+
+.table-section__header {
+  font-weight: bold;
+  text-align: left;
+}
+
+.table-section__column-header,
+.table-section__cell {
+  padding: $space-default;
+  border: $table-border-size solid $color-white;
+}

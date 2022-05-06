@@ -5,6 +5,7 @@
 #import '../../components/PageSections/ImageTextSection/ImageTextSection.fragment.graphql'
 #import '../../components/PageSections/RelatedSection/RelatedSection.fragment.graphql'
 #import '../../components/PageSections/QuoteSection/QuoteSection.fragment.graphql'
+#import '../../components/PageSections/TableSection/TableSection.fragment.graphql'
 #import '../../components/BlogTags/BlogTags.fragment.graphql'
 
 query BlogpostQuery($slug: String) {
@@ -41,6 +42,9 @@ query BlogpostQuery($slug: String) {
       }
       ... on RelatedSectionRecord {
         ...relatedSectionFragment
+      }
+      ... on TableSectionRecord {
+        ...tableSectionFragment
       }
     }
   }
