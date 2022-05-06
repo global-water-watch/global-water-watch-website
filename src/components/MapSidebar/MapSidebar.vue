@@ -59,7 +59,10 @@
 
     methods: {
       getMonthly () {
-
+        const timeSeries = reservoirRepo.getTimeSeriesMonthly()
+        this.xAxis = Object.freeze(timeSeries.xAxis)
+        this.yAxis = Object.freeze(timeSeries.yAxis)
+        this.series = Object.freeze(timeSeries.series)
       },
     },
   }
