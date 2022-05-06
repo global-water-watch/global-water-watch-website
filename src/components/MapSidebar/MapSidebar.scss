@@ -4,7 +4,7 @@
   left: 0;
   width: 640px;
   height: 100%;
-  padding: $space-default;
+  padding: $space-default $space-default 75px; // extra bottom for social share
   background-color: $gradient-top;
   z-index: 2;
 }

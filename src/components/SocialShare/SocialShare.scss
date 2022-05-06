@@ -1,4 +1,4 @@
-$social-share-durtion: .2s;
+$social-share-duration: .2s;
 $social-share-border-radius: 18px;
 $social-share-size: 26px;
 
@@ -28,7 +28,7 @@ $social-share-size: 26px;
   height: 0;
   overflow: hidden;
   visibility: hidden;
-  transition: visibility 0s $social-share-durtion;
+  transition: visibility 0s $social-share-duration;
 
   .open & {
     visibility: visible;
