@@ -6,7 +6,7 @@
 </template>
 
 <script>
-  import { use, init } from 'echarts/core'
+  import { use, init, registerTheme } from 'echarts/core'
   import { LineChart } from 'echarts/charts'
   import {
     TitleComponent,
@@ -20,6 +20,9 @@
   } from 'echarts/components'
   import { LabelLayout, UniversalTransition } from 'echarts/features'
   import { CanvasRenderer } from 'echarts/renderers'
+  import gwwTheme from '@/assets/theme/chart-theme.json'
+
+  registerTheme('gww', gwwTheme)
 
   use([
     TitleComponent,
@@ -174,7 +177,7 @@
 
     mounted () {
       const { $chart } = this.$refs
-      const chart = init($chart)
+      const chart = init($chart, 'gww')
       this.chart = chart
 
       chart.setOption(this.option)
