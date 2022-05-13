@@ -60,6 +60,7 @@ export default {
     { src: '~plugins/vue-dato-video.js' },
     { src: '~plugins/vue-fragment.js' },
     { src: '~plugins/vue2mapbox-gl.client.js' },
+    { src: '~plugins/create-repository.js' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -93,15 +94,20 @@ export default {
       },
       defaultAssets: {
         font: false,
-        icons: 'mdi'
-      }
+        icons: 'mdi',
+      },
     }],
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     '@voorhoede/nuxt-preview-mode-module',
+    '@nuxtjs/axios',
   ],
+
+  axios: {
+    baseURL: process.env.API_BASE_URL,
+  },
 
   // Preview mode: https://github.com/voorhoede/nuxt-preview-mode-module
   previewMode: {
