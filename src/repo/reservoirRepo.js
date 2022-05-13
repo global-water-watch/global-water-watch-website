@@ -29,12 +29,15 @@ const formatTimeSeries = (timeSeries) => {
   }
 }
 
-export default {
-  getTimeSeries () {
-    return formatTimeSeries(timeSeriesArea)
-  },
+export default function (axios) {
+  return {
+    // Get timeseries
+    getTimeSeries: () => formatTimeSeries(timeSeriesArea),
 
-  getTimeSeriesMonthly () {
-    return formatTimeSeries(timeSeriesAreaMonthly)
-  },
+    // Get monthly timeseries
+    getTimeSeriesMonthly: () => formatTimeSeries(timeSeriesAreaMonthly),
+
+    // Get reservoir by id (fid)
+    getReservoirById: id => axios.$get(`reservoir/${id}`),
+  }
 }

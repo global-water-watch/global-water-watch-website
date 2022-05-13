@@ -20,6 +20,7 @@
     "@deltares/utilities": "^0.5.0",
     "@deltares/vue-components": "^0.5.0",
     "@deltares/vuetify-theme": "^0.5.0",
+    "@nuxtjs/axios": "^5.13.6",
     "@nuxtjs/composition-api": "^0.31.0",
     "@voorhoede/nuxt-preview-mode-module": "^1.0.4",
     "@voorhoede/vue-dato-video": "^1.0.7",

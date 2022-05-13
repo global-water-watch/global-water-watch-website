@@ -28,8 +28,6 @@
 </template>
 
 <script>
-  import reservoirRepo from '@/repo/reservoirRepo'
-
   export default {
     props: {
       reservoir: {
@@ -51,7 +49,7 @@
     },
 
     created () {
-      const timeSeries = reservoirRepo.getTimeSeries()
+      const timeSeries = this.$repo.reservoir.getTimeSeries()
       this.xAxis = Object.freeze(timeSeries.xAxis)
       this.yAxis = Object.freeze(timeSeries.yAxis)
       this.series = Object.freeze(timeSeries.series)
@@ -59,7 +57,7 @@
 
     methods: {
       getMonthly () {
-        const timeSeries = reservoirRepo.getTimeSeriesMonthly()
+        const timeSeries = this.$repo.reservoir.getTimeSeriesMonthly()
         this.xAxis = Object.freeze(timeSeries.xAxis)
         this.yAxis = Object.freeze(timeSeries.yAxis)
         this.series = Object.freeze(timeSeries.series)
