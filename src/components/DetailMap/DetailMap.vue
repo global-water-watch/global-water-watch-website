@@ -7,10 +7,10 @@
     :zoom="mapConfig.zoom"
     :map-style="mapConfig.style"
     @mb-created="onMapCreated"
+    @mb-load="addReservoirsToMap"
   >
     <!-- Controls -->
     <v-mapbox-navigation-control position="bottom-right" />
-    <v-mapbox-layer v-for="layer in layers" :key="layer.reservoir_id" :options="layer" />
   </v-mapbox>
 </template>
 
@@ -40,23 +40,47 @@
       }
     },
 
-    computed: {
-      layers () {
-        return this.reservoirs.map(reservoir => ({
-          id: reservoir.reservoir_id,
-          type: 'fill',
-          properties: {},
-          geometry: {
-            type: 'MultiPolygon',
-            coordinates: reservoir.geom,
-          },
-        }))
-      },
-    },
-
     methods: {
+      addReservoirsToMap (event) {
+        const map = event.target
+        this.reservoirs.forEach((reservoir) => {
+          const reservoirName = `reservoir-${reservoir.reservoir_id}`
+
+          map.addSource(reservoirName, {
+            type: 'geojson',
+            data: {
+              type: 'Feature',
+              properties: {},
+              geometry: {
+                type: 'MultiPolygon',
+                coordinates: reservoir.geom,
+              },
+            },
+          })
+          map.addLayer({
+            id: `${reservoirName}-fill`,
+            type: 'fill',
+            source: reservoirName,
+            layout: {},
+            paint: {
+              'fill-color': '#0080ff',
+              'fill-opacity': 0.5,
+            },
+          })
+          map.addLayer({
+            id: `${reservoirName}-line`,
+            type: 'line',
+            source: reservoirName,
+            layout: {},
+            paint: {
+              'line-color': '#000',
+              'line-width': 3,
+            },
+          })
+        })
+      },
+
       onMapCreated (map) {
-        console.log(this.reservoirs)
         map.removeControl(map._logoControl)
         map.addControl(map._logoControl, 'top-right')
       },
