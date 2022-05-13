@@ -14,6 +14,7 @@
   position: relative;
   padding-top: 15vw;
   padding-bottom: 20vw;
+  z-index: $layer-images;
 
   @media screen and (min-width: $breakpoint-large) {
     padding-top: 130px;
@@ -58,6 +59,7 @@
   left: 0;
   height: 150px;
   transform: translateY(-50%);
+  z-index: $layer-images;
 
   @media screen and (min-width: $breakpoint-medium) {
     height: 300px;
