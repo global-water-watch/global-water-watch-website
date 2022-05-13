@@ -1,11 +1,15 @@
 <template>
-  <Fragment>
-    <PageHeroesDetailHero v-if="reservoir" :title="title">
+  <Fragment v-if="reservoir">
+    <PageHeroesDetailHero :title="title">
       <p v-if="reservoirId" class="p">
         {{ reservoirId }}
       </p>
     </PageHeroesDetailHero>
-    <section class="layout-section layout-section--lined" />
+    <section class="layout-section layout-section--lined">
+      <client-only>
+        <DetailMap :reservoirs="[reservoir]" />
+      </client-only>
+    </section>
   </Fragment>
 </template>
 
