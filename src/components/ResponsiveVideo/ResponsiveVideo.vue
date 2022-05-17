@@ -31,3 +31,5 @@
     },
   }
 </script>
+
+<style src="./ResponsiveVideo.scss" lang="scss"></style>

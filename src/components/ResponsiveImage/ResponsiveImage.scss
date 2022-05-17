@@ -1,6 +1,7 @@
 .responsive-image {
   position: relative;
   width: 100%;
+  z-index: $layer-images;
 }
 
 .responsive-image__aspect-ratio {
