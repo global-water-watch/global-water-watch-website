@@ -15,6 +15,8 @@
 </template>
 
 <script>
+  import { bbox } from '@turf/turf'
+
   const MAP_ZOOM = 7
   const NETHERLANDS_CENTER_LATITUDE = 52.1326
   const NETHERLANDS_CENTER_LONGITUDE = 5.2913
@@ -45,8 +47,7 @@
         const map = event.target
         this.reservoirs.forEach((reservoir) => {
           const reservoirName = `reservoir-${reservoir.reservoir_id}`
-
-          map.addSource(reservoirName, {
+          const geoJson = {
             type: 'geojson',
             data: {
               type: 'Feature',
@@ -56,7 +57,12 @@
                 coordinates: reservoir.geom,
               },
             },
-          })
+          }
+
+          const boundingBox = bbox(geoJson.data)
+          map.fitBounds(boundingBox, { padding: 40 })
+
+          map.addSource(reservoirName, geoJson)
           map.addLayer({
             id: `${reservoirName}-fill`,
             type: 'fill',
