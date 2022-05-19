@@ -17,10 +17,10 @@
 <script>
   import { bbox } from '@turf/turf'
 
-  const MAP_ZOOM = 7
-  const NETHERLANDS_CENTER_LATITUDE = 52.1326
-  const NETHERLANDS_CENTER_LONGITUDE = 5.2913
-  const MAP_CENTER = [NETHERLANDS_CENTER_LONGITUDE, NETHERLANDS_CENTER_LATITUDE]
+  const MAP_ZOOM = 3
+  const WORLD_CENTER_LONGITUDE = 78.836854
+  const WORLD_CENTER_LATITUDE = 22.662175
+  const MAP_CENTER = [WORLD_CENTER_LONGITUDE, WORLD_CENTER_LATITUDE]
   const MAPBOX_STYLE = 'mapbox://styles/mapbox/light-v9'
 
   export default {
@@ -59,8 +59,10 @@
             },
           }
 
-          const boundingBox = bbox(geoJson.data)
-          map.fitBounds(boundingBox, { padding: 40 })
+          if (geoJson?.data?.geometry?.coordinates) {
+            const boundingBox = bbox(geoJson.data)
+            map.fitBounds(boundingBox, { padding: 40 })
+          }
 
           map.addSource(reservoirName, geoJson)
           map.addLayer({
