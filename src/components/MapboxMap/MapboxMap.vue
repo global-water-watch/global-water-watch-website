@@ -27,13 +27,13 @@
 </template>
 
 <script>
+  import { BASIN_LAYER_05, RESERVOIRS_LAYER } from '@/lib/constants'
+
   const MAP_ZOOM = 7
   const NETHERLANDS_CENTER_LATITUDE = 52.1326
   const NETHERLANDS_CENTER_LONGITUDE = 5.2913
   const MAP_CENTER = [NETHERLANDS_CENTER_LONGITUDE, NETHERLANDS_CENTER_LATITUDE]
   const MAPBOX_STYLE = 'mapbox://styles/mapbox/light-v9'
-  const RESERVOIRS_LAYER = 'reservoirsv10'
-  const BASIN_LAYER = 'BasinATLAS_v10_lev05'
 
   export default {
     props: {
@@ -60,28 +60,37 @@
 
     methods: {
       onMapCreated (map) {
-        map.on('click', `${RESERVOIRS_LAYER}-fill`, ({ point }) => {
+        map.on('click', `${RESERVOIRS_LAYER}-fill`, (e) => {
           map.removeControl(map._logoControl)
           map.addControl(map._logoControl, 'top-right')
 
-          const reservoir = map.queryRenderedFeatures(point)
-            .filter(({ layer }) => layer.id === RESERVOIRS_LAYER)[0]
-          if (reservoir) {
-            this.$router.push({ path: `/reservoir/${reservoir?.properties?.fid}` })
-          }
-          // this.$store.dispatch('geo-data/setSelectedReservoir', reservoir?.properties)
-        })
-
-        map.on('click', `${BASIN_LAYER}-fill`, (e) => {
           if (!e.features.length) {
             return
           }
 
-          const feature = e.features[0]
-          const { HYBAS_ID } = feature.properties
+          const [reservoir] = e.features
 
-          console.log(HYBAS_ID)
-          // this.$router.push({ path: `/basins/${HYBAS_ID}` })
+          if (reservoir) {
+            const { fid } = reservoir.properties
+            this.$router.push({ path: `/reservoir/${fid}` })
+          }
+          // TODO: check if needed??
+          // this.$store.dispatch('geo-data/setSelectedReservoir', reservoir?.properties)
+        })
+
+        map.on('click', `${BASIN_LAYER_05}-fill`, (e) => {
+          if (!e.features.length) {
+            return
+          }
+
+          const [basin] = e.features
+
+          if (basin) {
+            const { HYBAS_ID } = basin.properties
+            console.log(HYBAS_ID)
+            // TODO: create basins page for this route
+            // this.$router.push({ path: `/basins/${HYBAS_ID}` })
+          }
         })
       },
     },

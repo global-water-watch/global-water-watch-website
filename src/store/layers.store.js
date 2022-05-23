@@ -1,5 +1,7 @@
-const RESERVOIRS_LAYER = 'reservoirsv10'
-const BASIN_LAYER = 'BasinATLAS_v10_lev05'
+import {
+  BASIN_LAYER_05,
+  RESERVOIRS_LAYER,
+} from '@/lib/constants'
 
 export const state = () => ({
   selectedLayers: [],
@@ -27,10 +29,10 @@ export const state = () => ({
       },
     },
     {
-      id: `${BASIN_LAYER}-fill`,
+      id: `${BASIN_LAYER_05}-fill`,
       type: 'fill',
-      source: BASIN_LAYER,
-      'source-layer': BASIN_LAYER,
+      source: BASIN_LAYER_05,
+      'source-layer': BASIN_LAYER_05,
       layout: {},
       paint: {
         'fill-color': '#0080ff',
