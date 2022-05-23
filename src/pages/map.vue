@@ -1,13 +1,11 @@
 <template>
   <div class="map-wrapper">
     <client-only>
-      <mapbox-map />
-      <!--      <transition name="slide-in-right">-->
-      <!--        <map-sidebar-->
-      <!--          v-if="reservoir"-->
-      <!--          :reservoir="reservoir"-->
-      <!--        />-->
-      <!--      </transition>-->
+      <mapbox-map
+        :layers="layers"
+        :sources="sources"
+      />
+      <map-side-bar-new />
     </client-only>
   </div>
 </template>
@@ -15,9 +13,12 @@
 <script>
   export default {
     computed: {
-      // reservoir () {
-      //   return this.$store.getters['geo-data/selectedReservoir']
-      // },
+      layers () {
+        return this.$store.getters['layers.store/getSelectedLayers']
+      },
+      sources () {
+        return this.$store.getters['sources.store/getSelectedSources']
+      },
     },
   }
 </script>

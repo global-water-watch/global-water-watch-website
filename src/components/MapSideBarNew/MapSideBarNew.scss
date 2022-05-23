@@ -1,0 +1,17 @@
+.map-sidebar-new {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 480px;
+  height: 100%;
+  padding: $space-default $space-default 75px; // extra bottom for social share
+  background-color: $gradient-top;
+  z-index: 2;
+}
+
+.map-sidebar-new__content {
+  position: relative;
+  height: 100%;
+  padding: 0 $space-default;
+  overflow-y: auto;
+}
