@@ -1,12 +1,14 @@
-const RESERVOIRS_LAYER = 'reservoirsv10'
-const RESERVOIR_TILE_SET_ID = 'global-water-watch.reservoirs-v10'
-const BASIN_LAYER = 'BasinATLAS_v10_lev05'
-const BASIN_TILE_SET_ID = 'global-water-watch.BasinATLAS_v10_lev05'
+import {
+  BASIN_LAYER_05,
+  BASIN_TILE_SET_ID_05,
+  RESERVOIRS_LAYER,
+  RESERVOIR_TILE_SET_ID,
+} from '@/lib/constants'
 
 export const state = () => ({
   selectedSources: [
     RESERVOIRS_LAYER,
-    BASIN_LAYER,
+    BASIN_LAYER_05,
   ],
   sources: [
     {
@@ -15,9 +17,9 @@ export const state = () => ({
       url: `mapbox://${RESERVOIR_TILE_SET_ID}`,
     },
     {
-      id: BASIN_LAYER,
+      id: BASIN_LAYER_05,
       type: 'vector',
-      url: `mapbox://${BASIN_TILE_SET_ID}`,
+      url: `mapbox://${BASIN_TILE_SET_ID_05}`,
     },
   ],
 })
