@@ -46,16 +46,11 @@
       addReservoirsToMap (event) {
         const map = event.target
         this.reservoirs.forEach((reservoir) => {
-          const reservoirName = `reservoir-${reservoir.reservoir_id}`
+          const reservoirName = `reservoir-${reservoir.id}`
           const geoJson = {
             type: 'geojson',
             data: {
-              type: 'Feature',
-              properties: {},
-              geometry: {
-                type: 'MultiPolygon',
-                coordinates: reservoir.geom,
-              },
+              ...reservoir,
             },
           }
 
@@ -71,8 +66,8 @@
             source: reservoirName,
             layout: {},
             paint: {
-              'fill-color': '#0A86BD',
-              'fill-opacity': 0.5,
+              'fill-color': '#8fdfef',
+              'fill-opacity': 0.2,
             },
           })
           map.addLayer({
@@ -81,9 +76,8 @@
             source: reservoirName,
             layout: {},
             paint: {
-              'line-color': '#0A86BD',
-              'line-width': 2,
-              'line-opacity': 0.8,
+              'line-color': '#8fdfef',
+              'line-width': 1,
             },
           })
         })

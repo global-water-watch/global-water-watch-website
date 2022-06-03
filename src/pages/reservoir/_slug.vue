@@ -33,11 +33,11 @@
 
     computed: {
       title () {
-        return this.reservoir?.name ?? 'Nameless reservoir'
+        return this.reservoir?.properties?.name ?? 'Nameless reservoir'
       },
 
       reservoirId () {
-        return this.reservoir.reservoir_id ? `#${this.reservoir.reservoir_id}` : ''
+        return this.reservoir.id ? `#${this.reservoir.id}` : ''
       },
     },
   }
