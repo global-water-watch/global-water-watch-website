@@ -1,11 +1,19 @@
 <template>
-  <Fragment v-if="reservoirId">
-    <PageHeroesDetailHero :title="title">
-      <p class="p">
-        {{ reservoirId }}
-      </p>
-    </PageHeroesDetailHero>
-    <ReservoirPageSection :reservoir="reservoir" :time-series="timeSeries" />
+  <Fragment>
+    <p v-if="$fetchState.pending">
+      Fetching reservoirs...
+    </p>
+    <p v-else-if="$fetchState.error">
+      Error fetching reservoirs...
+    </p>
+    <div v-else>
+      <PageHeroesDetailHero :title="title">
+        <p class="p">
+          {{ reservoirId }}
+        </p>
+      </PageHeroesDetailHero>
+      <ReservoirPageSection :reservoir="reservoir" :time-series="timeSeries" />
+    </div>
   </Fragment>
 </template>
 
@@ -27,7 +35,7 @@
           this.$repo.reservoir.getTimeSeries(),
         ])
       } catch (e) {
-        return this.$nuxt.error({ statusCode: 404, message: e.message })
+        throw new Error(e)
       }
     },
 
