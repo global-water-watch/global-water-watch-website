@@ -1,19 +1,11 @@
 <template>
-  <Fragment>
-    <p v-if="$fetchState.pending">
-      Fetching reservoirs...
-    </p>
-    <p v-else-if="$fetchState.error">
-      Error fetching reservoirs...
-    </p>
-    <div v-else>
-      <PageHeroesDetailHero :title="title">
-        <p class="p">
-          {{ reservoirId }}
-        </p>
-      </PageHeroesDetailHero>
-      <ReservoirPageSection :reservoir="reservoir" :time-series="timeSeries" />
-    </div>
+  <Fragment v-if="!$fetchState.pending">
+    <PageHeroesDetailHero :title="title">
+      <p class="p">
+        {{ reservoirId }}
+      </p>
+    </PageHeroesDetailHero>
+    <ReservoirPageSection :reservoir="reservoir" :time-series="timeSeries" />
   </Fragment>
 </template>
 
@@ -35,7 +27,7 @@
           this.$repo.reservoir.getTimeSeries(),
         ])
       } catch (e) {
-        throw new Error(e)
+        console.log(e)
       }
     },
 
