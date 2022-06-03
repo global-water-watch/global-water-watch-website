@@ -14,6 +14,7 @@
         :use-zoom="true"
         :use-toolbox="false"
       />
+      <ProjectShare title="Share this project" />
     </div>
   </section>
 </template>
