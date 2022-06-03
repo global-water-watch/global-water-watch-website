@@ -86,7 +86,11 @@
       },
 
       removeQueryParams () {
-        this.$router.replace({ path: 'blog' }).catch(() => { /* Avoided redundant navigation to current location */ })
+        if (this.$route.fullPath === '/blog' || this.$route.fullPath === '/blog/') {
+          return false
+        } else {
+          this.$router.replace({ path: '/blog' }).catch(() => { /* Avoided redundant navigation to current location */ })
+        }
       },
     },
   }
