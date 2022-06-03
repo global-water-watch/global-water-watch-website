@@ -31,6 +31,8 @@
       }
     },
 
+    fetchOnServer: false,
+
     computed: {
       title () {
         return this.reservoir?.properties?.name ?? 'Nameless reservoir'
