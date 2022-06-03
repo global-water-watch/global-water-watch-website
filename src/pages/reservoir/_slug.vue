@@ -1,5 +1,5 @@
 <template>
-  <Fragment v-if="!$fetchState.pending">
+  <Fragment v-if="!$fetchState.pending && reservoir">
     <PageHeroesDetailHero :title="title">
       <p class="p">
         {{ reservoirId }}
@@ -21,13 +21,15 @@
     }),
 
     async fetch () {
-      try {
-        [this.reservoir, this.timeSeries] = await Promise.all([
-          this.$repo.reservoir.getReservoirById(this.$route.params.slug),
-          this.$repo.reservoir.getTimeSeries(),
-        ])
-      } catch (e) {
-        console.log(e)
+      if (this.$route.params.slug) {
+        try {
+          [this.reservoir, this.timeSeries] = await Promise.all([
+            this.$repo.reservoir.getReservoirById(this.$route.params.slug),
+            this.$repo.reservoir.getTimeSeries(),
+          ])
+        } catch (e) {
+          console.log(e)
+        }
       }
     },
 
