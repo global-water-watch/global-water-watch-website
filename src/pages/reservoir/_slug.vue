@@ -5,13 +5,7 @@
         {{ reservoirId }}
       </p>
     </PageHeroesDetailHero>
-    <section class="layout-section layout-section--lined">
-      <div class="layout-container">
-        <client-only>
-          <DetailMap :reservoirs="[reservoir]" />
-        </client-only>
-      </div>
-    </section>
+    <ReservoirPageSection :reservoir="reservoir" :time-series="timeSeries" />
   </Fragment>
 </template>
 
@@ -19,11 +13,19 @@
   export default {
     data: () => ({
       reservoir: {},
+      timeSeries: {
+        xAxis: [],
+        yAxis: [],
+        series: [],
+      },
     }),
 
     async fetch () {
       try {
-        this.reservoir = await this.$repo.reservoir.getReservoirById(this.$route.params.slug)
+        [this.reservoir, this.timeSeries] = await Promise.all([
+          this.$repo.reservoir.getReservoirById(this.$route.params.slug),
+          this.$repo.reservoir.getTimeSeries(),
+        ])
       } catch (e) {
         return this.$nuxt.error({ statusCode: 404, message: e.message })
       }

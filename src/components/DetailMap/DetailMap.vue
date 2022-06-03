@@ -21,7 +21,7 @@
   const WORLD_CENTER_LONGITUDE = 78.836854
   const WORLD_CENTER_LATITUDE = 22.662175
   const MAP_CENTER = [WORLD_CENTER_LONGITUDE, WORLD_CENTER_LATITUDE]
-  const MAPBOX_STYLE = 'mapbox://styles/mapbox/light-v9'
+  const MAPBOX_STYLE = 'mapbox://styles/mapbox/dark-v9'
 
   export default {
     props: {
@@ -71,7 +71,7 @@
             source: reservoirName,
             layout: {},
             paint: {
-              'fill-color': '#0080ff',
+              'fill-color': '#0A86BD',
               'fill-opacity': 0.5,
             },
           })
@@ -81,8 +81,9 @@
             source: reservoirName,
             layout: {},
             paint: {
-              'line-color': '#000',
-              'line-width': 3,
+              'line-color': '#0A86BD',
+              'line-width': 2,
+              'line-opacity': 0.8,
             },
           })
         })
