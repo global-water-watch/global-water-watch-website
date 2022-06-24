@@ -1,12 +1,14 @@
 <template>
-  <Fragment>
-    <PageHeroesDetailHero v-if="reservoir" :title="title">
-      <p v-if="reservoirId" class="p">
-        {{ reservoirId }}
-      </p>
-    </PageHeroesDetailHero>
-    <section class="layout-section layout-section--lined" />
-  </Fragment>
+  <client-only>
+    <Fragment>
+      <PageHeroesDetailHero v-if="reservoir" :title="title">
+        <p v-if="reservoirId" class="p">
+          {{ reservoirId }}
+        </p>
+      </PageHeroesDetailHero>
+      <section class="layout-section layout-section--lined" />
+    </Fragment>
+  </client-only>
 </template>
 
 <script>
@@ -16,20 +18,24 @@
     }),
 
     async fetch () {
+      console.log('fetching reservoir')
       try {
         this.reservoir = await this.$repo.reservoir.getReservoirById(this.$route.params.slug)
+        console.log(this.reservoir)
       } catch (e) {
         return this.$nuxt.error({ statusCode: 404, message: e.message })
       }
     },
 
+    fetchOnServer: false,
+
     computed: {
       title () {
-        return this.reservoir?.name ?? 'Nameless reservoir'
+        return this.reservoir?.properties?.name ?? 'Nameless reservoir'
       },
 
       reservoirId () {
-        return this.reservoir.reservoir_id ? `#${this.reservoir.reservoir_id}` : ''
+        return this.reservoir.id ? `#${this.reservoir.id}` : ''
       },
     },
   }
