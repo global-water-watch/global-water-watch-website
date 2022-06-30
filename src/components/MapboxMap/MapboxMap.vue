@@ -45,15 +45,6 @@
 
     methods: {
       onMapCreated (map) {
-        // @TODO :: add click functionality elsewhere
-        // map.on('click', ({ point }) => {
-        //   const reservoir = map.queryRenderedFeatures(point)
-        //     .filter(({ layer }) => layer.id === RESERVOIRS_LAYER)[0]
-        //   if (reservoir) {
-        //     this.$router.push({ path: `/reservoir/${reservoir?.properties?.fid}` })
-        //   }
-        //   // this.$store.dispatch('geo-data/setSelectedReservoir', reservoir?.properties)
-        // })
         map.removeControl(map._logoControl)
         map.addControl(map._logoControl, 'top-right')
       },
