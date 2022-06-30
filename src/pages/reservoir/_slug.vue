@@ -1,12 +1,12 @@
 <template>
   <client-only>
-    <Fragment>
-      <PageHeroesDetailHero v-if="reservoir" :title="title">
-        <p v-if="reservoirId" class="p">
+    <Fragment v-if="!$fetchState.pending && reservoir">
+      <PageHeroesDetailHero :title="title">
+        <p class="p">
           {{ reservoirId }}
         </p>
       </PageHeroesDetailHero>
-      <section class="layout-section layout-section--lined" />
+      <ReservoirPageSection :reservoir="reservoir" :time-series="timeSeries" />
     </Fragment>
   </client-only>
 </template>
@@ -15,13 +15,23 @@
   export default {
     data: () => ({
       reservoir: {},
+      timeSeries: {
+        xAxis: [],
+        yAxis: [],
+        series: [],
+      },
     }),
 
     async fetch () {
-      try {
-        this.reservoir = await this.$repo.reservoir.getReservoirById(this.$route.params.slug)
-      } catch (e) {
-        return this.$nuxt.error({ statusCode: 404, message: e.message })
+      if (this.$route.params.slug) {
+        try {
+          [this.reservoir, this.timeSeries] = await Promise.all([
+            this.$repo.reservoir.getReservoirById(this.$route.params.slug),
+            this.$repo.reservoir.getTimeSeries(),
+          ])
+        } catch (e) {
+          console.error(e)
+        }
       }
     },
 

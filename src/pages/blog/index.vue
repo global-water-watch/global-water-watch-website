@@ -82,7 +82,7 @@
           this.activeTags.push(tag)
         }
 
-        this.$router.replace({ path: 'blog', query: { tags: this.activeTags.join(',') } })
+        this.$router.replace({ path: '/blog', query: { tags: this.activeTags.join(',') } })
       },
 
       clearFilters () {
@@ -91,7 +91,11 @@
       },
 
       removeQueryParams () {
-        this.$router.replace({ path: 'blog', query: { tags: undefined } })
+        if (this.$route.fullPath === '/blog' || this.$route.fullPath === '/blog/') {
+          return false
+        } else {
+          this.$router.replace({ path: '/blog' }).catch(() => { /* Avoided redundant navigation to current location */ })
+        }
       },
     },
   }
