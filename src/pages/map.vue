@@ -2,23 +2,14 @@
   <div class="map-wrapper">
     <client-only>
       <mapbox-map />
-      <!--      <transition name="slide-in-right">-->
-      <!--        <map-sidebar-->
-      <!--          v-if="reservoir"-->
-      <!--          :reservoir="reservoir"-->
-      <!--        />-->
-      <!--      </transition>-->
+      <map-layers-panel />
     </client-only>
   </div>
 </template>
 
 <script>
   export default {
-    computed: {
-      // reservoir () {
-      //   return this.$store.getters['geo-data/selectedReservoir']
-      // },
-    },
+
   }
 </script>
 

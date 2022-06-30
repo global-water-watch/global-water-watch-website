@@ -9,6 +9,12 @@
   >
     <!-- Controls -->
     <v-mapbox-navigation-control position="bottom-right" />
+
+    <map-layer-reservoirs
+      v-for="layer in reservoirLayers"
+      :key="layer.id"
+      :options="layer"
+    />
   </v-mapbox>
 </template>
 
@@ -18,7 +24,6 @@
   const WORLD_CENTER_LATITUDE = 22.662175
   const MAP_CENTER = [WORLD_CENTER_LONGITUDE, WORLD_CENTER_LATITUDE]
   const MAPBOX_STYLE = 'mapbox://styles/mapbox/light-v9'
-  const RESERVOIRS_LAYER = 'reservoirsv10'
 
   export default {
     data () {
@@ -32,16 +37,23 @@
       }
     },
 
+    computed: {
+      reservoirLayers () {
+        return this.$store.getters['reservoir-layers/layers']
+      },
+    },
+
     methods: {
       onMapCreated (map) {
-        map.on('click', ({ point }) => {
-          const reservoir = map.queryRenderedFeatures(point)
-            .filter(({ layer }) => layer.id === RESERVOIRS_LAYER)[0]
-          if (reservoir) {
-            this.$router.push({ path: `/reservoir/${reservoir?.properties?.fid}` })
-          }
-          // this.$store.dispatch('geo-data/setSelectedReservoir', reservoir?.properties)
-        })
+        // @TODO :: add click functionality elsewhere
+        // map.on('click', ({ point }) => {
+        //   const reservoir = map.queryRenderedFeatures(point)
+        //     .filter(({ layer }) => layer.id === RESERVOIRS_LAYER)[0]
+        //   if (reservoir) {
+        //     this.$router.push({ path: `/reservoir/${reservoir?.properties?.fid}` })
+        //   }
+        //   // this.$store.dispatch('geo-data/setSelectedReservoir', reservoir?.properties)
+        // })
         map.removeControl(map._logoControl)
         map.addControl(map._logoControl, 'top-right')
       },
