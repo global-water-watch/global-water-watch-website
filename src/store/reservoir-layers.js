@@ -20,7 +20,3 @@ export const mutations = {
     state.layers = state.layers.filter(({ id }) => id !== layerId)
   },
 }
-
-export const actions = {
-
-}

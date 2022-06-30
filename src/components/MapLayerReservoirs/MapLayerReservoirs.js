@@ -22,7 +22,7 @@ export default {
         'source-layer': id,
         layout: {},
         paint: style.paint,
-        clickable: style.clickable,
+        clickFn: style.clickFn,
       }))
     },
   },
@@ -43,8 +43,8 @@ export default {
 
       this.renderLayers.forEach((layer) => {
         map.addLayer(layer)
-        if (layer.clickable) {
-          map.on('click', layer.id, this.clickFn)
+        if (layer.clickFn) {
+          map.on('click', layer.id, layer.clickFn)
         }
       })
     },
@@ -60,21 +60,10 @@ export default {
         if (!map.getStyle().layers.some(({ source }) => source === layerSource)) {
           map.removeSource(layerSource)
         }
-        if (layer.clickable) {
-          map.off('click', layer.id, this.clickFn)
+        if (layer.clickFn) {
+          map.off('click', layer.id, layer.clickFn)
         }
       })
-    },
-
-    clickFn (e) {
-      if (!e.features.length) {
-        return
-      }
-      const [reservoir] = e.features
-      if (reservoir) {
-        const { fid } = reservoir.properties
-        console.log(fid)
-      }
     },
   },
 
