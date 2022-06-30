@@ -45,7 +45,12 @@
       '$route' () {
         this.setActiveTags()
       },
-      activeTags (newValue) {
+      activeTags (newValue, oldValue) {
+        // Do not change change route if nothing actually changed
+        // to avoid route duplication errors
+        if (newValue?.length === oldValue?.length) {
+          return
+        }
         if (!newValue.length) {
           this.removeQueryParams()
         }

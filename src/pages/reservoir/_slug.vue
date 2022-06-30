@@ -1,12 +1,14 @@
 <template>
-  <Fragment v-if="!$fetchState.pending && reservoir">
-    <PageHeroesDetailHero :title="title">
-      <p class="p">
-        {{ reservoirId }}
-      </p>
-    </PageHeroesDetailHero>
-    <ReservoirPageSection :reservoir="reservoir" :time-series="timeSeries" />
-  </Fragment>
+  <client-only>
+    <Fragment v-if="!$fetchState.pending && reservoir">
+      <PageHeroesDetailHero :title="title">
+        <p class="p">
+          {{ reservoirId }}
+        </p>
+      </PageHeroesDetailHero>
+      <ReservoirPageSection :reservoir="reservoir" :time-series="timeSeries" />
+    </Fragment>
+  </client-only>
 </template>
 
 <script>

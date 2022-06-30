@@ -147,4 +147,8 @@ export default {
       fallback: true
     }
   },
+
+  generate: {
+    fallback: true,
+  },
 }
