@@ -7,6 +7,8 @@
     :map-style="mapConfig.style"
     @mb-created="onMapCreated"
   >
+    <!-- Geocoder -->
+    <v-mapbox-geocoder />
     <!-- Controls -->
     <v-mapbox-navigation-control position="bottom-right" />
   </v-mapbox>
