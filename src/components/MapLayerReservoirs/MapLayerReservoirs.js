@@ -54,10 +54,10 @@ export default {
       if (!map) { return }
 
       this.renderLayers.forEach((layer) => {
-        const layerOnMap = map.getLayer(layer.id)
-        const layerSource = layerOnMap.source
-        map.removeLayer(layerOnMap)
-        if (layerSource && !map.getStyle().layers.some(({ source }) => source === layerSource)) {
+        const layerSource = this.options.id
+        map.removeLayer(layer.id)
+        // Only remove source when no other layers depend on it
+        if (!map.getStyle().layers.some(({ source }) => source === layerSource)) {
           map.removeSource(layerSource)
         }
         if (layer.clickable) {

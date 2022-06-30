@@ -1,30 +1,5 @@
 export const state = () => ({
-  layers: [
-    {
-      id: 'reservoirsv10',
-      source: {
-        type: 'vector',
-        url: 'mapbox://global-water-watch.reservoirs-v10',
-      },
-      styles: [
-        {
-          type: 'fill',
-          paint: {
-            'fill-color': '#8fdfef',
-            'fill-opacity': 0.2,
-          },
-          clickable: true,
-        },
-        {
-          type: 'line',
-          paint: {
-            'line-color': '#8fdfef',
-            'line-width': 1,
-          },
-        },
-      ],
-    },
-  ],
+  layers: [],
 })
 
 export const getters = {
@@ -33,10 +8,16 @@ export const getters = {
 
 export const mutations = {
   ADD_LAYER (state, newLayer) {
-
+    const layerExists = state.layers.some(storedLayer => storedLayer.id === newLayer.id)
+    if (!layerExists) {
+      state.layers = [
+        ...state.layers,
+        Object.freeze({ ...newLayer }),
+      ]
+    }
   },
   REMOVE_LAYER (state, layerId) {
-
+    state.layers = state.layers.filter(({ id }) => id !== layerId)
   },
 }
 
