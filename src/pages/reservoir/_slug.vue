@@ -18,12 +18,9 @@
     }),
 
     async fetch () {
-      console.log('fetching reservoir')
       try {
         this.reservoir = await this.$repo.reservoir.getReservoirById(this.$route.params.slug)
-        console.log(this.reservoir)
       } catch (e) {
-        console.log(e)
         return this.$nuxt.error({ statusCode: 404, message: e.message })
       }
     },

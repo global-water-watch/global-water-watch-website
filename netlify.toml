@@ -48,9 +48,3 @@
   to = "https://www.globalwaterwatch.io/:splat"
   status = 301
   force = true
-
-# Redirect anything else
-# [[redirects]]
-#   from = "/*"
-#   to = "/404.html"
-#   status = 404
