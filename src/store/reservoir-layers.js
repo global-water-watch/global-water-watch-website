@@ -4,7 +4,7 @@ export const state = () => ({
       id: 'reservoirsv10',
       source: {
         type: 'vector',
-        url: 'mapbox://\'global-water-watch.reservoirs-v10\'',
+        url: 'mapbox://global-water-watch.reservoirs-v10',
       },
       styles: [
         {
@@ -13,6 +13,7 @@ export const state = () => ({
             'fill-color': '#8fdfef',
             'fill-opacity': 0.2,
           },
+          clickable: true,
         },
         {
           type: 'line',
