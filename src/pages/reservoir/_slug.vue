@@ -30,7 +30,7 @@
             this.$repo.reservoir.getTimeSeries(),
           ])
         } catch (e) {
-          console.log(e)
+          console.error(e)
         }
       }
     },

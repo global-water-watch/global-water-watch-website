@@ -1,9 +1,7 @@
 <template>
   <section class="reservoir-page-section layout-section layout-section--lined">
     <div class="layout-container">
-      <client-only>
-        <DetailMap :reservoirs="reservoir ? [reservoir] : reservoirs" />
-      </client-only>
+      <DetailMap :reservoirs="reservoir ? [reservoir] : reservoirs" />
       <data-chart
         :title="chartTitle"
         :x-axis="xAxis"
