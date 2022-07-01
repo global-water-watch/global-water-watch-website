@@ -68,15 +68,18 @@ export default {
     },
 
     removeLayerById (layerId) {
-      console.log('remove layer', layerId)
       const map = this.getMap()
       if (!map) { return }
       map.removeLayer(layerId)
       map.removeSource(layerId)
       const { clickFn } = this.options
       if (clickFn) {
-        map.on('click', layerId, clickFn)
+        map.off('click', layerId, clickFn)
       }
+    },
+
+    removeAllLayers () {
+      this.activeLayerIds.forEach(this.removeLayerById)
     },
   },
 
@@ -90,6 +93,6 @@ export default {
   },
 
   destroyed () {
-    this.removeLayer()
+    this.removeAllLayers()
   },
 }
