@@ -60,32 +60,34 @@
         const map = event.target
         console.log('event', event)
 
-        this.transformedReservoirs.forEach((reservoir) => {
-          console.log('reservoir', reservoir)
-          const reservoirName = `reservoir-${reservoir?.data?.id}`
+        if (this.transformedReservoirs.length > 0) {
+          this.transformedReservoirs.forEach((reservoir) => {
+            console.log('reservoir', reservoir)
+            const reservoirName = `reservoir-${reservoir?.data?.id}`
 
-          map.addSource(reservoirName, reservoir)
-          map.addLayer({
-            id: `${reservoirName}-fill`,
-            type: 'fill',
-            source: reservoirName,
-            layout: {},
-            paint: {
-              'fill-color': '#8fdfef',
-              'fill-opacity': 0.2,
-            },
+            map.addSource(reservoirName, reservoir)
+            map.addLayer({
+              id: `${reservoirName}-fill`,
+              type: 'fill',
+              source: reservoirName,
+              layout: {},
+              paint: {
+                'fill-color': '#8fdfef',
+                'fill-opacity': 0.2,
+              },
+            })
+            map.addLayer({
+              id: `${reservoirName}-line`,
+              type: 'line',
+              source: reservoirName,
+              layout: {},
+              paint: {
+                'line-color': '#8fdfef',
+                'line-width': 1,
+              },
+            })
           })
-          map.addLayer({
-            id: `${reservoirName}-line`,
-            type: 'line',
-            source: reservoirName,
-            layout: {},
-            paint: {
-              'line-color': '#8fdfef',
-              'line-width': 1,
-            },
-          })
-        })
+        }
 
         if (this.transformedReservoirs.length > 1) {
           const allFeatures = featureCollection(this.transformedReservoirs.map(reservoir => reservoir.data))
