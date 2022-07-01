@@ -58,8 +58,10 @@
     methods: {
       addReservoirsToMap (event) {
         const map = event.target
+        console.log('event', event)
 
         this.transformedReservoirs.forEach((reservoir) => {
+          console.log('reservoir', reservoir)
           const reservoirName = `reservoir-${reservoir?.data?.id}`
 
           map.addSource(reservoirName, reservoir)
