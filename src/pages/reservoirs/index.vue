@@ -26,11 +26,16 @@
       if (this.$route.query.ids) {
         const ids = this.$route.query.ids.split(',')
 
+        console.log('ids', ids)
+
         try {
           this.timeSeries = this.$repo.reservoir.getTimeSeries()
-          this.reservoirs = await Promise.all(ids.map((id) => {
-            return this.$repo.reservoir.getReservoirById(id)
+          this.reservoirs = await Promise.all(ids.map(async (id) => {
+            const reservoir = await this.$repo.reservoir.getReservoirById(id)
+            return reservoir
           }))
+
+          console.log('this.reservoirs', this.reservoirs)
         } catch (e) {
           console.error(e)
         }
