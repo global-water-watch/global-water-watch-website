@@ -1,4 +1,4 @@
-const difference = (arr1, arr2) => arr1.filter(x => !arr2.includes(x))
+import { difference } from '@/lib/array-helpers'
 
 export default {
   name: 'v-mapbox-reservoirs-layer',
@@ -36,14 +36,14 @@ export default {
 
     onZoomEnd ({ target: map }) {
       this.zoom = Math.round(map.getZoom())
-      console.log(this.zoom)
+      console.info(this.zoom)
       const matchingLayers = this.options.layers
         .filter(({ zoomLevels }) => zoomLevels.includes(this.zoom))
       const matchingLayerIds = matchingLayers.map(({ id }) => id)
       const layersToAdd = difference(matchingLayerIds, this.activeLayerIds)
       const layersToRemove = difference(this.activeLayerIds, matchingLayerIds)
-      layersToAdd.forEach(this.addLayerById)
       layersToRemove.forEach(this.removeLayerById)
+      layersToAdd.forEach(this.addLayerById)
       this.activeLayerIds = matchingLayerIds
     },
 
@@ -67,9 +67,10 @@ export default {
         })
 
         if (style.type === 'fill') {
+          // @PERFORMANCE :: Find a way to kill this listener when destroyed if performance issues arise
           map.on('mousemove', layerUniqueId, (evt) => {
             const newHoveredFeatureId = evt.features?.[0]?.id
-            if (!newHoveredFeatureId) {
+            if (!newHoveredFeatureId || newHoveredFeatureId === this.hoveredFeatureId) {
               return
             }
             // Reset previous hover state
@@ -83,7 +84,6 @@ export default {
                 { hover: false },
               )
             }
-            console.log(this.hoveredFeatureId, newHoveredFeatureId)
             // Set new hover state
             this.hoveredFeatureId = newHoveredFeatureId
             map.setFeatureState(
@@ -95,10 +95,24 @@ export default {
               { hover: true },
             )
           })
+
+          map.on('mouseleave', layerUniqueId, () => {
+            if (this.hoveredFeatureId !== null) {
+              map.setFeatureState(
+                {
+                  source: layerId,
+                  sourceLayer: layerId,
+                  id: this.hoveredFeatureId,
+                },
+                { hover: false },
+              )
+            }
+            this.hoveredFeatureId = null
+          })
         }
 
         if (clickFn) {
-          map.on('click', layerId, clickFn)
+          map.on('click', layerUniqueId, clickFn)
         }
       })
     },
@@ -106,12 +120,20 @@ export default {
     removeLayerById (layerId) {
       const map = this.getMap()
       if (!map) { return }
-      map.removeLayer(layerId)
-      map.removeSource(layerId)
-      const { clickFn } = this.options
-      if (clickFn) {
-        map.off('click', layerId, clickFn)
-      }
+
+      const { styles } = this.options
+      styles.forEach((style) => {
+        const layerUniqueId = `${layerId}-${style.type}`
+        map.removeLayer(layerUniqueId)
+        // Only remove source when no other layers depend on it
+        if (!map.getStyle().layers.some(({ source }) => source === layerId)) {
+          map.removeSource(layerId)
+        }
+        const { clickFn } = this.options
+        if (clickFn) {
+          map.off('click', layerId, clickFn)
+        }
+      })
     },
 
     removeAllLayers () {

@@ -62,11 +62,11 @@
             name: 'Basins',
             layers: [
               {
-                id: 'BasinATLAS_v10_lev05',
-                zoomLevels: [5],
+                id: 'BasinATLAS_v10_lev03',
+                zoomLevels: [1, 2, 3],
                 source: {
                   type: 'vector',
-                  url: 'mapbox://global-water-watch.BasinATLAS_v10_lev05',
+                  url: 'mapbox://global-water-watch.BasinATLAS_v10_lev03',
                 },
               },
               {
@@ -75,6 +75,14 @@
                 source: {
                   type: 'vector',
                   url: 'mapbox://global-water-watch.BasinATLAS_v10_lev04',
+                },
+              },
+              {
+                id: 'BasinATLAS_v10_lev05',
+                zoomLevels: [5, 6, 7, 8],
+                source: {
+                  type: 'vector',
+                  url: 'mapbox://global-water-watch.BasinATLAS_v10_lev05',
                 },
               },
             ],
