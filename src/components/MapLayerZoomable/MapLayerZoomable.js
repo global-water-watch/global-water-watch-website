@@ -18,6 +18,8 @@ export default {
     zoom: 0,
     activeLayerIds: [],
     hoveredFeatureId: null,
+    mouseMoveFnMap: {},
+    mouseLeaveFnMap: {},
   }),
 
   methods: {
@@ -67,8 +69,7 @@ export default {
         })
 
         if (style.type === 'fill') {
-          // @PERFORMANCE :: Find a way to kill this listener when destroyed if performance issues arise
-          map.on('mousemove', layerUniqueId, (evt) => {
+          this.mouseMoveFnMap[layerUniqueId] = (evt) => {
             const newHoveredFeatureId = evt.features?.[0]?.id
             if (!newHoveredFeatureId || newHoveredFeatureId === this.hoveredFeatureId) {
               return
@@ -94,9 +95,9 @@ export default {
               },
               { hover: true },
             )
-          })
+          }
 
-          map.on('mouseleave', layerUniqueId, () => {
+          this.mouseLeaveFnMap[layerUniqueId] = () => {
             if (this.hoveredFeatureId !== null) {
               map.setFeatureState(
                 {
@@ -108,7 +109,10 @@ export default {
               )
             }
             this.hoveredFeatureId = null
-          })
+          }
+
+          map.on('mousemove', layerUniqueId, this.mouseMoveFnMap[layerUniqueId])
+          map.on('mouseleave', layerUniqueId, this.mouseLeaveFnMap[layerUniqueId])
         }
 
         if (clickFn) {
@@ -125,10 +129,22 @@ export default {
       styles.forEach((style) => {
         const layerUniqueId = `${layerId}-${style.type}`
         map.removeLayer(layerUniqueId)
+
         // Only remove source when no other layers depend on it
         if (!map.getStyle().layers.some(({ source }) => source === layerId)) {
           map.removeSource(layerId)
         }
+
+        if (this.mouseMoveFnMap[layerUniqueId]) {
+          map.off('mousemove', layerUniqueId, this.mouseMoveFnMap[layerUniqueId])
+          delete this.mouseMoveFnMap[layerUniqueId]
+        }
+
+        if (this.mouseLeaveFnMap[layerUniqueId]) {
+          map.off('mouseleave', layerUniqueId, this.mouseLeaveFnMap[layerUniqueId])
+          delete this.mouseLeaveFnMap[layerUniqueId]
+        }
+
         const { clickFn } = this.options
         if (clickFn) {
           map.off('click', layerId, clickFn)
