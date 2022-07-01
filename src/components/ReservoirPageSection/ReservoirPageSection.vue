@@ -3,6 +3,7 @@
     <div class="layout-container">
       <DetailMap :reservoirs="reservoir ? [reservoir] : reservoirs" />
       <data-chart
+        v-if="timeSeries"
         :title="chartTitle"
         :x-axis="xAxis"
         :y-axis="yAxis"
