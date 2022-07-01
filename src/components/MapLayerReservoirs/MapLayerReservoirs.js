@@ -22,7 +22,6 @@ export default {
         'source-layer': id,
         layout: {},
         paint: style.paint,
-        clickFn: style.clickFn,
       }))
     },
   },
@@ -37,14 +36,14 @@ export default {
 
     addLayer () {
       const map = this.getMap()
-      const { id, source } = this.options
+      const { id, source, clickFn } = this.options
 
       map.addSource(id, { id, ...source })
 
       this.renderLayers.forEach((layer) => {
         map.addLayer(layer)
-        if (layer.clickFn) {
-          map.on('click', layer.id, layer.clickFn)
+        if (clickFn) {
+          map.on('click', layer.id, clickFn)
         }
       })
     },
@@ -52,16 +51,16 @@ export default {
     removeLayer () {
       const map = this.getMap()
       if (!map) { return }
+      const { clickFn, id: layerSource } = this.options
 
       this.renderLayers.forEach((layer) => {
-        const layerSource = this.options.id
         map.removeLayer(layer.id)
         // Only remove source when no other layers depend on it
         if (!map.getStyle().layers.some(({ source }) => source === layerSource)) {
           map.removeSource(layerSource)
         }
-        if (layer.clickFn) {
-          map.off('click', layer.id, layer.clickFn)
+        if (clickFn) {
+          map.off('click', layer.id, clickFn)
         }
       })
     },

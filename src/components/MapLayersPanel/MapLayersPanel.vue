@@ -45,8 +45,6 @@
                   'fill-color': '#8fdfef',
                   'fill-opacity': 0.2,
                 },
-                // @TODO :: Refactor this to be for all style layers
-                clickFn: this.onReservoirClick,
               },
               {
                 type: 'line',
@@ -56,6 +54,7 @@
                 },
               },
             ],
+            clickFn: this.onReservoirClick,
           }),
         ],
         basinLayers: [
