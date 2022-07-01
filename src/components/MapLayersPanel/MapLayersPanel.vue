@@ -112,7 +112,15 @@
       },
 
       onBasinClick (evt) {
-        console.log('you clicked a basin', evt)
+        if (!evt.features.length) {
+          return
+        }
+        const [basin] = evt.features
+        if (basin) {
+          const { HYBAS_ID } = basin.properties
+          // TODO :: Handle basins properly
+          console.log(HYBAS_ID)
+        }
       },
     },
   }
