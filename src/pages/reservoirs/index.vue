@@ -23,6 +23,7 @@
     }),
 
     async fetch () {
+      console.log(this.$route)
       if (this.$route.query.ids) {
         const ids = this.$route.query.ids.split(',')
 
