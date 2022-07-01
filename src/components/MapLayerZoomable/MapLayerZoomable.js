@@ -1,3 +1,5 @@
+const difference = (arr1, arr2) => arr1.filter(x => !arr2.includes(x))
+
 export default {
   name: 'v-mapbox-reservoirs-layer',
 
@@ -14,22 +16,8 @@ export default {
 
   data: () => ({
     zoom: 0,
+    activeLayerIds: [],
   }),
-
-  computed: {
-    renderLayers () {
-      // const { id, styles } = this.options
-      // return styles.map(style => ({
-      //   id: `${id}-${style.type}`,
-      //   type: style.type,
-      //   source: id,
-      //   'source-layer': id,
-      //   layout: {},
-      //   paint: style.paint,
-      //   clickFn: style.clickFn,
-      // }))
-    },
-  },
 
   methods: {
     deferredMountedTo () {
@@ -47,38 +35,48 @@ export default {
 
     onZoomEnd ({ target: map }) {
       this.zoom = Math.round(map.getZoom())
-      console.log(this.zoom)
+      const matchingLayers = this.options.layers
+        .filter(({ zoomLevels }) => zoomLevels.includes(this.zoom))
+      const matchingLayerIds = matchingLayers.map(({ id }) => id)
+      const layersToAdd = difference(matchingLayerIds, this.activeLayerIds)
+      const layersToRemove = difference(this.activeLayerIds, matchingLayerIds)
+      layersToAdd.forEach(this.addLayerById)
+      layersToRemove.forEach(this.removeLayerById)
+      this.activeLayerIds = matchingLayerIds
     },
 
-    addLayer () {
+    addLayerById (layerId) {
       const map = this.getMap()
-      // const { id, source } = this.options
+      if (!map) { return }
+      const layer = this.options.layers.find(({ id }) => id === layerId)
+      const { style, clickFn } = this.options
 
-      // map.addSource(id, { id, ...source })
+      map.addSource(layerId, { id: layerId, ...layer.source })
 
-      // this.renderLayers.forEach((layer) => {
-      //   map.addLayer(layer)
-      //   if (layer.clickFn) {
-      //     map.on('click', layer.id, layer.clickFn)
-      //   }
-      // })
+      map.addLayer({
+        id: layerId,
+        type: style.type,
+        source: layerId,
+        'source-layer': layerId,
+        layout: {},
+        paint: style.paint,
+      })
+
+      if (clickFn) {
+        map.on('click', layerId, clickFn)
+      }
     },
 
-    removeLayer () {
-      // const map = this.getMap()
-      // if (!map) { return }
-
-      // this.renderLayers.forEach((layer) => {
-      //   const layerSource = this.options.id
-      //   map.removeLayer(layer.id)
-      //   // Only remove source when no other layers depend on it
-      //   if (!map.getStyle().layers.some(({ source }) => source === layerSource)) {
-      //     map.removeSource(layerSource)
-      //   }
-      //   if (layer.clickFn) {
-      //     map.off('click', layer.id, layer.clickFn)
-      //   }
-      // })
+    removeLayerById (layerId) {
+      console.log('remove layer', layerId)
+      const map = this.getMap()
+      if (!map) { return }
+      map.removeLayer(layerId)
+      map.removeSource(layerId)
+      const { clickFn } = this.options
+      if (clickFn) {
+        map.on('click', layerId, clickFn)
+      }
     },
   },
 
