@@ -17,6 +17,7 @@ export default {
   data: () => ({
     zoom: 0,
     activeLayerIds: [],
+    hoveredFeatureId: null,
   }),
 
   methods: {
@@ -35,6 +36,7 @@ export default {
 
     onZoomEnd ({ target: map }) {
       this.zoom = Math.round(map.getZoom())
+      console.log(this.zoom)
       const matchingLayers = this.options.layers
         .filter(({ zoomLevels }) => zoomLevels.includes(this.zoom))
       const matchingLayerIds = matchingLayers.map(({ id }) => id)
@@ -49,22 +51,56 @@ export default {
       const map = this.getMap()
       if (!map) { return }
       const layer = this.options.layers.find(({ id }) => id === layerId)
-      const { style, clickFn } = this.options
+      const { styles, clickFn } = this.options
 
-      map.addSource(layerId, { id: layerId, ...layer.source })
+      map.addSource(layerId, { id: layerId, ...layer.source, promoteId: 'HYBAS_ID' })
 
-      map.addLayer({
-        id: layerId,
-        type: style.type,
-        source: layerId,
-        'source-layer': layerId,
-        layout: {},
-        paint: style.paint,
+      styles.forEach((style) => {
+        const layerUniqueId = `${layerId}-${style.type}`
+        map.addLayer({
+          id: layerUniqueId,
+          type: style.type,
+          source: layerId,
+          'source-layer': layerId,
+          layout: {},
+          paint: style.paint,
+        })
+
+        if (style.type === 'fill') {
+          map.on('mousemove', layerUniqueId, (evt) => {
+            const newHoveredFeatureId = evt.features?.[0]?.id
+            if (!newHoveredFeatureId) {
+              return
+            }
+            // Reset previous hover state
+            if (this.hoveredFeatureId !== null) {
+              map.setFeatureState(
+                {
+                  source: layerId,
+                  sourceLayer: layerId,
+                  id: this.hoveredFeatureId,
+                },
+                { hover: false },
+              )
+            }
+            console.log(this.hoveredFeatureId, newHoveredFeatureId)
+            // Set new hover state
+            this.hoveredFeatureId = newHoveredFeatureId
+            map.setFeatureState(
+              {
+                source: layerId,
+                sourceLayer: layerId,
+                id: this.hoveredFeatureId,
+              },
+              { hover: true },
+            )
+          })
+        }
+
+        if (clickFn) {
+          map.on('click', layerId, clickFn)
+        }
       })
-
-      if (clickFn) {
-        map.on('click', layerId, clickFn)
-      }
     },
 
     removeLayerById (layerId) {
