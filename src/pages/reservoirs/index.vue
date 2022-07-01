@@ -43,6 +43,8 @@
       }
     },
 
+    fetchOnServer: false,
+
     computed: {
       reservoirIds () {
         return this.reservoirs.map(r => r.id).join(', ')
