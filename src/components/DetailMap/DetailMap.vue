@@ -60,6 +60,10 @@
         const map = event.target
         console.log('event', event)
 
+        console.log('this.reservoirs', this.reservoirs)
+
+        console.log('this.transformedReservoirs', this.transformedReservoirs)
+
         if (this.transformedReservoirs.length > 0) {
           this.transformedReservoirs.forEach((reservoir) => {
             console.log('reservoir', reservoir)
