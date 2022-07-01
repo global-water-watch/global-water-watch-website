@@ -19,4 +19,7 @@ export const mutations = {
   REMOVE_LAYER (state, layerId) {
     state.layers = state.layers.filter(({ id }) => id !== layerId)
   },
+  REMOVE_ALL_LAYERS (state) {
+    state.layers = []
+  },
 }
