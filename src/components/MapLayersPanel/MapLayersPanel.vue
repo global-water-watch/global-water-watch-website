@@ -132,7 +132,7 @@
 
       onReservoirClick (evt) {
         const reservoir = evt.features?.[0]
-        if (reservoir) {
+        if (!reservoir) {
           return
         }
         const { fid } = reservoir.properties
