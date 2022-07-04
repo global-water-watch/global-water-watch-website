@@ -38,7 +38,7 @@ export default {
 
     onZoomEnd ({ target: map }) {
       this.zoom = Math.round(map.getZoom())
-      console.info(this.zoom)
+      console.info('Zoom:', this.zoom)
       const matchingLayers = this.options.layers
         .filter(({ zoomLevels }) => zoomLevels.includes(this.zoom))
       const matchingLayerIds = matchingLayers.map(({ id }) => id)
@@ -167,6 +167,8 @@ export default {
   },
 
   destroyed () {
+    const map = this.getMap()
+    map.off('zoomend', this.onZoomEnd)
     this.removeAllLayers()
   },
 }
