@@ -1,7 +1,7 @@
 import { difference } from '@/lib/array-helpers'
 
 export default {
-  name: 'v-mapbox-reservoirs-layer',
+  name: 'v-mapbox-zoomable-layer',
 
   inject: ['getMap'],
 
