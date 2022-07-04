@@ -43,14 +43,14 @@
                 type: 'fill',
                 paint: {
                   'fill-color': '#8fdfef',
-                  'fill-opacity': 0.2,
+                  'fill-opacity': 0.4,
                 },
               },
               {
                 type: 'line',
                 paint: {
                   'line-color': '#8fdfef',
-                  'line-width': 1,
+                  'line-width': 0.8,
                 },
               },
             ],
@@ -62,21 +62,51 @@
             name: 'Basins',
             layers: [
               {
+                id: 'BasinATLAS_v10_lev03',
+                zoomLevels: [1, 2, 3],
+                source: {
+                  type: 'vector',
+                  url: 'mapbox://global-water-watch.BasinATLAS_v10_lev03',
+                },
+              },
+              {
+                id: 'BasinATLAS_v10_lev04',
+                zoomLevels: [4],
+                source: {
+                  type: 'vector',
+                  url: 'mapbox://global-water-watch.BasinATLAS_v10_lev04',
+                },
+              },
+              {
                 id: 'BasinATLAS_v10_lev05',
-                zoomLevels: [5],
+                zoomLevels: [5, 6, 7, 8],
                 source: {
                   type: 'vector',
                   url: 'mapbox://global-water-watch.BasinATLAS_v10_lev05',
                 },
               },
             ],
-            style: {
-              type: 'fill',
-              paint: {
-                'fill-color': '#0080ff',
-                'fill-opacity': 0.5,
+            styles: [
+              {
+                type: 'fill',
+                paint: {
+                  'fill-color': '#0080ff',
+                  'fill-opacity': [
+                    'case',
+                    ['boolean', ['feature-state', 'hover'], false],
+                    0.75,
+                    0,
+                  ],
+                },
               },
-            },
+              {
+                type: 'line',
+                paint: {
+                  'line-color': '#0080ff',
+                  'line-width': 0.8,
+                },
+              },
+            ],
             clickFn: this.onBasinClick,
           }),
         ],
@@ -101,18 +131,22 @@
       },
 
       onReservoirClick (evt) {
-        if (!evt.features.length) {
+        const reservoir = evt.features?.[0]
+        if (!reservoir) {
           return
         }
-        const [reservoir] = evt.features
-        if (reservoir) {
-          const { fid } = reservoir.properties
-          this.$router.push({ path: `/reservoir/${fid}` })
-        }
+        const { fid } = reservoir.properties
+        this.$router.push({ path: `/reservoir/${fid}` })
       },
 
       onBasinClick (evt) {
-        console.log('you clicked a basin', evt)
+        const basin = evt.features?.[0]
+        if (!basin) {
+          return
+        }
+        const { HYBAS_ID } = basin.properties
+        // TODO :: Handle basins properly
+        console.log(HYBAS_ID)
       },
     },
   }
