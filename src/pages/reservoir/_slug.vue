@@ -24,10 +24,11 @@
 
     async fetch () {
       if (this.$route.params.slug) {
+        const TEMP_SINGLE_RESERVOIR_WITH_TS = 1
         try {
           [this.reservoir, this.timeSeries] = await Promise.all([
-            this.$repo.reservoir.getReservoirById(this.$route.params.slug),
-            this.$repo.reservoir.getTimeSeries(),
+            this.$repo.reservoir.getById(this.$route.params.slug),
+            this.$repo.reservoir.getTimeSeriesById(TEMP_SINGLE_RESERVOIR_WITH_TS),
           ])
         } catch (e) {
           console.error(e)
