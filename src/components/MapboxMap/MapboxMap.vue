@@ -17,6 +17,12 @@
       :key="layer.id"
       :options="layer"
     />
+
+    <map-layer-zoomable
+      v-for="layer in zoomableLayers"
+      :key="layer.name"
+      :options="layer"
+    />
   </v-mapbox>
 </template>
 
@@ -42,6 +48,9 @@
     computed: {
       reservoirLayers () {
         return this.$store.getters['reservoir-layers/layers']
+      },
+      zoomableLayers () {
+        return this.$store.getters['zoomable-layers/layers']
       },
     },
 

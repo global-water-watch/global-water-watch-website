@@ -12,6 +12,15 @@
             @change="toggleReservoirLayer($event, layer)"
           />
         </li>
+        <li
+          v-for="layer in basinLayers"
+          :key="layer.name"
+        >
+          <v-checkbox
+            :label="layer.name"
+            @change="toggleZoomableLayer($event, layer)"
+          />
+        </li>
       </ul>
     </div>
   </div>
@@ -36,7 +45,6 @@
                   'fill-color': '#8fdfef',
                   'fill-opacity': 0.2,
                 },
-                clickFn: this.onReservoirClick,
               },
               {
                 type: 'line',
@@ -46,6 +54,30 @@
                 },
               },
             ],
+            clickFn: this.onReservoirClick,
+          }),
+        ],
+        basinLayers: [
+          Object.freeze({
+            name: 'Basins',
+            layers: [
+              {
+                id: 'BasinATLAS_v10_lev05',
+                zoomLevels: [5],
+                source: {
+                  type: 'vector',
+                  url: 'mapbox://global-water-watch.BasinATLAS_v10_lev05',
+                },
+              },
+            ],
+            style: {
+              type: 'fill',
+              paint: {
+                'fill-color': '#0080ff',
+                'fill-opacity': 0.5,
+              },
+            },
+            clickFn: this.onBasinClick,
           }),
         ],
       }
@@ -60,6 +92,14 @@
         }
       },
 
+      toggleZoomableLayer (showLayer, layer) {
+        if (showLayer) {
+          this.$store.commit('zoomable-layers/ADD_LAYER', layer)
+        } else {
+          this.$store.commit('zoomable-layers/REMOVE_LAYER', layer.id)
+        }
+      },
+
       onReservoirClick (evt) {
         if (!evt.features.length) {
           return
@@ -69,6 +109,10 @@
           const { fid } = reservoir.properties
           this.$router.push({ path: `/reservoir/${fid}` })
         }
+      },
+
+      onBasinClick (evt) {
+        console.log('you clicked a basin', evt)
       },
     },
   }
