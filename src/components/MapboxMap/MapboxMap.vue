@@ -29,8 +29,6 @@
 </template>
 
 <script>
-  // import MapboxDrawControl from './MapboxDrawControl'
-
   const MAP_ZOOM = 3
   const WORLD_CENTER_LONGITUDE = 78.836854
   const WORLD_CENTER_LATITUDE = 22.662175
