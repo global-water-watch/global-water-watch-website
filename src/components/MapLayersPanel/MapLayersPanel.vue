@@ -1,28 +1,43 @@
 <template>
   <div class="map-layers-panel">
-    <h3>Layers</h3>
-    <div class="map-layers-panel__content">
-      <ul>
-        <li
-          v-for="layer in reservoirLayers"
-          :key="layer.id"
-        >
-          <v-checkbox
-            :label="layer.name"
-            @change="toggleReservoirLayer($event, layer)"
-          />
-        </li>
-        <li
-          v-for="layer in basinLayers"
-          :key="layer.name"
-        >
-          <v-checkbox
-            :label="layer.name"
-            @change="toggleZoomableLayer($event, layer)"
-          />
-        </li>
-      </ul>
-    </div>
+    <ul>
+      <li
+        v-for="layer in reservoirLayers"
+        :key="layer.id"
+      >
+        <v-checkbox
+          v-model="activeLayerName"
+          :value="layer.name"
+          :label="layer.name"
+          dense
+          hide-details
+          @change="toggleReservoirLayer($event, layer)"
+        />
+      </li>
+      <li
+        v-for="layer in basinLayers"
+        :key="layer.name"
+      >
+        <v-checkbox
+          v-model="activeLayerName"
+          :value="layer.name"
+          :label="layer.name"
+          dense
+          hide-details
+          @change="toggleZoomableLayer($event, layer)"
+        />
+      </li>
+      <li>
+        <v-checkbox
+          v-model="activeLayerName"
+          :value="'Regions'"
+          :label="'Regions'"
+          dense
+          hide-details
+          disabled
+        />
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -90,7 +105,7 @@
               {
                 type: 'fill',
                 paint: {
-                  'fill-color': '#0080ff',
+                  'fill-color': '#8fdfef',
                   'fill-opacity': [
                     'case',
                     ['boolean', ['feature-state', 'hover'], false],
@@ -102,7 +117,7 @@
               {
                 type: 'line',
                 paint: {
-                  'line-color': '#0080ff',
+                  'line-color': '#8fdfef',
                   'line-width': 0.8,
                 },
               },
@@ -113,8 +128,36 @@
       }
     },
 
+    computed: {
+      activeLayerName: {
+        get () {
+          return this.$store.getters['ui/activeLayerName']
+        },
+        set (layerName) {
+          this.$store.commit('ui/SET_ACTIVE_LAYER_NAME', layerName)
+        },
+      },
+    },
+
+    mounted () {
+      // @TODO :: Very PoC, much refactor
+      const initiallySelectedReservoirLayer = this.reservoirLayers
+        .find(({ name }) => name === this.activeLayerName)
+      const initiallySelectedBasinLayer = this.basinLayers
+        .find(({ name }) => name === this.activeLayerName)
+      if (initiallySelectedReservoirLayer) {
+        this.$store.commit('reservoir-layers/ADD_LAYER', initiallySelectedReservoirLayer)
+      }
+      if (initiallySelectedBasinLayer) {
+        this.$store.commit('zoomable-layers/ADD_LAYER', initiallySelectedBasinLayer)
+      }
+    },
+
     methods: {
       toggleReservoirLayer (showLayer, layer) {
+        // Clear all other types of layers
+        this.$store.commit('zoomable-layers/REMOVE_ALL_LAYERS')
+
         if (showLayer) {
           this.$store.commit('reservoir-layers/ADD_LAYER', layer)
         } else {
@@ -123,6 +166,9 @@
       },
 
       toggleZoomableLayer (showLayer, layer) {
+        // Clear all other types of layers
+        this.$store.commit('reservoir-layers/REMOVE_ALL_LAYERS')
+
         if (showLayer) {
           this.$store.commit('zoomable-layers/ADD_LAYER', layer)
         } else {
