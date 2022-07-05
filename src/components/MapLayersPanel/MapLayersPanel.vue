@@ -240,18 +240,13 @@
       },
 
       onBasinClick (evt) {
-        const map = evt.target
         const basin = evt.features?.[0]
         if (!basin) {
           return
         }
+        const { source } = basin
         const { HYBAS_ID } = basin.properties
-        const lala = map.queryRenderedFeatures({
-          layers: ['BasinATLAS_v10_lev03-fill'],
-          // filter: ['==', 'id', HYBAS_ID.toString()],
-        }).filter(({ id }) => id === HYBAS_ID)?.[0]?.geometry
-        console.log(lala)
-        // this.$router.push({ path: `/basin/${HYBAS_ID}` })
+        this.$router.push({ path: `/basin/${source}--${HYBAS_ID}` })
       },
 
       onRegionLayerClick (evt) {
