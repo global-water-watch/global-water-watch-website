@@ -62,6 +62,7 @@
         basinLayers: [
           Object.freeze({
             name: 'Basins',
+            promoteId: 'HYBAS_ID', // this id is used to identify the hover id in the map.
             layers: [
               {
                 id: 'BasinATLAS_v10_lev03',
@@ -115,10 +116,11 @@
         administrativeRegionLayers: [
           Object.freeze({
             name: 'Administrative regions',
+            promoteId: 'shapeID', // this id is used to identify the hover id in the map.
             layers: [
               {
                 id: 'geoBoundariesCGAZ_ADM0',
-                zoomLevels: [0, 1, 2, 3, 4],
+                zoomLevels: [0, 1, 2, 3],
                 source: {
                   type: 'vector',
                   url: 'mapbox://global-water-watch.geoboundaries-adm0',
@@ -126,7 +128,7 @@
               },
               {
                 id: 'geoBoundariesCGAZ_ADM1',
-                zoomLevels: [3, 4, 5, 6, 7, 8],
+                zoomLevels: [4, 5, 6, 7],
                 source: {
                   type: 'vector',
                   url: 'mapbox://global-water-watch.geoboundaries-adm1',
@@ -134,7 +136,7 @@
               },
               {
                 id: 'geoBoundariesCGAZ_ADM2',
-                zoomLevels: [7, 8, 9, 10, 11, 12],
+                zoomLevels: [8, 9, 10, 11, 12],
                 source: {
                   type: 'vector',
                   url: 'mapbox://global-water-watch.geoboundaries-adm2',
@@ -145,14 +147,19 @@
               {
                 type: 'fill',
                 paint: {
-                  'fill-color': '#895400',
-                  'fill-opacity': 0.4,
+                  'fill-color': '#d78200',
+                  'fill-opacity': [
+                    'case',
+                    ['boolean', ['feature-state', 'hover'], false],
+                    0.75,
+                    0,
+                  ],
                 },
               },
               {
                 type: 'line',
                 paint: {
-                  'line-color': '#895400',
+                  'line-color': '#d78200',
                   'line-width': 0.8,
                 },
               },

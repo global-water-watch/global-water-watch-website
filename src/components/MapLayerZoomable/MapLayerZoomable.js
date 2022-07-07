@@ -35,6 +35,7 @@ export default {
       const map = this.getMap()
       map.on('zoomend', this.onZoomEnd)
       this.onZoomEnd({ target: map })
+      console.log(this.options)
     },
 
     onZoomEnd ({ target: map }) {
@@ -54,9 +55,9 @@ export default {
       const map = this.getMap()
       if (!map) { return }
       const layer = this.options.layers.find(({ id }) => id === layerId)
-      const { styles, clickFn } = this.options
+      const { styles, clickFn, promoteId } = this.options
 
-      map.addSource(layerId, { id: layerId, ...layer.source, promoteId: 'HYBAS_ID' })
+      map.addSource(layerId, { id: layerId, ...layer.source, promoteId })
 
       styles.forEach((style) => {
         const layerUniqueId = `${layerId}-${style.type}`
