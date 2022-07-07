@@ -39,5 +39,9 @@ export default function (axios) {
 
     // Get reservoir by id (fid)
     getReservoirById: id => axios.$get(`reservoir/${id}`),
+
+    getByGeometry: geometry => axios
+      .post('reservoir/geometry', geometry)
+      .then(({ data }) => data),
   }
 }
