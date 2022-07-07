@@ -25,7 +25,7 @@ module.exports = {
       },
     ],
     'comma-dangle': ['warn', 'always-multiline'],
-    'no-console': isProduction ? 'error' : 'warn',
+    'no-console': [isProduction ? 'error' : 'warn', { allow: ['warn', 'error', 'info'] }],
     'no-debugger': isProduction ? 'error' : 'warn',
     semi: isProduction ? ['error', 'never'] : ['warn', 'never'],
     'vue/script-indent': ['error', 2, { baseIndent: 1 }],

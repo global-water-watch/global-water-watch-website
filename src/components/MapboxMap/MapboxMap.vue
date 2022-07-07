@@ -17,10 +17,20 @@
       :key="layer.id"
       :options="layer"
     />
+
+    <map-layer-zoomable
+      v-for="layer in zoomableLayers"
+      :key="layer.name"
+      :options="layer"
+    />
+
+    <mapbox-draw-control />
   </v-mapbox>
 </template>
 
 <script>
+  // import MapboxDrawControl from './MapboxDrawControl'
+
   const MAP_ZOOM = 3
   const WORLD_CENTER_LONGITUDE = 78.836854
   const WORLD_CENTER_LATITUDE = 22.662175
@@ -42,6 +52,9 @@
     computed: {
       reservoirLayers () {
         return this.$store.getters['reservoir-layers/layers']
+      },
+      zoomableLayers () {
+        return this.$store.getters['zoomable-layers/layers']
       },
     },
 
