@@ -27,14 +27,17 @@
           @change="toggleZoomableLayer($event, layer)"
         />
       </li>
-      <li>
+      <li
+        v-for="layer in administrativeRegionLayers"
+        :key="layer.name"
+      >
         <v-checkbox
           v-model="activeLayerName"
-          :value="'Regions'"
-          :label="'Regions'"
+          :value="layer.name"
+          :label="layer.name"
           dense
           hide-details
-          disabled
+          @change="toggleZoomableLayer($event, layer)"
         />
       </li>
     </ul>
@@ -125,6 +128,54 @@
             clickFn: this.onBasinClick,
           }),
         ],
+        administrativeRegionLayers: [
+          Object.freeze({
+            name: 'Administrative regions',
+            layers: [
+              {
+                id: 'geoBoundariesCGAZ_ADM0',
+                zoomLevels: [0, 1, 2, 3, 4],
+                source: {
+                  type: 'vector',
+                  url: 'mapbox://global-water-watch.geoboundaries-adm0',
+                },
+              },
+              {
+                id: 'geoBoundariesCGAZ_ADM1',
+                zoomLevels: [3, 4, 5, 6, 7, 8],
+                source: {
+                  type: 'vector',
+                  url: 'mapbox://global-water-watch.geoboundaries-adm1',
+                },
+              },
+              {
+                id: 'geoBoundariesCGAZ_ADM2',
+                zoomLevels: [7, 8, 9, 10, 11, 12],
+                source: {
+                  type: 'vector',
+                  url: 'mapbox://global-water-watch.geoboundaries-adm2',
+                },
+              },
+            ],
+            styles: [
+              {
+                type: 'fill',
+                paint: {
+                  'fill-color': '#895400',
+                  'fill-opacity': 0.4,
+                },
+              },
+              {
+                type: 'line',
+                paint: {
+                  'line-color': '#895400',
+                  'line-width': 0.8,
+                },
+              },
+            ],
+            clickFn: this.onRegionLayerClick,
+          }),
+        ],
       }
     },
 
@@ -145,11 +196,17 @@
         .find(({ name }) => name === this.activeLayerName)
       const initiallySelectedBasinLayer = this.basinLayers
         .find(({ name }) => name === this.activeLayerName)
+      const initiallySelectedAdministrativeRegionLayer = this.administrativeRegionLayers
+        .find(({ name }) => name === this.activeLayerName)
+
       if (initiallySelectedReservoirLayer) {
         this.$store.commit('reservoir-layers/ADD_LAYER', initiallySelectedReservoirLayer)
       }
       if (initiallySelectedBasinLayer) {
         this.$store.commit('zoomable-layers/ADD_LAYER', initiallySelectedBasinLayer)
+      }
+      if (initiallySelectedAdministrativeRegionLayer) {
+        this.$store.commit('zoomable-layers/ADD_LAYER', initiallySelectedAdministrativeRegionLayer)
       }
     },
 
@@ -168,6 +225,12 @@
       toggleZoomableLayer (showLayer, layer) {
         // Clear all other types of layers
         this.$store.commit('reservoir-layers/REMOVE_ALL_LAYERS')
+
+        const [activeLayer] = this.$store.getters['zoomable-layers/layers']
+
+        if (activeLayer) {
+          this.$store.commit('zoomable-layers/REMOVE_LAYER', activeLayer.id)
+        }
 
         if (showLayer) {
           this.$store.commit('zoomable-layers/ADD_LAYER', layer)
@@ -193,6 +256,15 @@
         const { HYBAS_ID } = basin.properties
         // TODO :: Handle basins properly
         console.log(HYBAS_ID)
+      },
+
+      onRegionLayerClick (evt) {
+        const region = evt.features?.[0]
+        if (!region) {
+          return
+        }
+        // TODO :: handle regions properly
+        console.log(region)
       },
     },
   }
