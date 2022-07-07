@@ -18,6 +18,7 @@ export default {
     zoom: 0,
     activeLayerIds: [],
     hoveredFeatureId: null,
+    mouseEnterFnMap: {},
     mouseMoveFnMap: {},
     mouseLeaveFnMap: {},
   }),
@@ -69,6 +70,10 @@ export default {
         })
 
         if (style.type === 'fill') {
+          this.mouseEnterFnMap[layerUniqueId] = () => {
+            map.getCanvas().style.cursor = 'pointer'
+          }
+
           this.mouseMoveFnMap[layerUniqueId] = (evt) => {
             const newHoveredFeatureId = evt.features?.[0]?.id
             if (!newHoveredFeatureId || newHoveredFeatureId === this.hoveredFeatureId) {
@@ -98,6 +103,7 @@ export default {
           }
 
           this.mouseLeaveFnMap[layerUniqueId] = () => {
+            map.getCanvas().style.cursor = ''
             if (this.hoveredFeatureId !== null) {
               map.setFeatureState(
                 {
@@ -111,6 +117,7 @@ export default {
             this.hoveredFeatureId = null
           }
 
+          map.on('mouseenter', layerUniqueId, this.mouseEnterFnMap[layerUniqueId])
           map.on('mousemove', layerUniqueId, this.mouseMoveFnMap[layerUniqueId])
           map.on('mouseleave', layerUniqueId, this.mouseLeaveFnMap[layerUniqueId])
         }
@@ -133,6 +140,11 @@ export default {
         // Only remove source when no other layers depend on it
         if (!map.getStyle().layers.some(({ source }) => source === layerId)) {
           map.removeSource(layerId)
+        }
+
+        if (this.mouseEnterFnMap[layerUniqueId]) {
+          map.off('mouseenter', layerUniqueId, this.mouseEnterFnMap[layerUniqueId])
+          delete this.mouseEnterFnMap[layerUniqueId]
         }
 
         if (this.mouseMoveFnMap[layerUniqueId]) {

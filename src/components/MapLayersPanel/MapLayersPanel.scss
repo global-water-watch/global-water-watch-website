@@ -1,17 +1,10 @@
 .map-layers-panel {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 280px;
-  height: 100%;
-  padding: $space-default $space-default 75px; // extra bottom for social share
+  top: 20px;
+  left: 20px;
+  padding: 5px 15px 12px;
+  border-radius: 4px;
   background-color: $gradient-top;
+  box-shadow: 0 0 10px 2px rgb(0 0 0 / 10%);
   z-index: 2;
-}
-
-.map-layers-panel__content {
-  position: relative;
-  height: 100%;
-  padding: 0 $space-default;
-  overflow-y: auto;
 }
