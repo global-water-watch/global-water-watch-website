@@ -1,46 +1,30 @@
 <template>
   <div class="map-layers-panel">
-    <ul>
-      <li
+    <v-radio-group
+      v-model="activeLayerName"
+    >
+      <v-radio
         v-for="layer in reservoirLayers"
-        :key="layer.id"
-      >
-        <v-checkbox
-          v-model="activeLayerName"
-          :value="layer.name"
-          :label="layer.name"
-          dense
-          hide-details
-          @change="toggleReservoirLayer($event, layer)"
-        />
-      </li>
-      <li
+        :key="layer.name"
+        :label="layer.name"
+        :value="layer.name"
+        @change="toggleReservoirLayer(activeLayerName, layer)"
+      />
+      <v-radio
         v-for="layer in basinLayers"
         :key="layer.name"
-      >
-        <v-checkbox
-          v-model="activeLayerName"
-          :value="layer.name"
-          :label="layer.name"
-          dense
-          hide-details
-          @change="toggleZoomableLayer($event, layer)"
-        />
-      </li>
-      <li
+        :label="layer.name"
+        :value="layer.name"
+        @change="toggleZoomableLayer(activeLayerName, layer)"
+      />
+      <v-radio
         v-for="layer in administrativeRegionLayers"
         :key="layer.name"
-      >
-        <v-checkbox
-          v-model="activeLayerName"
-          :value="layer.name"
-          :label="layer.name"
-          dense
-          hide-details
-          @change="toggleZoomableLayer($event, layer)"
-        />
-      </li>
-    </ul>
+        :label="layer.name"
+        :value="layer.name"
+        @change="toggleZoomableLayer(activeLayerName, layer)"
+      />
+    </v-radio-group>
   </div>
 </template>
 
