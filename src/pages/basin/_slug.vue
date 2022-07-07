@@ -9,6 +9,7 @@
         @found-geometry="onGeometry"
       />
       <div>Basin page</div>
+      <pre>{{ reservoirs }}</pre>
     </client-only>
   </Fragment>
 </template>
@@ -19,6 +20,7 @@
       layer: null,
       id: null,
       areaType: null,
+      reservoirs: [],
     }),
 
     mounted () {
@@ -34,7 +36,13 @@
 
     methods: {
       onGeometry (geometry) {
-        console.log(geometry)
+        this.$repo.reservoir.getByGeometry(geometry)
+          .then((reservoirs) => {
+            this.reservoirs = reservoirs
+          })
+          .catch((err) => {
+            console.error(err)
+          })
       },
     },
   }
