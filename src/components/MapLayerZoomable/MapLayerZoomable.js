@@ -35,7 +35,6 @@ export default {
       const map = this.getMap()
       map.on('zoomend', this.onZoomEnd)
       this.onZoomEnd({ target: map })
-      console.log(this.options)
     },
 
     onZoomEnd ({ target: map }) {
