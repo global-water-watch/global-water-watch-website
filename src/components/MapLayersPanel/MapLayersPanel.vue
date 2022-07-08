@@ -2,27 +2,14 @@
   <div class="map-layers-panel">
     <v-radio-group
       v-model="activeLayerName"
+      :disabled="!mapReady"
     >
       <v-radio
-        v-for="layer in reservoirLayers"
+        v-for="layer in layers"
         :key="layer.name"
         :label="layer.name"
         :value="layer.name"
-        @change="toggleReservoirLayer(activeLayerName, layer)"
-      />
-      <v-radio
-        v-for="layer in basinLayers"
-        :key="layer.name"
-        :label="layer.name"
-        :value="layer.name"
-        @change="toggleZoomableLayer(activeLayerName, layer)"
-      />
-      <v-radio
-        v-for="layer in administrativeRegionLayers"
-        :key="layer.name"
-        :label="layer.name"
-        :value="layer.name"
-        @change="toggleZoomableLayer(activeLayerName, layer)"
+        @change="activateLayer(layer)"
       />
     </v-radio-group>
   </div>
@@ -32,9 +19,10 @@
   export default {
     data () {
       return {
-        reservoirLayers: [
+        layers: [
           Object.freeze({
             name: 'Reservoirs',
+            type: 'reservoir',
             id: 'reservoirsv10',
             source: {
               type: 'vector',
@@ -58,10 +46,9 @@
             ],
             clickFn: this.onReservoirClick,
           }),
-        ],
-        basinLayers: [
           Object.freeze({
             name: 'Basins',
+            type: 'zoomable',
             promoteId: 'HYBAS_ID', // this id is used to identify the hover id in the map.
             layers: [
               {
@@ -112,10 +99,9 @@
             ],
             clickFn: this.onBasinClick,
           }),
-        ],
-        administrativeRegionLayers: [
           Object.freeze({
             name: 'Administrative regions',
+            type: 'zoomable',
             promoteId: 'shapeID', // this id is used to identify the hover id in the map.
             layers: [
               {
@@ -171,6 +157,9 @@
     },
 
     computed: {
+      mapReady () {
+        return this.$store.getters['ui/mapReady']
+      },
       activeLayerName: {
         get () {
           return this.$store.getters['ui/activeLayerName']
@@ -182,52 +171,22 @@
     },
 
     mounted () {
-      // @TODO :: Very PoC, much refactor
-      const initiallySelectedReservoirLayer = this.reservoirLayers
+      const initiallySelectedLayer = this.layers
         .find(({ name }) => name === this.activeLayerName)
-      const initiallySelectedBasinLayer = this.basinLayers
-        .find(({ name }) => name === this.activeLayerName)
-      const initiallySelectedAdministrativeRegionLayer = this.administrativeRegionLayers
-        .find(({ name }) => name === this.activeLayerName)
-
-      if (initiallySelectedReservoirLayer) {
-        this.$store.commit('reservoir-layers/ADD_LAYER', initiallySelectedReservoirLayer)
-      }
-      if (initiallySelectedBasinLayer) {
-        this.$store.commit('zoomable-layers/ADD_LAYER', initiallySelectedBasinLayer)
-      }
-      if (initiallySelectedAdministrativeRegionLayer) {
-        this.$store.commit('zoomable-layers/ADD_LAYER', initiallySelectedAdministrativeRegionLayer)
+      if (initiallySelectedLayer) {
+        this.$store.commit(`${initiallySelectedLayer.type}-layers/ADD_LAYER`, initiallySelectedLayer)
       }
     },
 
     methods: {
-      toggleReservoirLayer (showLayer, layer) {
-        // Clear all other types of layers
+      clearAll () {
         this.$store.commit('zoomable-layers/REMOVE_ALL_LAYERS')
-
-        if (showLayer) {
-          this.$store.commit('reservoir-layers/ADD_LAYER', layer)
-        } else {
-          this.$store.commit('reservoir-layers/REMOVE_LAYER', layer.id)
-        }
+        this.$store.commit('reservoir-layers/REMOVE_ALL_LAYERS')
       },
 
-      toggleZoomableLayer (showLayer, layer) {
-        // Clear all other types of layers
-        this.$store.commit('reservoir-layers/REMOVE_ALL_LAYERS')
-
-        const [activeLayer] = this.$store.getters['zoomable-layers/layers']
-
-        if (activeLayer) {
-          this.$store.commit('zoomable-layers/REMOVE_LAYER', activeLayer.id)
-        }
-
-        if (showLayer) {
-          this.$store.commit('zoomable-layers/ADD_LAYER', layer)
-        } else {
-          this.$store.commit('zoomable-layers/REMOVE_LAYER', layer.id)
-        }
+      activateLayer (layer) {
+        this.clearAll()
+        this.$store.commit(`${layer.type}-layers/ADD_LAYER`, layer)
       },
 
       onReservoirClick (evt) {
