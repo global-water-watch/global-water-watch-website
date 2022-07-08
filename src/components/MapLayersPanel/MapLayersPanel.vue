@@ -190,9 +190,9 @@
         if (!basin) {
           return
         }
+        const { source } = basin
         const { HYBAS_ID } = basin.properties
-        // TODO :: Handle basins properly
-        console.log(HYBAS_ID)
+        this.$router.push({ path: `/basin/${source}--${HYBAS_ID}` })
       },
     },
   }
