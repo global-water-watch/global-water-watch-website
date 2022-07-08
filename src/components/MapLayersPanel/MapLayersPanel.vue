@@ -254,8 +254,10 @@
         if (!region) {
           return
         }
-        // TODO :: handle regions properly
-        console.log(region)
+        const { source } = region
+        const { shapeID } = region.properties
+
+        this.$router.push({ path: `/boundaries/${source}--${shapeID}` })
       },
     },
   }

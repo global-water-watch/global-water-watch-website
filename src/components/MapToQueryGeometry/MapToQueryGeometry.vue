@@ -7,6 +7,7 @@
 
   const AREA_KEY_MAP = {
     basin: 'HYBAS_ID',
+    boundaries: 'shapeID',
   }
 
   export default {
@@ -26,6 +27,10 @@
     },
 
     mounted () {
+      console.log(this.id)
+      console.log(this.areaType)
+      console.log(this.layer)
+
       mapboxgl.accessToken = this.$config.mapBoxToken
 
       const map = new mapboxgl.Map({
@@ -55,6 +60,8 @@
       map.on('idle', () => {
         if (!map.getLayer(this.layer)) { return }
         const AREA_KEY = AREA_KEY_MAP[this.areaType]
+        console.log(AREA_KEY)
+        console.log(this.layer)
         const geometry = map.queryRenderedFeatures({
           layers: [this.layer],
         })
