@@ -15,7 +15,7 @@
 </template>
 
 <script>
-  import { bbox } from '@turf/turf'
+  import { bbox, featureCollection } from '@turf/turf'
 
   const MAP_ZOOM = 3
   const WORLD_CENTER_LONGITUDE = 78.836854
@@ -42,24 +42,25 @@
       }
     },
 
+    computed: {
+      transformedReservoirs () {
+        return this.reservoirs.map(reservoir => ({
+          type: 'geojson',
+          data: {
+            ...reservoir,
+          },
+        }))
+      },
+    },
+
     methods: {
       addReservoirsToMap (event) {
         const map = event.target
-        this.reservoirs.forEach((reservoir) => {
-          const reservoirName = `reservoir-${reservoir.id}`
-          const geoJson = {
-            type: 'geojson',
-            data: {
-              ...reservoir,
-            },
-          }
 
-          if (geoJson?.data?.geometry?.coordinates) {
-            const boundingBox = bbox(geoJson.data)
-            map.fitBounds(boundingBox, { padding: 40 })
-          }
+        this.transformedReservoirs.forEach((reservoir) => {
+          const reservoirName = `reservoir-${reservoir.data.id}`
 
-          map.addSource(reservoirName, geoJson)
+          map.addSource(reservoirName, reservoir)
           map.addLayer({
             id: `${reservoirName}-fill`,
             type: 'fill',
@@ -80,6 +81,10 @@
               'line-width': 1,
             },
           })
+
+          const allFeatures = featureCollection(this.transformedReservoirs.map(reservoir => reservoir.data))
+          const boundingBox = bbox(allFeatures)
+          map.fitBounds(boundingBox, { padding: 40 })
         })
       },
 

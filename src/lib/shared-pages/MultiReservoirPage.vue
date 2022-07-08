@@ -9,7 +9,11 @@
         @found-geometry="onGeometry"
       />
       <h1>REUSABLE MULTI REGION PAGE</h1>
-      <pre>{{ reservoirs }}</pre>
+
+      <ReservoirPageSection
+        :reservoirs="reservoirs"
+        :time-series="timeSeries"
+      />
     </client-only>
   </Fragment>
 </template>
@@ -21,6 +25,7 @@
       id: null,
       areaType: null,
       reservoirs: [],
+      timeSeries: null,
     }),
 
     mounted () {
