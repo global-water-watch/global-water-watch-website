@@ -7,6 +7,19 @@
 
   const AREA_KEY_MAP = {
     basin: 'HYBAS_ID',
+    boundary: 'shapeID',
+  }
+
+  // @REFACTOR :: This is not robust, we need to streamline this
+  // with the Deltares mapbox team, may be they can match the
+  // layer URL to the layer id
+  const SOURCE_URL_MAP = {
+    BasinATLAS_v10_lev03: 'BasinATLAS_v10_lev03',
+    BasinATLAS_v10_lev04: 'BasinATLAS_v10_lev04',
+    BasinATLAS_v10_lev05: 'BasinATLAS_v10_lev05',
+    geoBoundariesCGAZ_ADM0: 'geoboundaries-adm0',
+    geoBoundariesCGAZ_ADM1: 'geoboundaries-adm1',
+    geoBoundariesCGAZ_ADM2: 'geoboundaries-adm2',
   }
 
   export default {
@@ -37,7 +50,7 @@
         map.addSource(this.layer, {
           id: this.layer,
           type: 'vector',
-          url: `mapbox://global-water-watch.${this.layer}`,
+          url: `mapbox://global-water-watch.${SOURCE_URL_MAP[this.layer]}`,
         })
         map.addLayer({
           id: this.layer,
@@ -58,7 +71,8 @@
         const geometry = map.queryRenderedFeatures({
           layers: [this.layer],
         })
-          .find(({ properties }) => properties?.[AREA_KEY] === parseInt(this.id))
+          // Forcing a string here by doing `+ ''`
+          .find(({ properties }) => properties?.[AREA_KEY] + '' === this.id)
           ?.geometry
         this.$emit('found-geometry', geometry)
       })

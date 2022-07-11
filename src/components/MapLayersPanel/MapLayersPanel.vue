@@ -210,11 +210,12 @@
 
       onRegionLayerClick (evt) {
         const region = evt.features?.[0]
-        if (!region) {
-          return
-        }
-        // TODO :: handle regions properly
-        console.log(region)
+        if (!region) { return }
+        const { source } = region
+        const { shapeID } = region.properties
+        if (!shapeID) { return }
+
+        this.$router.push({ path: `/boundary/${source}--${shapeID}` })
       },
     },
   }
