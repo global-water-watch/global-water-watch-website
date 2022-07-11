@@ -5,7 +5,7 @@
       :disabled="!mapReady"
     >
       <v-radio
-        v-for="layer in transformedLayers"
+        v-for="layer in filteredLayers"
         :key="layer.name"
         :label="layer.name"
         :value="layer.name"
@@ -171,7 +171,7 @@
           this.$store.commit('ui/SET_ACTIVE_LAYER_NAME', layerName)
         },
       },
-      transformedLayers () {
+      filteredLayers () {
         const showExperimentalFeatures = this.$store.getters['ui/showExperimentalFeatures']
         return showExperimentalFeatures ? this.layers : this.layers.filter(layer => !layer.experimentalFeature)
       },
