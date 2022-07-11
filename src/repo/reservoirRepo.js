@@ -35,7 +35,10 @@ export default function (axios) {
     getById: id => axios.$get(`reservoir/${id}`),
 
     getTimeSeriesById: id => axios.$get(`reservoir/${id}/ts`)
-      .then(formatTimeSeries)
-    ,
+      .then(formatTimeSeries),
+
+    getByGeometry: geometry => axios
+      .post('reservoir/geometry', geometry)
+      .then(({ data }) => data),
   }
 }

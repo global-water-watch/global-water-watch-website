@@ -1,28 +1,17 @@
 <template>
   <div class="map-layers-panel">
-    <h3>Layers</h3>
-    <div class="map-layers-panel__content">
-      <ul>
-        <li
-          v-for="layer in reservoirLayers"
-          :key="layer.id"
-        >
-          <v-checkbox
-            :label="layer.name"
-            @change="toggleReservoirLayer($event, layer)"
-          />
-        </li>
-        <li
-          v-for="layer in basinLayers"
-          :key="layer.name"
-        >
-          <v-checkbox
-            :label="layer.name"
-            @change="toggleZoomableLayer($event, layer)"
-          />
-        </li>
-      </ul>
-    </div>
+    <v-radio-group
+      v-model="activeLayerName"
+      :disabled="!mapReady"
+    >
+      <v-radio
+        v-for="layer in layers"
+        :key="layer.name"
+        :label="layer.name"
+        :value="layer.name"
+        @change="activateLayer(layer)"
+      />
+    </v-radio-group>
   </div>
 </template>
 
@@ -30,9 +19,10 @@
   export default {
     data () {
       return {
-        reservoirLayers: [
+        layers: [
           Object.freeze({
             name: 'Reservoirs',
+            type: 'reservoir',
             id: 'reservoirsv10',
             source: {
               type: 'vector',
@@ -56,10 +46,10 @@
             ],
             clickFn: this.onReservoirClick,
           }),
-        ],
-        basinLayers: [
           Object.freeze({
             name: 'Basins',
+            type: 'zoomable',
+            promoteId: 'HYBAS_ID', // this id is used to identify the hover id in the map.
             layers: [
               {
                 id: 'BasinATLAS_v10_lev03',
@@ -90,7 +80,7 @@
               {
                 type: 'fill',
                 paint: {
-                  'fill-color': '#0080ff',
+                  'fill-color': '#8fdfef',
                   'fill-opacity': [
                     'case',
                     ['boolean', ['feature-state', 'hover'], false],
@@ -102,32 +92,101 @@
               {
                 type: 'line',
                 paint: {
-                  'line-color': '#0080ff',
+                  'line-color': '#8fdfef',
                   'line-width': 0.8,
                 },
               },
             ],
             clickFn: this.onBasinClick,
           }),
+          Object.freeze({
+            name: 'Administrative regions',
+            type: 'zoomable',
+            promoteId: 'shapeID', // this id is used to identify the hover id in the map.
+            layers: [
+              {
+                id: 'geoBoundariesCGAZ_ADM0',
+                zoomLevels: [0, 1, 2, 3],
+                source: {
+                  type: 'vector',
+                  url: 'mapbox://global-water-watch.geoboundaries-adm0',
+                },
+              },
+              {
+                id: 'geoBoundariesCGAZ_ADM1',
+                zoomLevels: [4, 5, 6, 7],
+                source: {
+                  type: 'vector',
+                  url: 'mapbox://global-water-watch.geoboundaries-adm1',
+                },
+              },
+              {
+                id: 'geoBoundariesCGAZ_ADM2',
+                zoomLevels: [8, 9, 10, 11, 12],
+                source: {
+                  type: 'vector',
+                  url: 'mapbox://global-water-watch.geoboundaries-adm2',
+                },
+              },
+            ],
+            styles: [
+              {
+                type: 'fill',
+                paint: {
+                  'fill-color': '#d78200',
+                  'fill-opacity': [
+                    'case',
+                    ['boolean', ['feature-state', 'hover'], false],
+                    0.75,
+                    0,
+                  ],
+                },
+              },
+              {
+                type: 'line',
+                paint: {
+                  'line-color': '#d78200',
+                  'line-width': 0.8,
+                },
+              },
+            ],
+            clickFn: this.onRegionLayerClick,
+          }),
         ],
       }
     },
 
+    computed: {
+      mapReady () {
+        return this.$store.getters['ui/mapReady']
+      },
+      activeLayerName: {
+        get () {
+          return this.$store.getters['ui/activeLayerName']
+        },
+        set (layerName) {
+          this.$store.commit('ui/SET_ACTIVE_LAYER_NAME', layerName)
+        },
+      },
+    },
+
+    mounted () {
+      const initiallySelectedLayer = this.layers
+        .find(({ name }) => name === this.activeLayerName)
+      if (initiallySelectedLayer) {
+        this.$store.commit(`${initiallySelectedLayer.type}-layers/ADD_LAYER`, initiallySelectedLayer)
+      }
+    },
+
     methods: {
-      toggleReservoirLayer (showLayer, layer) {
-        if (showLayer) {
-          this.$store.commit('reservoir-layers/ADD_LAYER', layer)
-        } else {
-          this.$store.commit('reservoir-layers/REMOVE_LAYER', layer.id)
-        }
+      clearAll () {
+        this.$store.commit('zoomable-layers/REMOVE_ALL_LAYERS')
+        this.$store.commit('reservoir-layers/REMOVE_ALL_LAYERS')
       },
 
-      toggleZoomableLayer (showLayer, layer) {
-        if (showLayer) {
-          this.$store.commit('zoomable-layers/ADD_LAYER', layer)
-        } else {
-          this.$store.commit('zoomable-layers/REMOVE_LAYER', layer.id)
-        }
+      activateLayer (layer) {
+        this.clearAll()
+        this.$store.commit(`${layer.type}-layers/ADD_LAYER`, layer)
       },
 
       onReservoirClick (evt) {
@@ -144,9 +203,19 @@
         if (!basin) {
           return
         }
+        const { source } = basin
         const { HYBAS_ID } = basin.properties
-        // TODO :: Handle basins properly
-        console.log(HYBAS_ID)
+        this.$router.push({ path: `/basin/${source}--${HYBAS_ID}` })
+      },
+
+      onRegionLayerClick (evt) {
+        const region = evt.features?.[0]
+        if (!region) { return }
+        const { source } = region
+        const { shapeID } = region.properties
+        if (!shapeID) { return }
+
+        this.$router.push({ path: `/boundary/${source}--${shapeID}` })
       },
     },
   }

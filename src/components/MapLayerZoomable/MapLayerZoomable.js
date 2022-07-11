@@ -18,6 +18,7 @@ export default {
     zoom: 0,
     activeLayerIds: [],
     hoveredFeatureId: null,
+    mouseEnterFnMap: {},
     mouseMoveFnMap: {},
     mouseLeaveFnMap: {},
   }),
@@ -38,7 +39,7 @@ export default {
 
     onZoomEnd ({ target: map }) {
       this.zoom = Math.round(map.getZoom())
-      console.info(this.zoom)
+      console.info('Zoom:', this.zoom)
       const matchingLayers = this.options.layers
         .filter(({ zoomLevels }) => zoomLevels.includes(this.zoom))
       const matchingLayerIds = matchingLayers.map(({ id }) => id)
@@ -53,9 +54,9 @@ export default {
       const map = this.getMap()
       if (!map) { return }
       const layer = this.options.layers.find(({ id }) => id === layerId)
-      const { styles, clickFn } = this.options
+      const { styles, clickFn, promoteId } = this.options
 
-      map.addSource(layerId, { id: layerId, ...layer.source, promoteId: 'HYBAS_ID' })
+      map.addSource(layerId, { id: layerId, ...layer.source, promoteId })
 
       styles.forEach((style) => {
         const layerUniqueId = `${layerId}-${style.type}`
@@ -69,6 +70,10 @@ export default {
         })
 
         if (style.type === 'fill') {
+          this.mouseEnterFnMap[layerUniqueId] = () => {
+            map.getCanvas().style.cursor = 'pointer'
+          }
+
           this.mouseMoveFnMap[layerUniqueId] = (evt) => {
             const newHoveredFeatureId = evt.features?.[0]?.id
             if (!newHoveredFeatureId || newHoveredFeatureId === this.hoveredFeatureId) {
@@ -98,6 +103,7 @@ export default {
           }
 
           this.mouseLeaveFnMap[layerUniqueId] = () => {
+            map.getCanvas().style.cursor = ''
             if (this.hoveredFeatureId !== null) {
               map.setFeatureState(
                 {
@@ -111,6 +117,7 @@ export default {
             this.hoveredFeatureId = null
           }
 
+          map.on('mouseenter', layerUniqueId, this.mouseEnterFnMap[layerUniqueId])
           map.on('mousemove', layerUniqueId, this.mouseMoveFnMap[layerUniqueId])
           map.on('mouseleave', layerUniqueId, this.mouseLeaveFnMap[layerUniqueId])
         }
@@ -133,6 +140,11 @@ export default {
         // Only remove source when no other layers depend on it
         if (!map.getStyle().layers.some(({ source }) => source === layerId)) {
           map.removeSource(layerId)
+        }
+
+        if (this.mouseEnterFnMap[layerUniqueId]) {
+          map.off('mouseenter', layerUniqueId, this.mouseEnterFnMap[layerUniqueId])
+          delete this.mouseEnterFnMap[layerUniqueId]
         }
 
         if (this.mouseMoveFnMap[layerUniqueId]) {
@@ -167,6 +179,8 @@ export default {
   },
 
   destroyed () {
+    const map = this.getMap()
+    map.off('zoomend', this.onZoomEnd)
     this.removeAllLayers()
   },
 }

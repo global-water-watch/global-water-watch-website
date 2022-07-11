@@ -44,8 +44,23 @@ export default {
         map.addLayer(layer)
         if (clickFn) {
           map.on('click', layer.id, clickFn)
+
+          if (layer.type === 'fill') {
+            map.on('mouseenter', layer.id, this.mouseEnterFn)
+            map.on('mouseleave', layer.id, this.mouseLeaveFn)
+          }
         }
       })
+    },
+
+    mouseEnterFn () {
+      const map = this.getMap()
+      map.getCanvas().style.cursor = 'pointer'
+    },
+
+    mouseLeaveFn () {
+      const map = this.getMap()
+      map.getCanvas().style.cursor = ''
     },
 
     removeLayer () {
@@ -61,6 +76,11 @@ export default {
         }
         if (clickFn) {
           map.off('click', layer.id, clickFn)
+
+          if (layer.type === 'fill') {
+            map.off('mouseenter', layer.id, this.mouseEnterFn)
+            map.off('mouseleave', layer.id, this.mouseLeaveFn)
+          }
         }
       })
     },

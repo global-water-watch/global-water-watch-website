@@ -1,14 +1,14 @@
 <template>
-  <client-only>
-    <Fragment v-if="!$fetchState.pending && reservoir">
+  <Fragment v-if="!$fetchState.pending && reservoir">
+    <client-only>
       <PageHeroesDetailHero :title="title">
         <p class="p">
           {{ reservoirId }}
         </p>
       </PageHeroesDetailHero>
-      <ReservoirPageSection :reservoir="reservoir" :time-series="timeSeries" />
-    </Fragment>
-  </client-only>
+      <ReservoirPageSection :reservoirs="[reservoir]" :time-series="timeSeries" />
+    </client-only>
+  </Fragment>
 </template>
 
 <script>
@@ -23,12 +23,12 @@
     }),
 
     async fetch () {
-      if (this.$route.params.slug) {
-        const TEMP_SINGLE_RESERVOIR_WITH_TS = 1
+      const { slug } = this.$route.params
+      if (slug) {
         try {
           [this.reservoir, this.timeSeries] = await Promise.all([
-            this.$repo.reservoir.getById(this.$route.params.slug),
-            this.$repo.reservoir.getTimeSeriesById(TEMP_SINGLE_RESERVOIR_WITH_TS),
+            this.$repo.reservoir.getById(slug),
+            this.$repo.reservoir.getTimeSeriesById(slug),
           ])
         } catch (e) {
           console.error(e)
