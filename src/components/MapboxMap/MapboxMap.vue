@@ -6,6 +6,7 @@
     :zoom="mapConfig.zoom"
     :map-style="mapConfig.style"
     @mb-created="onMapCreated"
+    @mb-load="onMapLoaded"
   >
     <!-- Geocoder -->
     <v-mapbox-geocoder />
@@ -60,6 +61,10 @@
       onMapCreated (map) {
         map.removeControl(map._logoControl)
         map.addControl(map._logoControl, 'top-right')
+      },
+
+      onMapLoaded () {
+        this.$store.commit('ui/SET_MAP_READY', true)
       },
     },
 
