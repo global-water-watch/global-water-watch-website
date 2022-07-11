@@ -61,6 +61,7 @@ export default {
     { src: '~plugins/vue-fragment.js' },
     { src: '~plugins/vue2mapbox-gl.client.js' },
     { src: '~plugins/create-repository.js' },
+    { src: '~plugins/experimental-features.js', mode: 'client' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

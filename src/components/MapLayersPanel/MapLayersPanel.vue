@@ -5,7 +5,7 @@
       :disabled="!mapReady"
     >
       <v-radio
-        v-for="layer in layers"
+        v-for="layer in transformedLayers"
         :key="layer.name"
         :label="layer.name"
         :value="layer.name"
@@ -24,6 +24,7 @@
             name: 'Reservoirs',
             type: 'reservoir',
             id: 'reservoirsv10',
+            experimentalFeature: false, // enable this feature when you don't want to show it in the UI
             source: {
               type: 'vector',
               url: 'mapbox://global-water-watch.reservoirs-v10',
@@ -50,6 +51,7 @@
             name: 'Basins',
             type: 'zoomable',
             promoteId: 'HYBAS_ID', // this id is used to identify the hover id in the map.
+            experimentalFeature: true, // disable this feature when you want to display it default
             layers: [
               {
                 id: 'BasinATLAS_v10_lev03',
@@ -103,6 +105,7 @@
             name: 'Administrative regions',
             type: 'zoomable',
             promoteId: 'shapeID', // this id is used to identify the hover id in the map.
+            experimentalFeature: true, // disable this feature when you want to display it default
             layers: [
               {
                 id: 'geoBoundariesCGAZ_ADM0',
@@ -167,6 +170,10 @@
         set (layerName) {
           this.$store.commit('ui/SET_ACTIVE_LAYER_NAME', layerName)
         },
+      },
+      transformedLayers () {
+        const showExperimentalFeatures = this.$store.getters['ui/showExperimentalFeatures']
+        return showExperimentalFeatures ? this.layers : this.layers.filter(layer => !layer.experimentalFeature)
       },
     },
 
