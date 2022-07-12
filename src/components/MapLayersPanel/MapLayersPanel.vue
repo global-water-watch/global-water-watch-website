@@ -109,7 +109,7 @@
                 zoomLevels: [0, 1, 2, 3],
                 source: {
                   type: 'vector',
-                  url: 'mapbox://global-water-watch.geoboundaries-adm0',
+                  url: 'mapbox://global-water-watch.geoBoundariesCGAZ_ADM0',
                 },
               },
               {
@@ -117,7 +117,7 @@
                 zoomLevels: [4, 5, 6, 7],
                 source: {
                   type: 'vector',
-                  url: 'mapbox://global-water-watch.geoboundaries-adm1',
+                  url: 'mapbox://global-water-watch.geoBoundariesCGAZ_ADM1',
                 },
               },
               {
@@ -125,7 +125,7 @@
                 zoomLevels: [8, 9, 10, 11, 12],
                 source: {
                   type: 'vector',
-                  url: 'mapbox://global-water-watch.geoboundaries-adm2',
+                  url: 'mapbox://global-water-watch.geoBoundariesCGAZ_ADM2',
                 },
               },
             ],
