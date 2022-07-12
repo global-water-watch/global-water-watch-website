@@ -102,7 +102,8 @@
           Object.freeze({
             name: 'Administrative regions',
             type: 'zoomable',
-            promoteId: 'shapeID', // this id is used to identify the hover id in the map.
+            promoteId: 'shapeID',
+            attribution: '<a href="https://www.geoboundaries.org" target="_blank" rel="noopener noreferrer">geoBoundaries</a>', // this id is used to identify the hover id in the map.
             layers: [
               {
                 id: 'geoBoundariesCGAZ_ADM0',
