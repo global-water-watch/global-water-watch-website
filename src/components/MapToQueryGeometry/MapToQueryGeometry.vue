@@ -59,8 +59,8 @@
           'source-layer': this.layer,
           layout: {},
           paint: {
-            'line-color': '#8fdfef',
-            'line-width': 0.8,
+            'line-color': 'red',
+            'line-width': 1.4,
           },
         })
       })
@@ -68,9 +68,7 @@
       map.on('idle', () => {
         if (!map.getLayer(this.layer)) { return }
         const AREA_KEY = AREA_KEY_MAP[this.areaType]
-        const geometry = map.queryRenderedFeatures({
-          layers: [this.layer],
-        })
+        const geometry = map.querySourceFeatures(this.layer, { sourceLayer: this.layer })
           // Forcing a string here by doing `+ ''`
           .find(({ properties }) => properties?.[AREA_KEY] + '' === this.id)
           ?.geometry
