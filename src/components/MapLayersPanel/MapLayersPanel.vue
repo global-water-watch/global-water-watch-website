@@ -12,6 +12,13 @@
         @change="activateLayer(layer)"
       />
     </v-radio-group>
+
+    <!-- <v-btn
+      small
+      @click="onDrawClick"
+    >
+      {{ hasDrawnFeatures ? 'View geometry details' : 'Draw custom geometry' }}
+    </v-btn> -->
   </div>
 </template>
 
@@ -175,6 +182,9 @@
         const showExperimentalFeatures = this.$store.getters['ui/showExperimentalFeatures']
         return showExperimentalFeatures ? this.layers : this.layers.filter(layer => !layer.experimentalFeature)
       },
+      hasDrawnFeatures () {
+        return this.$store.getters['drawn-geometry/drawnFeatures'].length
+      },
     },
 
     mounted () {
@@ -210,9 +220,11 @@
         if (!basin) {
           return
         }
+        const zoom = Math.round(evt.target.getZoom())
+        const { lng, lat } = evt.target.getCenter()
         const { source } = basin
         const { HYBAS_ID } = basin.properties
-        this.$router.push({ path: `/basin/${source}--${HYBAS_ID}` })
+        this.$router.push({ path: `/basin/${source}--${zoom}--${lng}--${lat}--${HYBAS_ID}` })
       },
 
       onRegionLayerClick (evt) {
@@ -221,8 +233,17 @@
         const { source } = region
         const { shapeID } = region.properties
         if (!shapeID) { return }
+        const zoom = Math.round(evt.target.getZoom())
+        const { lng, lat } = evt.target.getCenter()
 
-        this.$router.push({ path: `/boundary/${source}--${shapeID}` })
+        this.$router.push({ path: `/boundary/${source}--${zoom}--${lng}--${lat}--${shapeID}` })
+      },
+
+      onDrawClick () {
+        if (this.hasDrawnFeatures) {
+          console.log(this.$store.getters['drawn-geometry/drawnFeatures'])
+          // this.$router.push()
+        }
       },
     },
   }
