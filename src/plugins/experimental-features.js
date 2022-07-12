@@ -15,8 +15,6 @@ export default ({ store }) => {
   let index = 0
 
   document.onkeydown = function (e) {
-    e.preventDefault()
-
     const key = e.key.toLowerCase()
 
     if (key === konamiCodes[index]) {
