@@ -5,7 +5,7 @@
       :disabled="!mapReady"
     >
       <v-radio
-        v-for="layer in layers"
+        v-for="layer in filteredLayers"
         :key="layer.name"
         :label="layer.name"
         :value="layer.name"
@@ -57,6 +57,7 @@
             name: 'Basins',
             type: 'zoomable',
             promoteId: 'HYBAS_ID', // this id is used to identify the hover id in the map.
+            experimentalFeature: true, // disable this feature when you want to display it default
             layers: [
               {
                 id: 'BasinATLAS_v10_lev03',
@@ -109,14 +110,16 @@
           Object.freeze({
             name: 'Administrative regions',
             type: 'zoomable',
+            attribution: '<a href="https://www.geoboundaries.org" target="_blank" rel="noopener noreferrer">geoBoundaries</a>', // this id is used to identify the hover id in the map.
             promoteId: 'shapeID', // this id is used to identify the hover id in the map.
+            experimentalFeature: true, // disable this feature when you want to display it default
             layers: [
               {
                 id: 'geoBoundariesCGAZ_ADM0',
                 zoomLevels: [0, 1, 2, 3],
                 source: {
                   type: 'vector',
-                  url: 'mapbox://global-water-watch.geoboundaries-adm0',
+                  url: 'mapbox://global-water-watch.geoBoundariesCGAZ_ADM0',
                 },
               },
               {
@@ -124,7 +127,7 @@
                 zoomLevels: [4, 5, 6, 7],
                 source: {
                   type: 'vector',
-                  url: 'mapbox://global-water-watch.geoboundaries-adm1',
+                  url: 'mapbox://global-water-watch.geoBoundariesCGAZ_ADM1',
                 },
               },
               {
@@ -132,7 +135,7 @@
                 zoomLevels: [8, 9, 10, 11, 12],
                 source: {
                   type: 'vector',
-                  url: 'mapbox://global-water-watch.geoboundaries-adm2',
+                  url: 'mapbox://global-water-watch.geoBoundariesCGAZ_ADM2',
                 },
               },
             ],
@@ -174,6 +177,10 @@
         set (layerName) {
           this.$store.commit('ui/SET_ACTIVE_LAYER_NAME', layerName)
         },
+      },
+      filteredLayers () {
+        const showExperimentalFeatures = this.$store.getters['ui/showExperimentalFeatures']
+        return showExperimentalFeatures ? this.layers : this.layers.filter(layer => !layer.experimentalFeature)
       },
       hasDrawnFeatures () {
         return this.$store.getters['drawn-geometry/drawnFeatures'].length
