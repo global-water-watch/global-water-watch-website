@@ -24,15 +24,15 @@
 
     async fetch () {
       const { slug } = this.$route.params
-      if (slug) {
-        try {
-          [this.reservoir, this.timeSeries] = await Promise.all([
-            this.$repo.reservoir.getById(slug),
-            this.$repo.reservoir.getTimeSeriesById(slug),
-          ])
-        } catch (e) {
-          console.error(e)
-        }
+      if (!slug) { return }
+
+      try {
+        [this.reservoir, this.timeSeries] = await Promise.all([
+          this.$repo.reservoir.getById(slug),
+          this.$repo.reservoir.getTimeSeriesById(slug),
+        ])
+      } catch (e) {
+        console.error(e)
       }
     },
 

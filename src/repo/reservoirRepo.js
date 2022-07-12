@@ -1,4 +1,5 @@
 const formatTimeSeries = (timeSeries) => {
+  console.log(timeSeries)
   const timeSeriesData = timeSeries.reduce((accObj, { t, value }) => {
     const xAxisData = accObj.xAxisData || []
     const seriesData = accObj.seriesData || []
