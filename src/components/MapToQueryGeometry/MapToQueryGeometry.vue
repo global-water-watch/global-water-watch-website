@@ -1,5 +1,7 @@
 <template>
-  <div ref="map" style="display: none" />
+  <div class="map-hidden">
+    <div ref="map" class="map-hidden__child" />
+  </div>
 </template>
 
 <script>
@@ -8,18 +10,6 @@
   const AREA_KEY_MAP = {
     basin: 'HYBAS_ID',
     boundary: 'shapeID',
-  }
-
-  // @REFACTOR :: This is not robust, we need to streamline this
-  // with the Deltares mapbox team, may be they can match the
-  // layer URL to the layer id
-  const SOURCE_URL_MAP = {
-    BasinATLAS_v10_lev03: 'BasinATLAS_v10_lev03',
-    BasinATLAS_v10_lev04: 'BasinATLAS_v10_lev04',
-    BasinATLAS_v10_lev05: 'BasinATLAS_v10_lev05',
-    geoBoundariesCGAZ_ADM0: 'geoboundaries-adm0',
-    geoBoundariesCGAZ_ADM1: 'geoboundaries-adm1',
-    geoBoundariesCGAZ_ADM2: 'geoboundaries-adm2',
   }
 
   export default {
@@ -36,6 +26,14 @@
         type: String,
         required: true,
       },
+      zoom: {
+        type: Number,
+        required: true,
+      },
+      center: {
+        type: Object,
+        required: true,
+      },
     },
 
     mounted () {
@@ -43,6 +41,8 @@
 
       const map = new mapboxgl.Map({
         container: this.$refs.map,
+        zoom: this.zoom,
+        center: this.center,
         style: 'mapbox://styles/mapbox/light-v9',
       })
 
@@ -50,17 +50,17 @@
         map.addSource(this.layer, {
           id: this.layer,
           type: 'vector',
-          url: `mapbox://global-water-watch.${SOURCE_URL_MAP[this.layer]}`,
+          url: `mapbox://global-water-watch.${this.layer}`,
         })
         map.addLayer({
           id: this.layer,
-          type: 'fill',
+          type: 'line',
           source: this.layer,
           'source-layer': this.layer,
           layout: {},
           paint: {
-            'fill-color': '#8fdfef',
-            'fill-opacity': 0.4,
+            'line-color': 'red',
+            'line-width': 1.4,
           },
         })
       })
@@ -68,9 +68,7 @@
       map.on('idle', () => {
         if (!map.getLayer(this.layer)) { return }
         const AREA_KEY = AREA_KEY_MAP[this.areaType]
-        const geometry = map.queryRenderedFeatures({
-          layers: [this.layer],
-        })
+        const geometry = map.querySourceFeatures(this.layer, { sourceLayer: this.layer })
           // Forcing a string here by doing `+ ''`
           .find(({ properties }) => properties?.[AREA_KEY] + '' === this.id)
           ?.geometry
@@ -79,3 +77,15 @@
     },
   }
 </script>
+
+<style lang="scss">
+.map-hidden {
+  height: 0;
+  overflow: hidden;
+
+  &__child {
+    width: 100%;
+    padding-bottom: 100%;
+  }
+}
+</style>

@@ -4,6 +4,8 @@
       <map-to-query-geometry
         v-if="id && layer && areaType"
         :id="id"
+        :zoom="zoom"
+        :center="center"
         :area-type="areaType"
         :layer="layer"
         @found-geometry="onGeometry"
@@ -30,6 +32,8 @@
   export default {
     data: () => ({
       layer: null,
+      zoom: null,
+      center: null,
       id: null,
       areaType: null,
       reservoirs: [],
@@ -40,8 +44,10 @@
     mounted () {
       const { slug } = this.$route.params
       if (!slug) { return }
-      const [layer, id] = slug.split('--')
+      const [layer, zoom, lng, lat, id] = slug.split('--')
       this.layer = layer
+      this.zoom = parseInt(zoom)
+      this.center = { lng: parseFloat(lng), lat: parseFloat(lat) }
       this.id = id
       this.areaType = this.$route.path
         .split('/')
