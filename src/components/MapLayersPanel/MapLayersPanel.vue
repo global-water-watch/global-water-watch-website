@@ -5,7 +5,7 @@
       :disabled="!mapReady"
     >
       <v-radio
-        v-for="layer in layers"
+        v-for="layer in filteredLayers"
         :key="layer.name"
         :label="layer.name"
         :value="layer.name"
@@ -50,6 +50,7 @@
             name: 'Basins',
             type: 'zoomable',
             promoteId: 'HYBAS_ID', // this id is used to identify the hover id in the map.
+            experimentalFeature: true, // disable this feature when you want to display it default
             layers: [
               {
                 id: 'BasinATLAS_v10_lev03',
@@ -103,6 +104,7 @@
             name: 'Administrative regions',
             type: 'zoomable',
             promoteId: 'shapeID', // this id is used to identify the hover id in the map.
+            experimentalFeature: true, // disable this feature when you want to display it default
             layers: [
               {
                 id: 'geoBoundariesCGAZ_ADM0',
@@ -167,6 +169,10 @@
         set (layerName) {
           this.$store.commit('ui/SET_ACTIVE_LAYER_NAME', layerName)
         },
+      },
+      filteredLayers () {
+        const showExperimentalFeatures = this.$store.getters['ui/showExperimentalFeatures']
+        return showExperimentalFeatures ? this.layers : this.layers.filter(layer => !layer.experimentalFeature)
       },
     },
 
