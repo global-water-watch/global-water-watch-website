@@ -1,7 +1,7 @@
 export const state = () => ({
   mapReady: false,
   activeLayerName: 'Reservoirs',
-  showExperimentalFeatures: !!process.env.IS_DEV,
+  showExperimentalFeatures: process.env.IS_DEV,
 })
 
 export const getters = {
