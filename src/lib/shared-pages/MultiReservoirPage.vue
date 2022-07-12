@@ -8,7 +8,13 @@
         :layer="layer"
         @found-geometry="onGeometry"
       />
-      <h1>REUSABLE MULTI REGION PAGE</h1>
+
+      <PageHeroesDetailHero :title="pageContent.title">
+        <p class="p">
+          {{ pageContent.description }}
+        </p>
+        <ReservoirList v-if="reservoirs.length > 0" :reservoirs="reservoirs" />
+      </PageHeroesDetailHero>
 
       <ReservoirPageSection
         :reservoirs="reservoirs"
@@ -19,6 +25,8 @@
 </template>
 
 <script>
+  import { getPageContent } from '~/lib/shared-pages/page-content'
+
   export default {
     data: () => ({
       layer: null,
@@ -26,6 +34,7 @@
       areaType: null,
       reservoirs: [],
       timeSeries: null,
+      pageContent: {},
     }),
 
     mounted () {
@@ -37,6 +46,8 @@
       this.areaType = this.$route.path
         .split('/')
         .filter(Boolean)[0]
+
+      this.pageContent = getPageContent({ areaType: this.areaType })
     },
 
     methods: {
