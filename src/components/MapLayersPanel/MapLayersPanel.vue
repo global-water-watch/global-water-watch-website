@@ -24,7 +24,6 @@
             name: 'Reservoirs',
             type: 'reservoir',
             id: 'reservoirsv10',
-            experimentalFeature: false, // enable this feature when you don't want to show it in the UI
             source: {
               type: 'vector',
               url: 'mapbox://global-water-watch.reservoirs-v10',
