@@ -1,5 +1,7 @@
 <template>
-  <div ref="map" style="display: none" />
+  <div class="map-hidden">
+    <div ref="map" class="map-hidden__child" />
+  </div>
 </template>
 
 <script>
@@ -36,6 +38,14 @@
         type: String,
         required: true,
       },
+      zoom: {
+        type: Number,
+        required: true,
+      },
+      center: {
+        type: Object,
+        required: true,
+      },
     },
 
     mounted () {
@@ -43,6 +53,8 @@
 
       const map = new mapboxgl.Map({
         container: this.$refs.map,
+        zoom: this.zoom,
+        center: this.center,
         style: 'mapbox://styles/mapbox/light-v9',
       })
 
@@ -54,13 +66,13 @@
         })
         map.addLayer({
           id: this.layer,
-          type: 'fill',
+          type: 'line',
           source: this.layer,
           'source-layer': this.layer,
           layout: {},
           paint: {
-            'fill-color': '#8fdfef',
-            'fill-opacity': 0.4,
+            'line-color': '#8fdfef',
+            'line-width': 0.8,
           },
         })
       })
@@ -79,3 +91,15 @@
     },
   }
 </script>
+
+<style lang="scss">
+.map-hidden {
+  height: 0;
+  overflow: hidden;
+
+  &__child {
+    width: 100%;
+    padding-bottom: 100%;
+  }
+}
+</style>
