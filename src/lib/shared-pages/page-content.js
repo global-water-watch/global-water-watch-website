@@ -3,7 +3,7 @@ export const getPageContent = ({ areaType }) => {
     case 'boundary':
       return {
         title: 'Boundary',
-        description: 'Boundary description',
+        description: 'Administrative Region',
       }
     case 'reservoirs':
       return {

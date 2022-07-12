@@ -13,7 +13,7 @@
         <p class="p">
           {{ pageContent.description }}
         </p>
-        <ReservoirList v-if="reservoirs" :reservoirs="reservoirs" />
+        <ReservoirList v-if="reservoirs.length > 0" :reservoirs="reservoirs" />
       </PageHeroesDetailHero>
 
       <ReservoirPageSection
