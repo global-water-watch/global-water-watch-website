@@ -18,6 +18,8 @@
         <ReservoirList v-if="reservoirs.length > 0" :reservoirs="reservoirs" />
       </PageHeroesDetailHero>
 
+      <Loader :loading="reservoirsLoading" message="Depending on the amount of reservoirs in this area, it may take a while to load all data" />
+
       <ReservoirPageSection
         :reservoirs="reservoirs"
         :time-series="timeSeries"
@@ -38,6 +40,7 @@
       id: null,
       areaType: null,
       reservoirs: [],
+      reservoirsLoading: true,
       timeSeries: null,
       pageContent: {},
     }),
@@ -79,6 +82,7 @@
         this.$repo.reservoir.getByGeometry(geometry)
           .then((reservoirs) => {
             this.reservoirs = reservoirs
+            this.reservoirsLoading = false
           })
           .catch((err) => {
             console.error(err)
