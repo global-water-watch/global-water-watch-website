@@ -1,0 +1,40 @@
+.loader {
+  z-index: $layer-loader;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin: $space-default 0;
+  overflow: hidden;
+}
+
+.loader__ring {
+  display: inline-block;
+  width: 4rem;
+  height: 4rem;
+}
+
+.loader__ring:after {
+  content: " ";
+  display: block;
+  width: 3rem;
+  height: 3rem;
+  margin: 0.5rem;
+  border-radius: 50%;
+  border: 4px solid $color-white;
+  border-color: $color-white transparent $color-white transparent;
+  animation: ring 1.2s linear infinite;
+}
+
+.loader__message {
+  margin-top: $space-default;
+}
+
+@keyframes ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
