@@ -243,14 +243,9 @@
 
       onDrawClick () {
         if (this.drawnFeatures.length) {
-          // convert to: type: 'Polygon', coordinates: array,
-          // or 'MultiPolygon'
-          const { geometry } = this.drawnFeatures[0]
-          console.log(geometry)
-          // const { type, coordinates } = geometry
-          // const query = new URLSearchParams({ type, coordinates }).toString()
+          const coordinates = this.drawnFeatures.map(({ geometry }) => geometry.coordinates)
+          const geometry = { type: 'MultiPolygon', coordinates }
           const query = qs.stringify(geometry)
-          console.log(query)
           this.$router.push({ path: `/custom-selection/?${query}` })
         }
       },
