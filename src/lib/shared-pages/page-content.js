@@ -15,6 +15,11 @@ export const getPageContent = ({ areaType }) => {
         title: 'Basin',
         description: 'Basin description',
       }
+    case 'custom-selection':
+      return {
+        title: 'Custom selection',
+        description: 'Reservoirs within and intersecting with a customly drawn geometry',
+      }
     default:
       return {
         title: `Unknown ${areaType}`,

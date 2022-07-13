@@ -13,16 +13,18 @@
       />
     </v-radio-group>
 
-    <!-- <v-btn
+    <v-btn
       small
       @click="onDrawClick"
     >
-      {{ hasDrawnFeatures ? 'View geometry details' : 'Draw custom geometry' }}
-    </v-btn> -->
+      {{ drawnFeatures.length ? 'View geometry details' : 'Draw custom geometry' }}
+    </v-btn>
   </div>
 </template>
 
 <script>
+  import qs from 'qs'
+
   export default {
     data () {
       return {
@@ -182,8 +184,8 @@
         const showExperimentalFeatures = this.$store.getters['ui/showExperimentalFeatures']
         return showExperimentalFeatures ? this.layers : this.layers.filter(layer => !layer.experimentalFeature)
       },
-      hasDrawnFeatures () {
-        return this.$store.getters['drawn-geometry/drawnFeatures'].length
+      drawnFeatures () {
+        return this.$store.getters['drawn-geometry/drawnFeatures']
       },
     },
 
@@ -240,9 +242,16 @@
       },
 
       onDrawClick () {
-        if (this.hasDrawnFeatures) {
-          console.log(this.$store.getters['drawn-geometry/drawnFeatures'])
-          // this.$router.push()
+        if (this.drawnFeatures.length) {
+          // convert to: type: 'Polygon', coordinates: array,
+          // or 'MultiPolygon'
+          const { geometry } = this.drawnFeatures[0]
+          console.log(geometry)
+          // const { type, coordinates } = geometry
+          // const query = new URLSearchParams({ type, coordinates }).toString()
+          const query = qs.stringify(geometry)
+          console.log(query)
+          this.$router.push({ path: `/custom-selection/?${query}` })
         }
       },
     },
