@@ -23,15 +23,16 @@
     }),
 
     async fetch () {
-      if (this.$route.params.slug) {
-        try {
-          [this.reservoir, this.timeSeries] = await Promise.all([
-            this.$repo.reservoir.getReservoirById(this.$route.params.slug),
-            this.$repo.reservoir.getTimeSeries(),
-          ])
-        } catch (e) {
-          console.error(e)
-        }
+      const { slug } = this.$route.params
+      if (!slug) { return }
+
+      try {
+        [this.reservoir, this.timeSeries] = await Promise.all([
+          this.$repo.reservoir.getById(slug),
+          this.$repo.reservoir.getTimeSeriesById(slug),
+        ])
+      } catch (e) {
+        console.error(e)
       }
     },
 

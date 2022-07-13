@@ -1,15 +1,24 @@
-import timeSeriesArea from './DUMMY_DATA/time_series_area.json'
-import timeSeriesAreaMonthly from './DUMMY_DATA/time_series_area_monthly.json'
+import { capitalize } from '@/lib/primitive-helpers'
 
 const formatTimeSeries = (timeSeries) => {
-  const timeSeriesData = timeSeries.reduce((accObj, { time, area }) => {
+  const timeSeriesData = timeSeries.reduce((accObj, { t, value }) => {
     const xAxisData = accObj.xAxisData || []
     const seriesData = accObj.seriesData || []
     return {
-      xAxisData: [...xAxisData, time.replace(' ', '\n')],
-      seriesData: [...seriesData, Math.round(area)],
+      xAxisData: [
+        ...xAxisData,
+        new Date(t).toLocaleDateString('en-US', { year: 'numeric', month: 'numeric', day: 'numeric' }),
+      ],
+      seriesData: [...seriesData, value],
     }
   }, {})
+
+  const valueName = timeSeries[0]?.name
+    ?.split('_')
+    .map(capitalize)
+    .join(' ')
+
+  const valueUnit = timeSeries[0]?.unit
 
   return {
     xAxis: [{
@@ -17,12 +26,12 @@ const formatTimeSeries = (timeSeries) => {
     }],
     yAxis: [
       {
-        name: 'Area [m^2]',
+        name: `${valueName} (${valueUnit})`,
         type: 'value',
       },
     ],
     series: [{
-      name: 'Area',
+      name: valueName,
       type: 'line',
       data: timeSeriesData.seriesData,
     }],
@@ -31,14 +40,11 @@ const formatTimeSeries = (timeSeries) => {
 
 export default function (axios) {
   return {
-    // Get timeseries
-    getTimeSeries: () => formatTimeSeries(timeSeriesArea),
-
-    // Get monthly timeseries
-    getTimeSeriesMonthly: () => formatTimeSeries(timeSeriesAreaMonthly),
-
     // Get reservoir by id (fid)
-    getReservoirById: id => axios.$get(`reservoir/${id}`),
+    getById: id => axios.$get(`reservoir/${id}`),
+
+    getTimeSeriesById: id => axios.$get(`reservoir/${id}/ts`)
+      .then(formatTimeSeries),
 
     getByGeometry: geometry => axios
       .post('reservoir/geometry', geometry)
