@@ -35,21 +35,22 @@ export default {
         .on('draw.update', onChangeFn)
 
       this.addPreviousFeatures()
+      this.isInitialized = true
     },
 
     deferredMountedTo () {
       if (!this.isInitialized) {
         this.initialize()
-        this.isInitialized = true
       }
     },
 
     mounted () {
       const map = this.getMap()
+      console.log('mounted', map)
       // We can immediately initialize if we have the map ready
       if (map && map.isStyleLoaded()) {
+        console.log('mounted, inside isStyleLoaded')
         this.initialize()
-        this.isInitialized = true
       }
     },
 
