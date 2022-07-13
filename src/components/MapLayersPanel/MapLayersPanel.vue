@@ -137,6 +137,10 @@
                 paint: {
                   'line-color': '#8fdfef',
                   'line-width': 0.8,
+                  'line-opacity': 0,
+                  'line-opacity-transition': {
+                    duration: 2000,
+                  },
                 },
               },
             ],
@@ -192,6 +196,10 @@
                 paint: {
                   'line-color': '#d78200',
                   'line-width': 0.8,
+                  'line-opacity': 0,
+                  'line-opacity-transition': {
+                    duration: 2000,
+                  },
                 },
               },
             ],

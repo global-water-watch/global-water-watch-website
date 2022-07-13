@@ -74,6 +74,10 @@ export default {
           paint: style.paint,
         })
 
+        if (style.type === 'line' && typeof (style.paint['line-opacity']) !== 'undefined') {
+          map.setPaintProperty(layerUniqueId, 'line-opacity', 1)
+        }
+
         if (style.type === 'fill') {
           this.mouseEnterFnMap[layerUniqueId] = () => {
             map.getCanvas().style.cursor = 'pointer'
@@ -140,7 +144,15 @@ export default {
       const { styles } = this.options
       styles.forEach((style) => {
         const layerUniqueId = `${layerId}-${style.type}`
-        map.removeLayer(layerUniqueId)
+
+        if (style.type === 'line' && typeof (style.paint['line-opacity']) !== 'undefined') {
+          map.setPaintProperty(layerUniqueId, 'line-opacity', 0)
+        }
+
+        // TODO: this breaks when the old layer is still in the map
+        setTimeout(() => {
+          map.removeLayer(layerUniqueId)
+        }, 2000)
 
         // Only remove source when no other layers depend on it
         if (!map.getStyle().layers.some(({ source }) => source === layerId)) {
