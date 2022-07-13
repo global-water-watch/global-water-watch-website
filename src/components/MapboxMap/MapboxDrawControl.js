@@ -5,10 +5,14 @@ import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css'
 export default {
   name: 'v-mapbox-draw-control',
 
+  inject: ['getMap'],
+
   render: () => null,
 
   methods: {
-    deferredMountedTo (map) {
+    initialize () {
+      const map = this.getMap()
+
       const mbDraw = new MapboxDraw({
         displayControlsDefault: false,
         controls: {
@@ -31,6 +35,13 @@ export default {
         .on('draw.update', onChangeFn)
 
       this.addPreviousFeatures()
+      this.isInitialized = true
+    },
+
+    deferredMountedTo () {
+      if (!this.isInitialized) {
+        this.initialize()
+      }
     },
 
     addPreviousFeatures () {
@@ -39,5 +50,13 @@ export default {
         this.mbDraw.add(feature)
       })
     },
+  },
+
+  mounted () {
+    const map = this.getMap()
+    // We can immediately initialize if we have the map ready
+    if (map && map.isStyleLoaded()) {
+      this.initialize()
+    }
   },
 }

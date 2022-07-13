@@ -13,16 +13,19 @@
       />
     </v-radio-group>
 
-    <!-- <v-btn
+    <v-btn
+      v-if="showExperimentalFeatures"
       small
       @click="onDrawClick"
     >
-      {{ hasDrawnFeatures ? 'View geometry details' : 'Draw custom geometry' }}
-    </v-btn> -->
+      {{ drawnFeatures.length ? 'View geometry details' : 'Draw custom geometry' }}
+    </v-btn>
   </div>
 </template>
 
 <script>
+  import qs from 'qs'
+
   export default {
     data () {
       return {
@@ -60,8 +63,24 @@
             experimentalFeature: true, // disable this feature when you want to display it default
             layers: [
               {
+                id: 'BasinATLAS_v10_lev01',
+                zoomLevels: [0, 1, 2],
+                source: {
+                  type: 'vector',
+                  url: 'mapbox://global-water-watch.BasinATLAS_v10_lev01',
+                },
+              },
+              {
+                id: 'BasinATLAS_v10_lev02',
+                zoomLevels: [3],
+                source: {
+                  type: 'vector',
+                  url: 'mapbox://global-water-watch.BasinATLAS_v10_lev02',
+                },
+              },
+              {
                 id: 'BasinATLAS_v10_lev03',
-                zoomLevels: [1, 2, 3],
+                zoomLevels: [4],
                 source: {
                   type: 'vector',
                   url: 'mapbox://global-water-watch.BasinATLAS_v10_lev03',
@@ -69,7 +88,7 @@
               },
               {
                 id: 'BasinATLAS_v10_lev04',
-                zoomLevels: [4],
+                zoomLevels: [5],
                 source: {
                   type: 'vector',
                   url: 'mapbox://global-water-watch.BasinATLAS_v10_lev04',
@@ -77,10 +96,26 @@
               },
               {
                 id: 'BasinATLAS_v10_lev05',
-                zoomLevels: [5, 6, 7, 8],
+                zoomLevels: [6],
                 source: {
                   type: 'vector',
                   url: 'mapbox://global-water-watch.BasinATLAS_v10_lev05',
+                },
+              },
+              {
+                id: 'BasinATLAS_v10_lev06',
+                zoomLevels: [7],
+                source: {
+                  type: 'vector',
+                  url: 'mapbox://global-water-watch.BasinATLAS_v10_lev06',
+                },
+              },
+              {
+                id: 'BasinATLAS_v10_lev10',
+                zoomLevels: [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
+                source: {
+                  type: 'vector',
+                  url: 'mapbox://global-water-watch.BasinATLAS_v10_lev10',
                 },
               },
             ],
@@ -178,12 +213,14 @@
           this.$store.commit('ui/SET_ACTIVE_LAYER_NAME', layerName)
         },
       },
-      filteredLayers () {
-        const showExperimentalFeatures = this.$store.getters['ui/showExperimentalFeatures']
-        return showExperimentalFeatures ? this.layers : this.layers.filter(layer => !layer.experimentalFeature)
+      showExperimentalFeatures () {
+        return this.$store.getters['ui/showExperimentalFeatures']
       },
-      hasDrawnFeatures () {
-        return this.$store.getters['drawn-geometry/drawnFeatures'].length
+      filteredLayers () {
+        return this.showExperimentalFeatures ? this.layers : this.layers.filter(layer => !layer.experimentalFeature)
+      },
+      drawnFeatures () {
+        return this.$store.getters['drawn-geometry/drawnFeatures']
       },
     },
 
@@ -240,9 +277,11 @@
       },
 
       onDrawClick () {
-        if (this.hasDrawnFeatures) {
-          console.log(this.$store.getters['drawn-geometry/drawnFeatures'])
-          // this.$router.push()
+        if (this.drawnFeatures.length) {
+          const coordinates = this.drawnFeatures.map(({ geometry }) => geometry.coordinates)
+          const geometry = { type: 'MultiPolygon', coordinates }
+          const query = qs.stringify(geometry)
+          this.$router.push({ path: `/custom-selection/?${query}` })
         }
       },
     },

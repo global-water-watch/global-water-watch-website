@@ -56,7 +56,12 @@ export default {
       const layer = this.options.layers.find(({ id }) => id === layerId)
       const { styles, clickFn, promoteId, attribution } = this.options
 
-      map.addSource(layerId, { id: layerId, ...layer.source, promoteId, attribution })
+      map.addSource(layerId, {
+        id: layerId,
+        promoteId,
+        attribution: attribution || '',
+        ...layer.source,
+      })
 
       styles.forEach((style) => {
         const layerUniqueId = `${layerId}-${style.type}`
