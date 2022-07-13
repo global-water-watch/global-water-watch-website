@@ -3,6 +3,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
+  margin: $space-default 0;
   overflow: hidden;
 }
 
@@ -22,6 +24,10 @@
   border: 4px solid $color-white;
   border-color: $color-white transparent $color-white transparent;
   animation: ring 1.2s linear infinite;
+}
+
+.loader__message {
+  margin-top: $space-default;
 }
 
 @keyframes ring {
