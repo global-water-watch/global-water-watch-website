@@ -1,16 +1,24 @@
+import { capitalize } from '@/lib/primitive-helpers'
+
 const formatTimeSeries = (timeSeries) => {
-  console.log(timeSeries)
   const timeSeriesData = timeSeries.reduce((accObj, { t, value }) => {
     const xAxisData = accObj.xAxisData || []
     const seriesData = accObj.seriesData || []
     return {
       xAxisData: [
         ...xAxisData,
-        new Date(t).toLocaleDateString('en', { year: 'numeric', month: 'numeric', day: 'numeric' }),
+        new Date(t).toLocaleDateString('en-US', { year: 'numeric', month: 'numeric', day: 'numeric' }),
       ],
       seriesData: [...seriesData, value],
     }
   }, {})
+
+  const valueName = timeSeries[0]?.name
+    ?.split('_')
+    .map(capitalize)
+    .join(' ')
+
+  const valueUnit = timeSeries[0]?.unit
 
   return {
     xAxis: [{
@@ -18,12 +26,12 @@ const formatTimeSeries = (timeSeries) => {
     }],
     yAxis: [
       {
-        name: 'Area [m^2]',
+        name: `${valueName} (${valueUnit})`,
         type: 'value',
       },
     ],
     series: [{
-      name: 'Area',
+      name: valueName,
       type: 'line',
       data: timeSeriesData.seriesData,
     }],
