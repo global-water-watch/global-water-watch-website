@@ -63,8 +63,24 @@
             experimentalFeature: true, // disable this feature when you want to display it default
             layers: [
               {
+                id: 'BasinATLAS_v10_lev01',
+                zoomLevels: [0, 1, 2],
+                source: {
+                  type: 'vector',
+                  url: 'mapbox://global-water-watch.BasinATLAS_v10_lev01',
+                },
+              },
+              {
+                id: 'BasinATLAS_v10_lev02',
+                zoomLevels: [3],
+                source: {
+                  type: 'vector',
+                  url: 'mapbox://global-water-watch.BasinATLAS_v10_lev02',
+                },
+              },
+              {
                 id: 'BasinATLAS_v10_lev03',
-                zoomLevels: [1, 2, 3],
+                zoomLevels: [4],
                 source: {
                   type: 'vector',
                   url: 'mapbox://global-water-watch.BasinATLAS_v10_lev03',
@@ -72,7 +88,7 @@
               },
               {
                 id: 'BasinATLAS_v10_lev04',
-                zoomLevels: [4],
+                zoomLevels: [5],
                 source: {
                   type: 'vector',
                   url: 'mapbox://global-water-watch.BasinATLAS_v10_lev04',
@@ -80,10 +96,26 @@
               },
               {
                 id: 'BasinATLAS_v10_lev05',
-                zoomLevels: [5, 6, 7, 8],
+                zoomLevels: [6],
                 source: {
                   type: 'vector',
                   url: 'mapbox://global-water-watch.BasinATLAS_v10_lev05',
+                },
+              },
+              {
+                id: 'BasinATLAS_v10_lev06',
+                zoomLevels: [7],
+                source: {
+                  type: 'vector',
+                  url: 'mapbox://global-water-watch.BasinATLAS_v10_lev06',
+                },
+              },
+              {
+                id: 'BasinATLAS_v10_lev10',
+                zoomLevels: [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
+                source: {
+                  type: 'vector',
+                  url: 'mapbox://global-water-watch.BasinATLAS_v10_lev10',
                 },
               },
             ],
