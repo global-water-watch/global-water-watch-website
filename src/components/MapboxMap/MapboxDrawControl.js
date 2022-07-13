@@ -44,21 +44,19 @@ export default {
       }
     },
 
-    mounted () {
-      const map = this.getMap()
-      console.log('mounted', map)
-      // We can immediately initialize if we have the map ready
-      if (map && map.isStyleLoaded()) {
-        console.log('mounted, inside isStyleLoaded')
-        this.initialize()
-      }
-    },
-
     addPreviousFeatures () {
       const features = this.$store.getters['drawn-geometry/drawnFeatures']
       features.forEach((feature) => {
         this.mbDraw.add(feature)
       })
     },
+  },
+
+  mounted () {
+    const map = this.getMap()
+    // We can immediately initialize if we have the map ready
+    if (map && map.isStyleLoaded()) {
+      this.initialize()
+    }
   },
 }
