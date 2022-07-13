@@ -14,6 +14,7 @@
     </v-radio-group>
 
     <v-btn
+      v-if="showExperimentalFeatures"
       small
       @click="onDrawClick"
     >
@@ -180,9 +181,11 @@
           this.$store.commit('ui/SET_ACTIVE_LAYER_NAME', layerName)
         },
       },
+      showExperimentalFeatures () {
+        return this.$store.getters['ui/showExperimentalFeatures']
+      },
       filteredLayers () {
-        const showExperimentalFeatures = this.$store.getters['ui/showExperimentalFeatures']
-        return showExperimentalFeatures ? this.layers : this.layers.filter(layer => !layer.experimentalFeature)
+        return this.showExperimentalFeatures ? this.layers : this.layers.filter(layer => !layer.experimentalFeature)
       },
       drawnFeatures () {
         return this.$store.getters['drawn-geometry/drawnFeatures']

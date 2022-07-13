@@ -25,7 +25,7 @@
       :options="layer"
     />
 
-    <mapbox-draw-control />
+    <mapbox-draw-control v-if="showExperimentalFeatures" />
   </v-mapbox>
 </template>
 
@@ -49,6 +49,9 @@
     },
 
     computed: {
+      showExperimentalFeatures () {
+        return this.$store.getters['ui/showExperimentalFeatures']
+      },
       reservoirLayers () {
         return this.$store.getters['reservoir-layers/layers']
       },
