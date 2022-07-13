@@ -13,16 +13,19 @@
       />
     </v-radio-group>
 
-    <!-- <v-btn
+    <v-btn
+      v-if="showExperimentalFeatures"
       small
       @click="onDrawClick"
     >
-      {{ hasDrawnFeatures ? 'View geometry details' : 'Draw custom geometry' }}
-    </v-btn> -->
+      {{ drawnFeatures.length ? 'View geometry details' : 'Draw custom geometry' }}
+    </v-btn>
   </div>
 </template>
 
 <script>
+  import qs from 'qs'
+
   export default {
     data () {
       return {
@@ -178,12 +181,14 @@
           this.$store.commit('ui/SET_ACTIVE_LAYER_NAME', layerName)
         },
       },
-      filteredLayers () {
-        const showExperimentalFeatures = this.$store.getters['ui/showExperimentalFeatures']
-        return showExperimentalFeatures ? this.layers : this.layers.filter(layer => !layer.experimentalFeature)
+      showExperimentalFeatures () {
+        return this.$store.getters['ui/showExperimentalFeatures']
       },
-      hasDrawnFeatures () {
-        return this.$store.getters['drawn-geometry/drawnFeatures'].length
+      filteredLayers () {
+        return this.showExperimentalFeatures ? this.layers : this.layers.filter(layer => !layer.experimentalFeature)
+      },
+      drawnFeatures () {
+        return this.$store.getters['drawn-geometry/drawnFeatures']
       },
     },
 
@@ -240,9 +245,11 @@
       },
 
       onDrawClick () {
-        if (this.hasDrawnFeatures) {
-          console.log(this.$store.getters['drawn-geometry/drawnFeatures'])
-          // this.$router.push()
+        if (this.drawnFeatures.length) {
+          const coordinates = this.drawnFeatures.map(({ geometry }) => geometry.coordinates)
+          const geometry = { type: 'MultiPolygon', coordinates }
+          const query = qs.stringify(geometry)
+          this.$router.push({ path: `/custom-selection/?${query}` })
         }
       },
     },
