@@ -300,6 +300,8 @@
       },
 
       onReservoirClick (evt) {
+        // If we click on a reservoir while drawing, do nothing
+        if (this.isDrawing) { return }
         const reservoir = evt.features?.[0]
         if (!reservoir) {
           return
