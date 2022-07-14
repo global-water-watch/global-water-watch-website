@@ -2,7 +2,7 @@
   <div class="map-layers-panel">
     <v-radio-group
       v-model="activeLayerName"
-      :disabled="!mapReady"
+      :disabled="!mapReady || isDrawing || isTransitioningLayer"
     >
       <v-radio
         v-for="layer in filteredLayers"
@@ -16,9 +16,10 @@
     <v-btn
       v-if="showExperimentalFeatures"
       small
-      @click="onDrawClick"
+      :disabled="!mapReady || isDrawing"
+      @click="onDrawButtonClick"
     >
-      {{ drawnFeatures.length ? 'View geometry details' : 'Draw custom geometry' }}
+      {{ drawButtonText }}
     </v-btn>
   </div>
 </template>
@@ -218,6 +219,7 @@
             clickFn: this.onRegionLayerClick,
           }),
         ],
+        isTransitioningLayer: false,
       }
     },
 
@@ -242,6 +244,26 @@
       drawnFeatures () {
         return this.$store.getters['drawn-geometry/drawnFeatures']
       },
+      isDrawing () {
+        return this.$store.getters['drawn-geometry/isDrawing']
+      },
+      drawButtonText () {
+        if (this.isDrawing) { return 'Drawing geometry' }
+        if (this.drawnFeatures.length) { return 'View geometry details' }
+        return 'Draw custom geometry'
+      },
+    },
+
+    watch: {
+      // Set layer back to 'Reservoirs' when drawing
+      isDrawing (isDrawing) {
+        if (isDrawing) {
+          const firstLayer = this.layers[0]
+          this.clearAll()
+          this.$store.commit(`${firstLayer.type}-layers/ADD_LAYER`, firstLayer)
+          this.activeLayerName = this.layers[0].name
+        }
+      },
     },
 
     mounted () {
@@ -258,9 +280,23 @@
         this.$store.commit('reservoir-layers/REMOVE_ALL_LAYERS')
       },
 
+      clearMbDraw () {
+        const { $mbDraw } = this.$root
+        if (!$mbDraw) { return }
+        $mbDraw.deleteAll()
+        // Manually deleting from mb draw does not trigger
+        // delete event, so deleting manually too
+        this.$store.commit('drawn-geometry/SET_DRAWN_FEATURES', [])
+      },
+
       activateLayer (layer) {
+        this.isTransitioningLayer = true
         this.clearAll()
+        this.clearMbDraw()
         this.$store.commit(`${layer.type}-layers/ADD_LAYER`, layer)
+        setTimeout(() => {
+          this.isTransitioningLayer = false
+        }, LAYER_FADE_DURATION_MS)
       },
 
       onReservoirClick (evt) {
@@ -296,12 +332,19 @@
         this.$router.push({ path: `/boundary/${source}--${zoom}--${lng}--${lat}--${shapeID}` })
       },
 
-      onDrawClick () {
+      onDrawButtonClick () {
         if (this.drawnFeatures.length) {
           const coordinates = this.drawnFeatures.map(({ geometry }) => geometry.coordinates)
           const geometry = { type: 'MultiPolygon', coordinates }
           const query = qs.stringify(geometry)
           this.$router.push({ path: `/custom-selection/?${query}` })
+        } else {
+          const { $mbDraw } = this.$root
+          if (!$mbDraw) { return }
+          $mbDraw.changeMode('draw_polygon')
+          // Manually setting the mode of mb draw does not trigger
+          // modechange event, so setting it here manually too
+          this.$store.commit('drawn-geometry/SET_IS_DRAWING', true)
         }
       },
     },

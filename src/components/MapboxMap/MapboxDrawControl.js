@@ -1,6 +1,5 @@
 import MapboxDraw from '@mapbox/mapbox-gl-draw'
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css'
-// import DrawRectangle from 'mapbox-gl-draw-rectangle-mode'
 
 export default {
   name: 'v-mapbox-draw-control',
@@ -22,6 +21,7 @@ export default {
       })
 
       this.mbDraw = mbDraw
+      this.$root.$mbDraw = mbDraw
       map.addControl(mbDraw, 'bottom-right')
 
       const onChangeFn = () => {
@@ -29,7 +29,16 @@ export default {
         this.$store.commit('drawn-geometry/SET_DRAWN_FEATURES', features)
       }
 
+      const onModeChangeFn = ({ mode }) => {
+        if (mode === 'simple_select') {
+          this.$store.commit('drawn-geometry/SET_IS_DRAWING', false)
+        } else {
+          this.$store.commit('drawn-geometry/SET_IS_DRAWING', true)
+        }
+      }
+
       map
+        .on('draw.modechange', onModeChangeFn)
         .on('draw.create', onChangeFn)
         .on('draw.delete', onChangeFn)
         .on('draw.update', onChangeFn)
