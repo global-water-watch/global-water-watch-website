@@ -25,6 +25,7 @@
 
 <script>
   import qs from 'qs'
+  import { LAYER_FADE_DURATION_MS } from '@/lib/constants'
 
   export default {
     data () {
@@ -135,6 +136,9 @@
                     0.75,
                     0,
                   ],
+                  'fill-opacity-transition': {
+                    duration: LAYER_FADE_DURATION_MS,
+                  },
                 },
               },
               {
@@ -144,7 +148,7 @@
                   'line-width': 0.8,
                   'line-opacity': 0,
                   'line-opacity-transition': {
-                    duration: 2000,
+                    duration: LAYER_FADE_DURATION_MS,
                   },
                 },
               },
@@ -194,6 +198,9 @@
                     0.75,
                     0,
                   ],
+                  'fill-opacity-transition': {
+                    duration: LAYER_FADE_DURATION_MS,
+                  },
                 },
               },
               {
@@ -203,7 +210,7 @@
                   'line-width': 0.8,
                   'line-opacity': 0,
                   'line-opacity-transition': {
-                    duration: 2000,
+                    duration: LAYER_FADE_DURATION_MS,
                   },
                 },
               },

@@ -1,0 +1,1 @@
+export const LAYER_FADE_DURATION_MS = 1000

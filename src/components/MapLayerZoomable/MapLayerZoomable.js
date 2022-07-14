@@ -1,3 +1,4 @@
+import { LAYER_FADE_DURATION_MS } from '@/lib/constants'
 import { difference } from '@/lib/array-helpers'
 
 export default {
@@ -145,19 +146,24 @@ export default {
       styles.forEach((style) => {
         const layerUniqueId = `${layerId}-${style.type}`
 
+        // 1. We first set the opacity to 0
         if (style.type === 'line' && typeof (style.paint['line-opacity']) !== 'undefined') {
           map.setPaintProperty(layerUniqueId, 'line-opacity', 0)
         }
+        if (style.type === 'fill') {
+          const unHoverFunction = this.mouseLeaveFnMap[layerUniqueId]
+          if (unHoverFunction) { unHoverFunction() }
+        }
 
-        // TODO: this breaks when the old layer is still in the map
+        // 2. Only after finishing the opacity transition do we fully remove the layer
         setTimeout(() => {
           map.removeLayer(layerUniqueId)
-        }, 2000)
 
-        // Only remove source when no other layers depend on it
-        if (!map.getStyle().layers.some(({ source }) => source === layerId)) {
-          map.removeSource(layerId)
-        }
+          // Only remove source when no other layers depend on it
+          if (!map.getStyle().layers.some(({ source }) => source === layerId)) {
+            map.removeSource(layerId)
+          }
+        }, LAYER_FADE_DURATION_MS)
 
         if (this.mouseEnterFnMap[layerUniqueId]) {
           map.off('mouseenter', layerUniqueId, this.mouseEnterFnMap[layerUniqueId])
