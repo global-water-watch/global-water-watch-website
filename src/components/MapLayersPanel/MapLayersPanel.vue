@@ -266,6 +266,10 @@
       },
     },
 
+    created () {
+      this.$store.commit('zoomable-layers/SET_CACHED_GEOMETRY', null)
+    },
+
     mounted () {
       const initiallySelectedLayer = this.layers
         .find(({ name }) => name === this.activeLayerName)
@@ -312,26 +316,30 @@
 
       onBasinClick (evt) {
         const basin = evt.features?.[0]
-        if (!basin) {
-          return
-        }
+        const UID = basin?.properties.HYBAS_ID
+        if (!UID) { return }
+
+        const { source, geometry } = basin
+        this.$store.commit('zoomable-layers/SET_CACHED_GEOMETRY', Object.freeze({ UID, geometry }))
+
         const zoom = Math.round(evt.target.getZoom())
         const { lng, lat } = evt.target.getCenter()
-        const { source } = basin
-        const { HYBAS_ID } = basin.properties
-        this.$router.push({ path: `/basin/${source}--${zoom}--${lng}--${lat}--${HYBAS_ID}` })
+
+        this.$router.push({ path: `/basin/${source}--${zoom}--${lng}--${lat}--${UID}` })
       },
 
       onRegionLayerClick (evt) {
         const region = evt.features?.[0]
-        if (!region) { return }
-        const { source } = region
-        const { shapeID } = region.properties
-        if (!shapeID) { return }
+        const UID = region?.properties.shapeID
+        if (!UID) { return }
+
+        const { source, geometry } = region
+        this.$store.commit('zoomable-layers/SET_CACHED_GEOMETRY', Object.freeze({ UID, geometry }))
+
         const zoom = Math.round(evt.target.getZoom())
         const { lng, lat } = evt.target.getCenter()
 
-        this.$router.push({ path: `/boundary/${source}--${zoom}--${lng}--${lat}--${shapeID}` })
+        this.$router.push({ path: `/boundary/${source}--${zoom}--${lng}--${lat}--${UID}` })
       },
 
       onDrawButtonClick () {
