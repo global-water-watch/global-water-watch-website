@@ -103,6 +103,24 @@
           // },
         }))
 
+        // get last value
+        if (xAxis.length && xAxis[0].data.length) {
+          // add axisPointer on last value
+          const xData = xAxis[0].data
+          const xDataLast = xData[xData.length - 1]
+
+          const xAxisPointer = {
+            label: {
+              show: true,
+            },
+            value: xDataLast,
+            handle: {
+              show: true,
+            },
+          }
+          xAxis[0].axisPointer = xAxisPointer
+        }
+
         return {
           /**
            * Chart data
@@ -116,12 +134,7 @@
            * Meta tools
           **/
           tooltip: showTooltip && {
-            trigger: 'axis',
-            axisPointer: {
-              type: 'cross',
-              animation: false,
-              // label: { backgroundColor: '#505765' },
-            },
+            triggerOn: 'click',
           },
 
           legend: showLegend && {
@@ -174,13 +187,27 @@
         this.chart.setOption(newVal)
       },
     },
-
     mounted () {
       const { $chart } = this.$refs
       const chart = init($chart, 'gww')
       this.chart = chart
 
       chart.setOption(this.option)
+      this.subscribeChartEvents(chart)
+    },
+    methods: {
+      subscribeChartEvents (chart) {
+        chart.on('updateAxisPointer', (evt) => {
+          if (evt.dataIndexInside) {
+            // we're just moving
+            return
+          }
+          const timeIndex = evt.axesInfo[0].value
+          const t = this.option.xAxis[0].data[timeIndex]
+          // emit that the selected time changed
+          this.$emit('selectedTimeChanged', t)
+        })
+      },
     },
   }
 </script>
