@@ -14,49 +14,54 @@
 
   export default {
     props: {
-      id: {
-        type: String,
-        required: true,
-      },
+      // id: {
+      //   type: String,
+      //   required: true,
+      // },
       areaType: {
         type: String,
         required: true,
       },
-      layer: {
-        type: String,
-        required: true,
-      },
-      zoom: {
-        type: Number,
-        required: true,
-      },
-      center: {
+      mapboxQueryData: {
         type: Object,
         required: true,
       },
+      // layer: {
+      //   type: String,
+      //   required: true,
+      // },
+      // zoom: {
+      //   type: Number,
+      //   required: true,
+      // },
+      // center: {
+      //   type: Object,
+      //   required: true,
+      // },
     },
 
     mounted () {
+      const { layer, zoom, center } = this.mapboxQueryData
       mapboxgl.accessToken = this.$config.mapBoxToken
 
       const map = new mapboxgl.Map({
         container: this.$refs.map,
-        zoom: this.zoom,
-        center: this.center,
+        zoom,
+        center,
         style: 'mapbox://styles/mapbox/light-v9',
       })
 
       map.on('load', () => {
-        map.addSource(this.layer, {
-          id: this.layer,
+        map.addSource(layer, {
+          id: layer,
           type: 'vector',
-          url: `mapbox://global-water-watch.${this.layer}`,
+          url: `mapbox://global-water-watch.${layer}`,
         })
         map.addLayer({
-          id: this.layer,
+          id: layer,
           type: 'line',
-          source: this.layer,
-          'source-layer': this.layer,
+          source: layer,
+          'source-layer': layer,
           layout: {},
           paint: {
             'line-color': 'red',
@@ -66,11 +71,12 @@
       })
 
       map.on('idle', () => {
-        if (!map.getLayer(this.layer)) { return }
+        const { layer, id } = this.mapboxQueryData
+        if (!map.getLayer(layer)) { return }
         const AREA_KEY = AREA_KEY_MAP[this.areaType]
-        const geometry = map.querySourceFeatures(this.layer, { sourceLayer: this.layer })
+        const geometry = map.querySourceFeatures(layer, { sourceLayer: layer })
           // Forcing a string here by doing `+ ''`
-          .find(({ properties }) => properties?.[AREA_KEY] + '' === this.id)
+          .find(({ properties }) => properties?.[AREA_KEY] + '' === id)
           ?.geometry
         this.$emit('found-geometry', geometry)
       })
