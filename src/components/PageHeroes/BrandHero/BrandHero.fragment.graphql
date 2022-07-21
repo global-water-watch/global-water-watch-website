@@ -1,5 +1,8 @@
 #import '../../ResponsiveImage/Image.fragment.graphql'
 #import '../../ResponsiveImage/ResponsiveImage.fragment.graphql'
+#import '../../AppLink/externalLink.fragment.graphql'
+#import '../../AppLink/internalLink.fragment.graphql'
+#import '../../CTABlock/CTABlock.fragment.graphql'
 
 fragment brandHeroFragment on BrandHeroRecord {
   id
@@ -11,5 +14,8 @@ fragment brandHeroFragment on BrandHeroRecord {
     responsiveImage(imgixParams: { w: 1200, auto: format }) {
       ...responsiveImageFragment
     }
+  }
+  ctaBlock {
+    ...ctaBlockFragment
   }
 }

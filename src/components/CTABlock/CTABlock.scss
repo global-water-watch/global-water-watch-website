@@ -1,0 +1,21 @@
+.cta-block {
+  margin-top: $space-large;
+  padding: $space-default;
+  text-align: center;
+  border: 1px solid #FFFFFF;
+  width: 300px;
+;
+
+  @media screen and (min-width: $breakpoint-medium) {
+    text-align: left;
+  }
+
+  @media screen and (min-width: $breakpoint-large) {
+    text-align: left;
+  }
+}
+
+.cta-block__button {
+  margin-top: $space-default;
+  background-color: $color-blue;
+}
