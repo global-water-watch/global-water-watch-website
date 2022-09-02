@@ -29,6 +29,10 @@
     },
 
     computed: {
+      title () {
+        return this.text.title
+      },
+
       singleBlock () {
         const [singleBlock] = this.items
         return singleBlock
@@ -37,10 +41,6 @@
       text () {
         const [text] = this.singleBlock.text
         return text
-      },
-
-      title () {
-        return this.text.title
       },
 
       link () {
