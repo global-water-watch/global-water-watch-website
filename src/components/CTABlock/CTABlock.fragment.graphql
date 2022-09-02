@@ -1,0 +1,25 @@
+#import '../AppLink/externalLink.fragment.graphql'
+#import '../AppLink/internalLink.fragment.graphql'
+
+fragment ctaBlockFragment on CtaBlockRecord {
+  id
+  _modelApiKey
+  text {
+    ... on TextItemRecord {
+      id
+      _modelApiKey
+      title
+      text {
+        value
+      }
+    }
+  }
+  links {
+    ... on InternalLinkRecord {
+      ...internalLinkFragment
+    }
+    ... on ExternalLinkRecord {
+      ...externalLinkFragment
+    }
+  }
+}
