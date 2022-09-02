@@ -1,6 +1,16 @@
 <template>
   <div class="map-layers-panel">
+    <v-checkbox
+      v-model="reservoirLayer.checked"
+      :label="reservoirLayer.name"
+      :value="true"
+      :disabled="true"
+      dense
+      hide-details
+    />
+
     <v-radio-group
+      v-if="showExperimentalFeatures"
       v-model="activeLayerName"
       :disabled="!mapReady || isDrawing || isTransitioningLayer"
     >
@@ -31,33 +41,34 @@
   export default {
     data () {
       return {
-        layers: [
-          Object.freeze({
-            name: 'Reservoirs',
-            type: 'reservoir',
-            id: 'reservoirsv10',
-            source: {
-              type: 'vector',
-              url: 'mapbox://global-water-watch.reservoirs-v10',
+        reservoirLayer: Object.freeze({
+          name: 'Reservoirs',
+          type: 'reservoir',
+          id: 'reservoirsv10',
+          checked: true,
+          source: {
+            type: 'vector',
+            url: 'mapbox://global-water-watch.reservoirs-v10',
+          },
+          styles: [
+            {
+              type: 'fill',
+              paint: {
+                'fill-color': '#8fdfef',
+                'fill-opacity': 0.4,
+              },
             },
-            styles: [
-              {
-                type: 'fill',
-                paint: {
-                  'fill-color': '#8fdfef',
-                  'fill-opacity': 0.4,
-                },
+            {
+              type: 'line',
+              paint: {
+                'line-color': '#8fdfef',
+                'line-width': 0.8,
               },
-              {
-                type: 'line',
-                paint: {
-                  'line-color': '#8fdfef',
-                  'line-width': 0.8,
-                },
-              },
-            ],
-            clickFn: this.onReservoirClick,
-          }),
+            },
+          ],
+          clickFn: this.onReservoirClick,
+        }),
+        layers: [
           Object.freeze({
             name: 'Basins',
             type: 'zoomable',
@@ -258,10 +269,9 @@
       // Set layer back to 'Reservoirs' when drawing
       isDrawing (isDrawing) {
         if (isDrawing) {
-          const firstLayer = this.layers[0]
+          const firstLayer = this.reservoirLayer
           this.clearAll()
           this.$store.commit(`${firstLayer.type}-layers/ADD_LAYER`, firstLayer)
-          this.activeLayerName = this.layers[0].name
         }
       },
     },
@@ -271,9 +281,12 @@
     },
 
     mounted () {
+      const initiallyReservoirLayer = this.reservoirLayer
       const initiallySelectedLayer = this.layers
         .find(({ name }) => name === this.activeLayerName)
-      if (initiallySelectedLayer) {
+
+      if (initiallyReservoirLayer && initiallySelectedLayer) {
+        this.$store.commit(`${initiallyReservoirLayer.type}-layers/ADD_LAYER`, initiallyReservoirLayer)
         this.$store.commit(`${initiallySelectedLayer.type}-layers/ADD_LAYER`, initiallySelectedLayer)
       }
     },
@@ -281,7 +294,6 @@
     methods: {
       clearAll () {
         this.$store.commit('zoomable-layers/REMOVE_ALL_LAYERS')
-        this.$store.commit('reservoir-layers/REMOVE_ALL_LAYERS')
       },
 
       clearMbDraw () {
