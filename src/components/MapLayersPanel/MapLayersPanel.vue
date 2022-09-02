@@ -10,6 +10,7 @@
     />
 
     <v-radio-group
+      v-if="showExperimentalFeatures"
       v-model="activeLayerName"
       :disabled="!mapReady || isDrawing || isTransitioningLayer"
     >
