@@ -20,6 +20,7 @@
       <ReservoirPageSection
         :reservoirs="reservoirs"
         :time-series="timeSeries"
+        :area-type="areaType"
       />
     </client-only>
   </Fragment>
