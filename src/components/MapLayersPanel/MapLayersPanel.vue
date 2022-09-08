@@ -89,7 +89,7 @@
             name: 'Basins',
             type: 'zoomable',
             promoteId: 'HYBAS_ID', // this id is used to identify the hover id in the map.
-            experimentalFeature: true, // disable this feature when you want to display it default
+            experimentalFeature: false, // disable this feature when you want to display it default
             layers: [
               {
                 id: 'BasinATLAS_v10_lev01',
@@ -188,7 +188,7 @@
             type: 'zoomable',
             attribution: '<a href="https://www.geoboundaries.org" target="_blank" rel="noopener noreferrer">geoBoundaries</a>', // this id is used to identify the hover id in the map.
             promoteId: 'shapeID', // this id is used to identify the hover id in the map.
-            experimentalFeature: true, // disable this feature when you want to display it default
+            experimentalFeature: false, // disable this feature when you want to display it default
             layers: [
               {
                 id: 'geoBoundariesCGAZ_ADM0',
