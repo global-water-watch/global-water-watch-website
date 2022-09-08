@@ -1,16 +1,6 @@
 <template>
   <div class="map-layers-panel">
-    <v-checkbox
-      v-model="reservoirLayer.checked"
-      :label="reservoirLayer.name"
-      :value="true"
-      :disabled="true"
-      dense
-      hide-details
-    />
-
     <v-radio-group
-      v-if="showExperimentalFeatures"
       v-model="activeLayerName"
       :disabled="!mapReady || isDrawing || isTransitioningLayer"
     >
@@ -24,7 +14,6 @@
     </v-radio-group>
 
     <v-btn
-      v-if="showExperimentalFeatures"
       small
       :disabled="!mapReady || isDrawing"
       @click="onDrawButtonClick"
@@ -69,6 +58,33 @@
           clickFn: this.onReservoirClick,
         }),
         layers: [
+          Object.freeze({
+            name: 'Reservoirs',
+            type: 'reservoir',
+            id: 'reservoirsv10',
+            checked: true,
+            source: {
+              type: 'vector',
+              url: 'mapbox://global-water-watch.reservoirs-v10',
+            },
+            styles: [
+              {
+                type: 'fill',
+                paint: {
+                  'fill-color': '#8fdfef',
+                  'fill-opacity': 0.4,
+                },
+              },
+              {
+                type: 'line',
+                paint: {
+                  'line-color': '#8fdfef',
+                  'line-width': 0.8,
+                },
+              },
+            ],
+            clickFn: this.onReservoirClick,
+          }),
           Object.freeze({
             name: 'Basins',
             type: 'zoomable',
