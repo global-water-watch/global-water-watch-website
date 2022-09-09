@@ -8,14 +8,14 @@ const formatTimeSeries = (timeSeries) => {
 
   const valueUnit = timeSeries[0]?.unit
 
-  const series = timeSeries.map(({ t, value }) => {
+  const data = timeSeries.map(({ t, value }) => {
     return [t, value]
   })
 
   return {
     xAxis: [
       {
-        data: series.t,
+        data: data.t,
         type: 'time',
       },
     ],
@@ -28,7 +28,7 @@ const formatTimeSeries = (timeSeries) => {
     series: [{
       name: valueName,
       type: 'line',
-      data: series,
+      data,
     }],
   }
 }
