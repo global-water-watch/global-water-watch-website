@@ -1,6 +1,6 @@
 export const state = () => ({
   mapReady: false,
-  activeLayerName: 'Basins',
+  activeLayerName: 'Reservoirs',
   showExperimentalFeatures: process.env.IS_DEV,
 })
 

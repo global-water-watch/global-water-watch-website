@@ -1,16 +1,6 @@
 <template>
   <div class="map-layers-panel">
-    <v-checkbox
-      v-model="reservoirLayer.checked"
-      :label="reservoirLayer.name"
-      :value="true"
-      :disabled="true"
-      dense
-      hide-details
-    />
-
     <v-radio-group
-      v-if="showExperimentalFeatures"
       v-model="activeLayerName"
       :disabled="!mapReady || isDrawing || isTransitioningLayer"
     >
@@ -24,7 +14,6 @@
     </v-radio-group>
 
     <v-btn
-      v-if="showExperimentalFeatures"
       small
       :disabled="!mapReady || isDrawing"
       @click="onDrawButtonClick"
@@ -70,10 +59,37 @@
         }),
         layers: [
           Object.freeze({
+            name: 'Reservoirs',
+            type: 'reservoir',
+            id: 'reservoirsv10',
+            checked: true,
+            source: {
+              type: 'vector',
+              url: 'mapbox://global-water-watch.reservoirs-v10',
+            },
+            styles: [
+              {
+                type: 'fill',
+                paint: {
+                  'fill-color': '#8fdfef',
+                  'fill-opacity': 0.4,
+                },
+              },
+              {
+                type: 'line',
+                paint: {
+                  'line-color': '#8fdfef',
+                  'line-width': 0.8,
+                },
+              },
+            ],
+            clickFn: this.onReservoirClick,
+          }),
+          Object.freeze({
             name: 'Basins',
             type: 'zoomable',
             promoteId: 'HYBAS_ID', // this id is used to identify the hover id in the map.
-            experimentalFeature: true, // disable this feature when you want to display it default
+            experimentalFeature: false, // disable this feature when you want to display it default
             layers: [
               {
                 id: 'BasinATLAS_v10_lev01',
@@ -172,7 +188,7 @@
             type: 'zoomable',
             attribution: '<a href="https://www.geoboundaries.org" target="_blank" rel="noopener noreferrer">geoBoundaries</a>', // this id is used to identify the hover id in the map.
             promoteId: 'shapeID', // this id is used to identify the hover id in the map.
-            experimentalFeature: true, // disable this feature when you want to display it default
+            experimentalFeature: false, // disable this feature when you want to display it default
             layers: [
               {
                 id: 'geoBoundariesCGAZ_ADM0',
