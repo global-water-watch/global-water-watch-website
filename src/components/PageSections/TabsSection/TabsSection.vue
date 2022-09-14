@@ -41,6 +41,16 @@
           </v-container>
         </v-tab-item>
       </v-tabs-items>
+
+      <div class="tabs-section__action">
+        <AppLink
+          v-if="transformedLink"
+          :link="transformedLink"
+          class="v-btn v-btn--has-bg v-size--default primary"
+        >
+          {{ transformedLink.title }}
+        </AppLink>
+      </div>
     </div>
   </section>
 </template>
@@ -67,6 +77,10 @@
         type: Object,
         default: () => {},
       },
+      link: {
+        type: Array,
+        default: undefined,
+      },
     },
 
     data () {
@@ -80,6 +94,10 @@
         return (this.theme && this.theme.slug === 'highlight')
           ? 'layout-section--blue'
           : 'layout-section--lined'
+      },
+
+      transformedLink () {
+        return (this.link && this.link.length) ? this.link[0] : undefined
       },
     },
   }

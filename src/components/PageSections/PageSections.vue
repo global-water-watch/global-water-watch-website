@@ -20,6 +20,9 @@
   import TabsSection from '@/components/PageSections/TabsSection/TabsSection'
   import TextSection from '@/components/PageSections/TextSection/TextSection'
   import TimelineSection from '@/components/PageSections/TimelineSection/TimelineSection'
+  import ImageTextSection from '@/components/PageSections/ImageTextSection/ImageTextSection'
+  import TableSection from '@/components/PageSections/TableSection/TableSection'
+  import BlogTags from '@/components/BlogTags/BlogTags'
 
   const componentsByType = {
     blog_quote: QuoteSection,
@@ -31,6 +34,8 @@
     related_section: RelatedSection,
     tabs_section: TabsSection,
     timeline_section: TimelineSection,
+    table_section: TableSection,
+    image_text_section: ImageTextSection,
   }
   const supportedTypes = Object.keys(componentsByType)
 
@@ -44,6 +49,9 @@
       TabsSection,
       TextSection,
       TimelineSection,
+      ImageTextSection,
+      TableSection,
+      BlogTags,
     },
     props: {
       sections: {
@@ -54,10 +62,14 @@
           return sections.every(({ _modelApiKey: m }) => supportedTypes.includes(m))
         },
       },
+      blogTags: {
+        type: Array,
+        default: undefined,
+      },
     },
     computed: {
       items () {
-        return this.sections
+        const sections = this.sections
           .filter(section => componentsByType[section._modelApiKey])
           .map((section, index) => {
             const id = `section-${section.id || index}`
@@ -67,6 +79,21 @@
               props: { ...section, id },
             }
           })
+
+        if (this.blogTags && this.blogTags.length) {
+          const relatedSection = sections.find(({ props }) => props._modelApiKey === 'related_section')
+          const index = sections.indexOf(relatedSection)
+          const id = 'section-blog-tags'
+          const component = { key: id, Component: BlogTags, props: { tags: this.blogTags, id } }
+
+          if (index > -1) {
+            sections.splice(index, 0, component)
+          } else {
+            sections.push(component)
+          }
+        }
+
+        return sections
       },
     },
   }

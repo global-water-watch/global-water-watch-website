@@ -14,7 +14,9 @@ $gradient-dark: linear-gradient(173.75deg, $gradient-top 0.15%, $gradient-bottom
 // z-index
 $layer-header: 50;
 $layer-social-share: 45;
-$layer-grid-lines: 40;
+$layer-loader: 41;
+$layer-images: 40;
+$layer-grid-lines: 35;
 
 // sizes
 $max-width-medium: 760px;
@@ -28,6 +30,8 @@ $space-xlarge: 50px;
 // text
 $font-weight-normal: 300;
 $font-weight-bold: 500;
+
+$font-size-small: 14px;
 
 // breakpoints
 $breakpoint-small: 600px;
@@ -65,3 +69,8 @@ $container-max-widths: (
   'lg': $max-width-large,
   'xl': $max-width-large,
 );
+
+//	Expo
+$ease--in-expo: cubic-bezier(.95, .05, .795, .035);
+$ease--out-expo: cubic-bezier(.19, 1, .22, 1);
+$ease--in-out-expo: cubic-bezier(1, 0, 0, 1);

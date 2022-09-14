@@ -1,0 +1,23 @@
+.blog-filter {
+  margin-bottom: $space-default;
+}
+
+.blog-filter__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.blog-filter__item {
+  margin-top: .6em;
+  margin-right: .6em;
+}
+
+.v-application .blog-filter__clear {
+  color: $color-white;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

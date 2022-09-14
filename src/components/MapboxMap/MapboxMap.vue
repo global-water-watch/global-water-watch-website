@@ -6,19 +6,35 @@
     :zoom="mapConfig.zoom"
     :map-style="mapConfig.style"
     @mb-created="onMapCreated"
+    @mb-load="onMapLoaded"
   >
+    <!-- Geocoder -->
+    <v-mapbox-geocoder />
     <!-- Controls -->
     <v-mapbox-navigation-control position="bottom-right" />
+
+    <map-layer-reservoirs
+      v-for="layer in reservoirLayers"
+      :key="layer.id"
+      :options="layer"
+    />
+
+    <map-layer-zoomable
+      v-for="layer in zoomableLayers"
+      :key="layer.name"
+      :options="layer"
+    />
+
+    <mapbox-draw-control v-if="showExperimentalFeatures" />
   </v-mapbox>
 </template>
 
 <script>
-  const MAP_ZOOM = 7
-  const NETHERLANDS_CENTER_LATITUDE = 52.1326
-  const NETHERLANDS_CENTER_LONGITUDE = 5.2913
-  const MAP_CENTER = [NETHERLANDS_CENTER_LONGITUDE, NETHERLANDS_CENTER_LATITUDE]
+  const MAP_ZOOM = 3
+  const WORLD_CENTER_LONGITUDE = 18.4
+  const WORLD_CENTER_LATITUDE = 23
+  const MAP_CENTER = [WORLD_CENTER_LONGITUDE, WORLD_CENTER_LATITUDE]
   const MAPBOX_STYLE = 'mapbox://styles/mapbox/light-v9'
-  const RESERVOIRS_LAYER = 'reservoirsv10'
 
   export default {
     data () {
@@ -32,21 +48,26 @@
       }
     },
 
+    computed: {
+      showExperimentalFeatures () {
+        return this.$store.getters['ui/showExperimentalFeatures']
+      },
+      reservoirLayers () {
+        return this.$store.getters['reservoir-layers/layers']
+      },
+      zoomableLayers () {
+        return this.$store.getters['zoomable-layers/layers']
+      },
+    },
+
     methods: {
       onMapCreated (map) {
-        map.on('click', ({ point }) => {
-          const reservoirs = map.queryRenderedFeatures(point)
-            .filter(({ layer }) => layer.id === RESERVOIRS_LAYER)
-            // .map((reservoir) => {
-            //   console.log(reservoir)
-            //   return reservoir
-            // })
-            .reduce((accObj, { properties: { name, fid } }) => ({
-              ...accObj,
-              [name]: fid,
-            }), {})
-          return reservoirs
-        })
+        map.removeControl(map._logoControl)
+        map.addControl(map._logoControl, 'top-right')
+      },
+
+      onMapLoaded () {
+        this.$store.commit('ui/SET_MAP_READY', true)
       },
     },
 

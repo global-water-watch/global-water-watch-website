@@ -1,0 +1,7 @@
+.detail-hero {
+  padding-top: 60px;
+
+  @media screen and (min-width: $breakpoint-medium) {
+    padding-top: 100px;
+  }
+}

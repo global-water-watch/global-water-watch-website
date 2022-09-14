@@ -1,0 +1,11 @@
+fragment internalLinkFragment on InternalLinkRecord {
+  _modelApiKey
+  id
+  title
+  page {
+    ... on HomeRecord {
+      _modelApiKey
+      id
+    }
+  }
+}

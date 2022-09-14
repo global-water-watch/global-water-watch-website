@@ -2,6 +2,11 @@
 #import '../../components/ResponsiveImage/ResponsiveImage.fragment.graphql'
 #import '../../components/PageHeroes/BlogHero/BlogHero.fragment.graphql'
 #import '../../components/PageSections/TextSection/TextSection.fragment.graphql'
+#import '../../components/PageSections/ImageTextSection/ImageTextSection.fragment.graphql'
+#import '../../components/PageSections/RelatedSection/RelatedSection.fragment.graphql'
+#import '../../components/PageSections/QuoteSection/QuoteSection.fragment.graphql'
+#import '../../components/PageSections/TableSection/TableSection.fragment.graphql'
+#import '../../components/BlogTags/BlogTags.fragment.graphql'
 
 query BlogpostQuery($slug: String) {
   blogpost(filter: {slug: {eq: $slug}}) {
@@ -17,6 +22,9 @@ query BlogpostQuery($slug: String) {
         }
       }
     }
+    tags {
+      ...blogTagsFragment
+    }
     heroes {
       ... on BlogHeroRecord {
         ...blogHeroFragment
@@ -25,6 +33,18 @@ query BlogpostQuery($slug: String) {
     sections {
       ... on BlogTextSectionRecord {
         ...textSectionFragment
+      }
+      ... on ImageTextSectionRecord {
+        ...imageTextSectionFragment
+      }
+      ... on BlogQuoteRecord {
+        ...quoteSectionFragment
+      }
+      ... on RelatedSectionRecord {
+        ...relatedSectionFragment
+      }
+      ... on TableSectionRecord {
+        ...tableSectionFragment
       }
     }
   }

@@ -60,7 +60,13 @@ export default {
     { src: '~plugins/vue-dato-video.js' },
     { src: '~plugins/vue-fragment.js' },
     { src: '~plugins/vue2mapbox-gl.client.js' },
+    { src: '~plugins/create-repository.js' },
+    { src: '~plugins/experimental-features.js', mode: 'client' },
   ],
+
+  env: {
+    IS_DEV: process.env.CONTEXT === 'development',
+  },
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -91,13 +97,22 @@ export default {
           lg: 1900,
         },
       },
+      defaultAssets: {
+        font: false,
+        icons: 'mdi',
+      },
     }],
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     '@voorhoede/nuxt-preview-mode-module',
+    '@nuxtjs/axios',
   ],
+
+  axios: {
+    baseURL: process.env.API_BASE_URL,
+  },
 
   // Preview mode: https://github.com/voorhoede/nuxt-preview-mode-module
   previewMode: {
@@ -117,6 +132,7 @@ export default {
         loader: 'webpack-graphql-loader',
       })
     },
+    transpile: [/echarts/, /zrender/],
     html: {
       // disable unneeded CSS & JS minification in HTML for faster builds
       // @see https://www.voorhoede.nl/en/blog/10x-faster-nuxt-builds-on-netlify/#optimise-html-minification
@@ -132,5 +148,9 @@ export default {
         useShortDoctype: true,
       },
     },
+  },
+
+  generate: {
+    fallback: true,
   },
 }

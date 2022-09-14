@@ -1,0 +1,10 @@
+.map-layers-panel {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  padding: 5px 15px 12px;
+  border-radius: 4px;
+  background-color: $gradient-top;
+  box-shadow: 0 0 10px 2px rgb(0 0 0 / 10%);
+  z-index: 2;
+}

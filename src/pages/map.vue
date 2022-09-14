@@ -1,19 +1,25 @@
 <template>
-  <client-only>
-    <mapbox-map />
-  </client-only>
+  <div class="map-wrapper">
+    <client-only>
+      <mapbox-map />
+      <map-layers-panel />
+    </client-only>
+  </div>
 </template>
 
 <script>
   export default {
-    layout: 'map',
+    destroyed () {
+      this.$store.commit('zoomable-layers/REMOVE_ALL_LAYERS')
+      this.$store.commit('reservoir-layers/REMOVE_ALL_LAYERS')
+    },
   }
 </script>
 
 <style lang="scss">
-  // Move social share to not be over Mapbox attribution
-  .social-share {
-    left: 6px;
-    bottom: 34px;
+  .map-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
   }
 </style>

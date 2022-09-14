@@ -1,3 +1,5 @@
+const isProduction = process.env.NODE_ENV === 'production'
+
 module.exports = {
   root: true,
   env: {
@@ -15,10 +17,17 @@ module.exports = {
   // add your custom rules here
   rules: {
     indent: 'off',
+    'no-unused-vars': [
+      isProduction ? 'error' : 'warn',
+      {
+        ignoreRestSiblings: true,
+        argsIgnorePattern: '^_',
+      },
+    ],
     'comma-dangle': ['warn', 'always-multiline'],
-    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'warn',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'warn',
-    semi: process.env.NODE_ENV === 'production' ? ['error', 'never'] : ['warn', 'never'],
+    'no-console': [isProduction ? 'error' : 'warn', { allow: ['warn', 'error', 'info'] }],
+    'no-debugger': isProduction ? 'error' : 'warn',
+    semi: isProduction ? ['error', 'never'] : ['warn', 'never'],
     'vue/script-indent': ['error', 2, { baseIndent: 1 }],
   },
 }

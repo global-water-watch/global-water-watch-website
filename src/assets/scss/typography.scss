@@ -47,8 +47,12 @@
   font-weight: $font-weight-bold;
 }
 
+.normal {
+  font-weight: $font-weight-normal;
+}
+
 .small {
-  font-size: 14px;
+  font-size: $font-size-small;
 }
 
 address {

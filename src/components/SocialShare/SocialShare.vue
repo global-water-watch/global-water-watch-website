@@ -11,7 +11,10 @@
     >
       <aside
         class="social-share"
-        :class="{ open: open, enhanced: enhanced }"
+        :class="{
+          open: open,
+          enhanced: enhanced
+        }"
       >
         <button
           type="button"
