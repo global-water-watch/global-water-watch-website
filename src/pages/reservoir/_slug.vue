@@ -6,12 +6,24 @@
           {{ reservoirId }}
         </p>
       </PageHeroesDetailHero>
-      <ReservoirPageSection :reservoirs="[reservoir]" :time-series="timeSeries" />
+
+      <Loader :loading="generatingSatelliteImageUrl" message="Generating satellite image from the selected data point" />
+
+      <ReservoirPageSection
+        :reservoirs="[reservoir]"
+        :time-series="timeSeries"
+        :satellite-image-url="satelliteImageUrl"
+        @onSelectedTimeChanged="onSelectedTimeChanged"
+      />
     </client-only>
   </Fragment>
 </template>
 
 <script>
+  import debounce from 'lodash.debounce'
+
+  const DEBOUNCE_TIME = 1000
+
   export default {
     data: () => ({
       reservoir: {},
@@ -20,6 +32,8 @@
         yAxis: [],
         series: [],
       },
+      satelliteImageUrl: '',
+      generatingSatelliteImageUrl: false,
     }),
 
     async fetch () {
@@ -45,6 +59,32 @@
 
       reservoirId () {
         return this.reservoir.id ? `#${this.reservoir.id}` : ''
+      },
+    },
+
+    methods: {
+      onSelectedTimeChanged (time) {
+        debounce(async () => {
+          this.generatingSatelliteImageUrl = true
+
+          if (this.reservoir && time) {
+            const dateTime = new Date(time).toISOString()
+
+            const geometry = {
+              ...this.reservoir,
+              properties: {
+                t: dateTime,
+              },
+            }
+
+            const { url } = await this.$repo.image.getSatelliteImage(geometry)
+            this.generatingSatelliteImageUrl = false
+
+            if (url) {
+              this.satelliteImageUrl = url
+            }
+          }
+        }, DEBOUNCE_TIME)()
       },
     },
   }

@@ -4,6 +4,7 @@
       <DetailMap
         v-if="reservoirs.length"
         :reservoirs="reservoirs"
+        :satellite-image-url="satelliteImageUrl"
       />
       <data-chart
         v-if="timeSeries"
@@ -15,6 +16,7 @@
         :show-legend="true"
         :use-zoom="true"
         :use-toolbox="false"
+        @selectedTimeChanged="onSelectedTimeChanged"
       />
       <ProjectShare title="Share this project" />
     </div>
@@ -31,6 +33,10 @@
       timeSeries: {
         type: [Object, null],
         default: null,
+      },
+      satelliteImageUrl: {
+        type: String,
+        default: '',
       },
     },
 
@@ -50,6 +56,12 @@
 
       series () {
         return this.timeSeries.series
+      },
+    },
+
+    methods: {
+      onSelectedTimeChanged (time) {
+        this.$emit('onSelectedTimeChanged', time)
       },
     },
   }

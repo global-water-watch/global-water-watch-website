@@ -17,6 +17,8 @@
 <script>
   import { bbox, featureCollection } from '@turf/turf'
 
+  let map
+
   const MAP_ZOOM = 3
   const WORLD_CENTER_LONGITUDE = 78.836854
   const WORLD_CENTER_LATITUDE = 22.662175
@@ -28,6 +30,10 @@
       reservoirs: {
         type: Array,
         required: true,
+      },
+      satelliteImageUrl: {
+        type: String,
+        default: '',
       },
     },
 
@@ -53,9 +59,42 @@
       },
     },
 
+    watch: {
+      satelliteImageUrl (newURL, oldURL) {
+        // check if the new URL is different from the old one
+        if (newURL !== oldURL) {
+          // remove the old layer
+          if (map.getLayer('satellite')) {
+            map.removeLayer('satellite')
+          }
+          // remove the old source
+          if (map.getSource('satellite')) {
+            map.removeSource('satellite')
+          }
+
+          // add satellite source as raster to the map
+          map.addSource('satellite', {
+            type: 'raster',
+            tiles: [newURL],
+            tileSize: 256,
+          })
+
+          // add satellite layer to the map
+          map.addLayer({
+            id: 'satellite',
+            type: 'raster',
+            source: 'satellite',
+            paint: {
+              'raster-opacity': 0.5,
+            },
+          })
+        }
+      },
+    },
+
     methods: {
       addReservoirsToMap (event) {
-        const map = event.target
+        map = event.target
 
         this.transformedReservoirs.forEach((reservoir) => {
           const reservoirName = `reservoir-${reservoir.data.id}`
