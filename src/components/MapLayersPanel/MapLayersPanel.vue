@@ -14,7 +14,6 @@
     </v-radio-group>
 
     <v-btn
-      v-if="showExperimentalFeatures"
       small
       :disabled="!mapReady || isDrawing"
       @click="onDrawButtonClick"
@@ -31,11 +30,39 @@
   export default {
     data () {
       return {
+        reservoirLayer: Object.freeze({
+          name: 'Reservoirs',
+          type: 'reservoir',
+          id: 'reservoirsv10',
+          checked: true,
+          source: {
+            type: 'vector',
+            url: 'mapbox://global-water-watch.reservoirs-v10',
+          },
+          styles: [
+            {
+              type: 'fill',
+              paint: {
+                'fill-color': '#8fdfef',
+                'fill-opacity': 0.4,
+              },
+            },
+            {
+              type: 'line',
+              paint: {
+                'line-color': '#8fdfef',
+                'line-width': 0.8,
+              },
+            },
+          ],
+          clickFn: this.onReservoirClick,
+        }),
         layers: [
           Object.freeze({
             name: 'Reservoirs',
             type: 'reservoir',
             id: 'reservoirsv10',
+            checked: true,
             source: {
               type: 'vector',
               url: 'mapbox://global-water-watch.reservoirs-v10',
@@ -62,7 +89,7 @@
             name: 'Basins',
             type: 'zoomable',
             promoteId: 'HYBAS_ID', // this id is used to identify the hover id in the map.
-            experimentalFeature: true, // disable this feature when you want to display it default
+            experimentalFeature: false, // disable this feature when you want to display it default
             layers: [
               {
                 id: 'BasinATLAS_v10_lev01',
@@ -161,7 +188,7 @@
             type: 'zoomable',
             attribution: '<a href="https://www.geoboundaries.org" target="_blank" rel="noopener noreferrer">geoBoundaries</a>', // this id is used to identify the hover id in the map.
             promoteId: 'shapeID', // this id is used to identify the hover id in the map.
-            experimentalFeature: true, // disable this feature when you want to display it default
+            experimentalFeature: false, // disable this feature when you want to display it default
             layers: [
               {
                 id: 'geoBoundariesCGAZ_ADM0',
@@ -258,18 +285,24 @@
       // Set layer back to 'Reservoirs' when drawing
       isDrawing (isDrawing) {
         if (isDrawing) {
-          const firstLayer = this.layers[0]
+          const firstLayer = this.reservoirLayer
           this.clearAll()
           this.$store.commit(`${firstLayer.type}-layers/ADD_LAYER`, firstLayer)
-          this.activeLayerName = this.layers[0].name
         }
       },
     },
 
+    created () {
+      this.$store.commit('zoomable-layers/SET_CACHED_GEOMETRY', null)
+    },
+
     mounted () {
+      const initiallyReservoirLayer = this.reservoirLayer
       const initiallySelectedLayer = this.layers
         .find(({ name }) => name === this.activeLayerName)
-      if (initiallySelectedLayer) {
+
+      if (initiallyReservoirLayer && initiallySelectedLayer) {
+        this.$store.commit(`${initiallyReservoirLayer.type}-layers/ADD_LAYER`, initiallyReservoirLayer)
         this.$store.commit(`${initiallySelectedLayer.type}-layers/ADD_LAYER`, initiallySelectedLayer)
       }
     },
@@ -277,7 +310,6 @@
     methods: {
       clearAll () {
         this.$store.commit('zoomable-layers/REMOVE_ALL_LAYERS')
-        this.$store.commit('reservoir-layers/REMOVE_ALL_LAYERS')
       },
 
       clearMbDraw () {
@@ -312,26 +344,30 @@
 
       onBasinClick (evt) {
         const basin = evt.features?.[0]
-        if (!basin) {
-          return
-        }
+        const UID = basin?.properties.HYBAS_ID
+        if (!UID) { return }
+
+        const { source, geometry } = basin
+        this.$store.commit('zoomable-layers/SET_CACHED_GEOMETRY', Object.freeze({ UID, geometry }))
+
         const zoom = Math.round(evt.target.getZoom())
         const { lng, lat } = evt.target.getCenter()
-        const { source } = basin
-        const { HYBAS_ID } = basin.properties
-        this.$router.push({ path: `/basin/${source}--${zoom}--${lng}--${lat}--${HYBAS_ID}` })
+
+        this.$router.push({ path: `/basin/${source}--${zoom}--${lng}--${lat}--${UID}` })
       },
 
       onRegionLayerClick (evt) {
         const region = evt.features?.[0]
-        if (!region) { return }
-        const { source } = region
-        const { shapeID } = region.properties
-        if (!shapeID) { return }
+        const UID = region?.properties.shapeID
+        if (!UID) { return }
+
+        const { source, geometry } = region
+        this.$store.commit('zoomable-layers/SET_CACHED_GEOMETRY', Object.freeze({ UID, geometry }))
+
         const zoom = Math.round(evt.target.getZoom())
         const { lng, lat } = evt.target.getCenter()
 
-        this.$router.push({ path: `/boundary/${source}--${zoom}--${lng}--${lat}--${shapeID}` })
+        this.$router.push({ path: `/boundary/${source}--${zoom}--${lng}--${lat}--${UID}` })
       },
 
       onDrawButtonClick () {

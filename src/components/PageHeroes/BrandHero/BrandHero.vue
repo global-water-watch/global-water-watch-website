@@ -16,6 +16,8 @@
           {{ subtitle }}
         </span>
       </p>
+
+      <CTABlock v-if="ctaBlock" :items="ctaBlock" />
     </div>
 
     <Wave color="#0AB6FF" :opacity="1" class="brand-hero__wave" />
@@ -23,12 +25,15 @@
 </template>
 
 <script>
+  import CTABlock from '~/components/CTABlock/CTABlock'
   export default {
+    components: { CTABlock },
     props: {
       id: { type: String, required: true },
       title: { type: String, required: true },
       subtitle: { type: String, required: true },
       backgroundImage: { type: Object, required: true },
+      ctaBlock: { type: Array, default: () => [] },
     },
   }
 </script>

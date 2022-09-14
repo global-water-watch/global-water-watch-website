@@ -1,9 +1,11 @@
 export const state = () => ({
   layers: [],
+  cachedGeometry: null,
 })
 
 export const getters = {
   layers: state => state.layers,
+  cachedGeometry: state => state.cachedGeometry,
 }
 
 export const mutations = {
@@ -21,5 +23,8 @@ export const mutations = {
   },
   REMOVE_ALL_LAYERS (state) {
     state.layers = []
+  },
+  SET_CACHED_GEOMETRY (state, geom) {
+    state.cachedGeometry = geom
   },
 }

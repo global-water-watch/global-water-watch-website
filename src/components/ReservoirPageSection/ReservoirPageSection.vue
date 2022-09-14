@@ -18,7 +18,9 @@
         :use-toolbox="false"
         @selectedTimeChanged="onSelectedTimeChanged"
       />
-      <ProjectShare title="Share this project" />
+
+      <!-- Temporary hide share project for custom selection since this url isn't nice to share -->
+      <ProjectShare v-if="areaType !== 'custom-selection'" title="Share this project" />
     </div>
   </section>
 </template>
@@ -33,6 +35,10 @@
       timeSeries: {
         type: [Object, null],
         default: null,
+      },
+      areaType: {
+        type: String,
+        default: '',
       },
       satelliteImageUrl: {
         type: String,

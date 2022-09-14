@@ -2,12 +2,9 @@
   <Fragment>
     <client-only>
       <map-to-query-geometry
-        v-if="id && layer && areaType"
-        :id="id"
-        :zoom="zoom"
-        :center="center"
+        v-if="areaType && mapboxQueryData"
+        :mapbox-query-data="mapboxQueryData"
         :area-type="areaType"
-        :layer="layer"
         @found-geometry="onGeometry"
       />
 
@@ -23,6 +20,7 @@
       <ReservoirPageSection
         :reservoirs="reservoirs"
         :time-series="timeSeries"
+        :area-type="areaType"
       />
     </client-only>
   </Fragment>
@@ -34,16 +32,19 @@
 
   export default {
     data: () => ({
-      layer: null,
-      zoom: null,
-      center: null,
-      id: null,
+      mapboxQueryData: null,
       areaType: null,
       reservoirs: [],
       reservoirsLoading: true,
       timeSeries: null,
       pageContent: {},
     }),
+
+    computed: {
+      cachedGeometry () {
+        return this.$store.getters['zoomable-layers/cachedGeometry']
+      },
+    },
 
     mounted () {
       this.areaType = this.$route.path
@@ -62,10 +63,19 @@
     methods: {
       doSlugBasedData (slug) {
         const [layer, zoom, lng, lat, id] = slug.split('--')
-        this.layer = layer
-        this.zoom = parseInt(zoom)
-        this.center = { lng: parseFloat(lng), lat: parseFloat(lat) }
-        this.id = id
+        // If we have a cached geometry, use that
+        if (this.cachedGeometry.UID + '' === id + '') {
+          console.log('using cached geometry')
+          this.onGeometry(this.cachedGeometry.geometry)
+        // Otherwise use mapbox to find the geometry
+        } else {
+          this.mapboxQueryData = {
+            layer,
+            id,
+            zoom: parseInt(zoom),
+            center: { lng: parseFloat(lng), lat: parseFloat(lat) },
+          }
+        }
       },
 
       doQueryBasedData () {
