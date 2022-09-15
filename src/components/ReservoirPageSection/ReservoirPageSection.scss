@@ -3,6 +3,12 @@
 }
 
 .reservoir-page-section .data-chart {
-  margin-top: $space-xlarge;
   height: 465px;
+}
+
+.reservoir-page-section__loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 150px;
 }

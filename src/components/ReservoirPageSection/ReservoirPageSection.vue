@@ -6,6 +6,11 @@
         :reservoirs="reservoirs"
         :satellite-image-url="satelliteImageUrl"
       />
+
+      <div class="reservoir-page-section__loader">
+        <Loader :loading="generatingSatelliteImageUrl" message="Generating satellite image from the selected data point" no-margin />
+      </div>
+
       <data-chart
         v-if="timeSeries"
         :title="chartTitle"
@@ -43,6 +48,10 @@
       satelliteImageUrl: {
         type: String,
         default: '',
+      },
+      generatingSatelliteImageUrl: {
+        type: Boolean,
+        default: false,
       },
     },
 

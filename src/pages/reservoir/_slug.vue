@@ -7,12 +7,11 @@
         </p>
       </PageHeroesDetailHero>
 
-      <Loader :loading="generatingSatelliteImageUrl" message="Generating satellite image from the selected data point" />
-
       <ReservoirPageSection
         :reservoirs="[reservoir]"
         :time-series="timeSeries"
         :satellite-image-url="satelliteImageUrl"
+        :generating-satellite-image-url="generatingSatelliteImageUrl"
         @onSelectedTimeChanged="onSelectedTimeChanged"
       />
     </client-only>
