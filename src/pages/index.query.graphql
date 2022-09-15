@@ -5,6 +5,7 @@
 #import '../components/PageSections/TabsSection/TabsSection.fragment.graphql'
 #import '../components/PageSections/TimelineSection/TimelineSection.fragment.graphql'
 #import '../components/PageSections/PeopleSection/PeopleSection.fragment.graphql'
+#import '../components/PageSections/RelatedSection/RelatedSection.fragment.graphql'
 #import '../components/ResponsiveImage/Image.fragment.graphql'
 #import '../components/ResponsiveImage/ResponsiveImage.fragment.graphql'
 
@@ -35,6 +36,7 @@ query HomeQuery {
       ... on PeopleSectionRecord { ...peopleSectionFragment }
       ... on TabsSectionRecord { ...tabsSectionFragment }
       ... on TimelineSectionRecord { ...timelineSectionFragment }
+      ... on RelatedSectionRecord { ...relatedSectionFragment }
     }
   }
 }
