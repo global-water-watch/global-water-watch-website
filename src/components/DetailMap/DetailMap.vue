@@ -61,6 +61,10 @@
 
     watch: {
       satelliteImageUrl (newURL, oldURL) {
+        // check if there is a layer id that contains the words 'reservoir' and 'line'
+        const layers = map.getStyle().layers
+        const layerId = layers.find(layer => layer.id.includes('reservoir') && layer.id.includes('line')).id
+
         // check if the new URL is different from the old one
         if (newURL !== oldURL) {
           // remove the old layer
@@ -85,9 +89,9 @@
             type: 'raster',
             source: 'satellite',
             paint: {
-              'raster-opacity': 0.5,
+              'raster-opacity': 1,
             },
-          })
+          }, layerId)
         }
       },
     },
