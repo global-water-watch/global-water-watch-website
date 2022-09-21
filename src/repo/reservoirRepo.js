@@ -1,18 +1,6 @@
 import { capitalize } from '@/lib/primitive-helpers'
 
 const formatTimeSeries = (timeSeries) => {
-  const timeSeriesData = timeSeries.reduce((accObj, { t, value }) => {
-    const xAxisData = accObj.xAxisData || []
-    const seriesData = accObj.seriesData || []
-    return {
-      xAxisData: [
-        ...xAxisData,
-        t,
-      ],
-      seriesData: [...seriesData, value],
-    }
-  }, {})
-
   const valueName = timeSeries[0]?.name
     ?.split('_')
     .map(capitalize)
@@ -20,9 +8,21 @@ const formatTimeSeries = (timeSeries) => {
 
   const valueUnit = timeSeries[0]?.unit
 
+  const data = timeSeries.map(({ t, value }) => {
+    return [t, value]
+  })
+
   return {
     xAxis: [{
-      data: timeSeriesData.xAxisData,
+      type: 'time',
+      axisPointer: {
+        label: {
+          show: true,
+        },
+        handle: {
+          show: true,
+        },
+      },
     }],
     yAxis: [
       {
@@ -33,7 +33,7 @@ const formatTimeSeries = (timeSeries) => {
     series: [{
       name: valueName,
       type: 'line',
-      data: timeSeriesData.seriesData,
+      data,
     }],
   }
 }

@@ -102,24 +102,6 @@
           // },
         }))
 
-        // get last value
-        if (xAxis.length && xAxis[0].data.length) {
-          // add axisPointer on last value
-          const xData = xAxis[0].data
-          const xDataLast = xData[xData.length - 1]
-
-          const xAxisPointer = {
-            label: {
-              show: true,
-            },
-            value: xDataLast,
-            handle: {
-              show: true,
-            },
-          }
-          xAxis[0].axisPointer = xAxisPointer
-        }
-
         return {
           /**
            * Chart data
@@ -201,8 +183,8 @@
             // we're just moving
             return
           }
-          const timeIndex = evt.axesInfo[0].value
-          const t = this.option.xAxis[0].data[timeIndex]
+          const value = evt.axesInfo[0].value
+          const t = new Date(value)
           // emit that the selected time changed
           this.$emit('selectedTimeChanged', t)
         })
