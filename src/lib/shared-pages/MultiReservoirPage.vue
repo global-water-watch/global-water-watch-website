@@ -40,6 +40,14 @@
       pageContent: {},
     }),
 
+    async fetch () {
+      try {
+        this.timeSeries = await this.$repo.reservoir.getTimeSeriesByGeometry()
+      } catch (e) {
+        console.error(e)
+      }
+    },
+
     computed: {
       cachedGeometry () {
         return this.$store.getters['zoomable-layers/cachedGeometry']
@@ -64,7 +72,7 @@
       doSlugBasedData (slug) {
         const [layer, zoom, lng, lat, id] = slug.split('--')
         // If we have a cached geometry, use that
-        if (this.cachedGeometry.UID + '' === id + '') {
+        if (this.cachedGeometry?.UID + '' === id + '') {
           console.log('using cached geometry')
           this.onGeometry(this.cachedGeometry.geometry)
         // Otherwise use mapbox to find the geometry
