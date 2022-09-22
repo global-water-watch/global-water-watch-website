@@ -184,9 +184,8 @@
             return
           }
           const value = evt.axesInfo[0].value
-          const t = new Date(value)
           // emit that the selected time changed
-          this.$emit('selectedTimeChanged', t)
+          this.$emit('selectedTimeChanged', value)
         })
       },
     },

@@ -32,7 +32,16 @@
         series: [],
       },
       satelliteImageUrl: '',
-      generatingSatelliteImageUrl: false,
+      generatingSatelliteImageUrl: {
+        loading: {
+          state: false,
+          message: '',
+        },
+        error: {
+          state: false,
+          message: '',
+        },
+      },
     }),
 
     async fetch () {
@@ -64,23 +73,31 @@
     methods: {
       onSelectedTimeChanged (time) {
         debounce(async () => {
-          this.generatingSatelliteImageUrl = true
+          this.generatingSatelliteImageUrl.loading.state = true
+          this.generatingSatelliteImageUrl.loading.message = 'Generating satellite image from the selected data point'
 
           if (this.reservoir && time) {
-            const dateTime = new Date(time).toISOString()
-
             const geometry = {
               ...this.reservoir,
               properties: {
-                t: dateTime,
+                t: time,
               },
             }
 
-            const { url } = await this.$repo.image.getSatelliteImage(geometry)
-            this.generatingSatelliteImageUrl = false
+            const data = await this.$repo.image.getSatelliteImage(geometry)
+            console.log(data.error)
 
-            if (url) {
-              this.satelliteImageUrl = url
+            if (data.url) {
+              this.generatingSatelliteImageUrl.error.state = false
+              this.generatingSatelliteImageUrl.loading.state = false
+              this.satelliteImageUrl = data.url
+            } else if (data.error) {
+              this.generatingSatelliteImageUrl.error.state = true
+              this.generatingSatelliteImageUrl.loading.state = false
+              this.generatingSatelliteImageUrl.error.message = `${data.error} ${this.reservoirId}`
+            } else {
+              this.generatingSatelliteImageUrl.error.state = false
+              this.generatingSatelliteImageUrl.loading.state = false
             }
           }
         }, DEBOUNCE_TIME)()

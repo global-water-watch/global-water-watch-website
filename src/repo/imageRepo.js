@@ -3,8 +3,6 @@ export default function (axios) {
     getSatelliteImage: geometry => axios
       .post('images/satellite/t', geometry)
       .then(({ data }) => data)
-      .catch((error) => {
-        console.error(error)
-      }),
+      .catch(() => { return { error: 'Failed generating satellite image for reservoir' } }),
   }
 }

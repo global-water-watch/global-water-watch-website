@@ -8,7 +8,17 @@
       />
 
       <div class="reservoir-page-section__loader">
-        <Loader :loading="generatingSatelliteImageUrl" message="Generating satellite image from the selected data point" no-margin />
+        <Loader
+          v-if="generatingSatelliteImageUrl.loading.state"
+          :loading="generatingSatelliteImageUrl.loading.state"
+          :message="generatingSatelliteImageUrl.loading.message"
+          no-margin
+        />
+        <Message
+          v-else-if="generatingSatelliteImageUrl.error.state"
+          :message="generatingSatelliteImageUrl.error.message"
+          type="error"
+        />
       </div>
 
       <data-chart
@@ -31,13 +41,19 @@
 </template>
 
 <script>
+  import Message from '~/components/Message/Message'
   export default {
+    components: { Message },
     props: {
       reservoirs: {
         type: Array,
         default: () => [],
       },
       timeSeries: {
+        type: [Object, null],
+        default: null,
+      },
+      generatingSatelliteImageUrl: {
         type: [Object, null],
         default: null,
       },
@@ -48,10 +64,6 @@
       satelliteImageUrl: {
         type: String,
         default: '',
-      },
-      generatingSatelliteImageUrl: {
-        type: Boolean,
-        default: false,
       },
     },
 
