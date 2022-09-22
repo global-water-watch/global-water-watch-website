@@ -74,7 +74,8 @@
       onSelectedTimeChanged (time) {
         debounce(async () => {
           this.generatingSatelliteImageUrl.loading.state = true
-          this.generatingSatelliteImageUrl.loading.message = 'Generating satellite image from the selected data point'
+          this.generatingSatelliteImageUrl.loading.message = 'Generating satellite image from the selected data point. ' +
+            'This feature is not optimized for larger reservoirs'
 
           if (this.reservoir && time) {
             const geometry = {
@@ -85,7 +86,6 @@
             }
 
             const data = await this.$repo.image.getSatelliteImage(geometry)
-            console.log(data.error)
 
             if (data.url) {
               this.generatingSatelliteImageUrl.error.state = false
