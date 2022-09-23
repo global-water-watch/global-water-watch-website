@@ -52,8 +52,19 @@
         default: null,
       },
       generatingSatelliteImageUrl: {
-        type: [Object, null],
-        default: null,
+        type: Object,
+        default: () => {
+          return {
+            loading: {
+              state: false,
+              message: '',
+            },
+            error: {
+              state: false,
+              message: '',
+            },
+          }
+        },
       },
       areaType: {
         type: String,
