@@ -9,13 +9,13 @@
 
       <div class="reservoir-page-section__loader">
         <Loader
-          v-if="generatingSatelliteImageUrl?.loading?.state"
+          v-if="generatingSatelliteImageUrl.loading.state"
           :loading="generatingSatelliteImageUrl.loading.state"
           :message="generatingSatelliteImageUrl.loading.message"
           no-margin
         />
         <Message
-          v-else-if="generatingSatelliteImageUrl?.error?.state"
+          v-else-if="generatingSatelliteImageUrl.error.state"
           :message="generatingSatelliteImageUrl.error.message"
           type="error"
         />
