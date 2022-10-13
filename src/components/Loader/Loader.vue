@@ -1,5 +1,5 @@
 <template>
-  <div v-show="loading" class="loader">
+  <div v-show="loading" class="loader" :class="{'loader--no-margin': noMargin}">
     <div class="loader__ring" />
     <p class="p loader__message">
       {{ message }}
@@ -11,6 +11,10 @@
   export default {
     props: {
       loading: {
+        type: Boolean,
+        default: false,
+      },
+      noMargin: {
         type: Boolean,
         default: false,
       },

@@ -115,12 +115,7 @@
            * Meta tools
           **/
           tooltip: showTooltip && {
-            trigger: 'axis',
-            axisPointer: {
-              type: 'cross',
-              animation: false,
-              // label: { backgroundColor: '#505765' },
-            },
+            triggerOn: 'click',
           },
 
           legend: showLegend && {
@@ -173,13 +168,26 @@
         this.chart.setOption(newVal)
       },
     },
-
     mounted () {
       const { $chart } = this.$refs
       const chart = init($chart, 'gww')
       this.chart = chart
 
       chart.setOption(this.option)
+      this.subscribeChartEvents(chart)
+    },
+    methods: {
+      subscribeChartEvents (chart) {
+        chart.on('updateAxisPointer', (evt) => {
+          if (evt.dataIndexInside) {
+            // we're just moving
+            return
+          }
+          const value = evt.axesInfo[0].value
+          // emit that the selected time changed
+          this.$emit('selectedTimeChanged', value)
+        })
+      },
     },
   }
 </script>
