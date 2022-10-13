@@ -11,7 +11,7 @@ const formatTimeSeries = (timeSeries) => {
   const valueUnit = 'km2'
 
   const data = timeSeries.map(({ t, value: valueInM2 }) => {
-    const value = (valueInM2 / 1000).toFixed(2)
+    const value = (valueInM2 / 1000000).toFixed(2)
     return [t, value]
   })
 
