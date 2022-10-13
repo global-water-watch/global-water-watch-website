@@ -1,7 +1,7 @@
 <template>
   <div class="layout-section layout-section--padded layout-section--lined related-section">
     <div class="layout-container">
-      <h2 class="h2">
+      <h2 class="h2" :class="`related-section__title--${titleAlignment}`">
         {{ title }}
       </h2>
       <ul v-if="items.length" class="related-section__grid">
@@ -31,6 +31,10 @@
       title: {
         type: String,
         required: true,
+      },
+      titleAlignment: {
+        type: String,
+        default: 'left',
       },
     },
   }

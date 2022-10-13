@@ -12,11 +12,23 @@ ul.related-section__grid {
   @media screen and (min-width: $breakpoint-large) {
     grid-row-gap: $space-xlarge * 2;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    margin-top: $space-large;
+    margin-top: $space-xlarge;
   }
 }
 
 ul.related-section__grid a.card-item {
   color: $color-white;
   text-decoration: none;
+}
+
+.related-section__title--left {
+  text-align: left;
+}
+
+.related-section__title--center {
+  text-align: center;
+}
+
+.related-section__title--right {
+  text-align: right;
 }
