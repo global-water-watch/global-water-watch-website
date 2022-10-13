@@ -81,7 +81,7 @@
 
         const styledSeries = series.map(serie => ({
           ...serie,
-          lineStyle: { width: 1 },
+          lineStyle: { width: 2, opacity: 0.8 },
           // emphasis: { focus: 'series' },
 
           // markArea: {
