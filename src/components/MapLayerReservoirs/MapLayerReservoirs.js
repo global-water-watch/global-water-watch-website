@@ -61,7 +61,7 @@ export default {
 
     setMapCoordinates (map) {
       // get zoom and center of the current map when zooming ended
-      this.zoom = Math.round(map.getZoom())
+      this.zoom = map.getZoom()
       this.center = map.getCenter().toArray()
 
       // set the current zoom and center to the store
