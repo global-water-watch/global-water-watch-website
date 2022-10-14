@@ -30,6 +30,10 @@
   margin-top: $space-default;
 }
 
+.loader--no-margin {
+  margin: 0;
+}
+
 @keyframes ring {
   0% {
     transform: rotate(0deg);

@@ -5,6 +5,7 @@ fragment relatedSectionFragment on RelatedSectionRecord {
   id
   _modelApiKey
   title
+  titleAlignment
   items {
     ... on BlogpostRecord {
       ...relatedBlogpostFragment

@@ -1,0 +1,9 @@
+.message {
+  display: flex;
+  text-align: center;
+  color: $color-white;
+}
+
+.message--error {
+  color: red;
+}
