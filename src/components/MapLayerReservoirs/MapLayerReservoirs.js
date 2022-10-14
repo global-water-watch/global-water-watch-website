@@ -1,3 +1,5 @@
+import { MAP_CENTER, MAP_ZOOM } from '@/lib/constants'
+
 export default {
   name: 'v-mapbox-reservoirs-layer',
 
@@ -11,6 +13,11 @@ export default {
       default: () => ({}),
     },
   },
+
+  data: () => ({
+    zoom: MAP_ZOOM || 0,
+    center: MAP_CENTER || [0, 0],
+  }),
 
   computed: {
     renderLayers () {
@@ -29,9 +36,36 @@ export default {
   methods: {
     deferredMountedTo () {
       if (!this.isInitialized) {
+        this.initialize()
         this.addLayer()
         this.isInitialized = true
       }
+    },
+
+    initialize () {
+      const map = this.getMap()
+      map.on('zoomend', this.onZoomEnd)
+      map.on('moveend', this.onMoveEnd)
+
+      this.onZoomEnd({ target: map })
+      this.onMoveEnd({ target: map })
+    },
+
+    onZoomEnd ({ target: map }) {
+      this.setMapCoordinates(map)
+    },
+
+    onMoveEnd ({ target: map }) {
+      this.setMapCoordinates(map)
+    },
+
+    setMapCoordinates (map) {
+      // get zoom and center of the current map when zooming ended
+      this.zoom = Math.round(map.getZoom())
+      this.center = map.getCenter().toArray()
+
+      // set the current zoom and center to the store
+      this.$store.commit('ui/SET_MAP_COORDINATES', { zoom: this.zoom, center: this.center })
     },
 
     addLayer () {
