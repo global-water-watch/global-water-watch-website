@@ -30,7 +30,7 @@
 </template>
 
 <script>
-  import { MAP_ZOOM, MAP_CENTER, MAPBOX_STYLE } from '@/lib/constants'
+  import { MAP_ZOOM, MAP_CENTER, MAPBOX_STYLE_LIGHT } from '@/lib/constants'
 
   export default {
     data () {
@@ -39,7 +39,7 @@
           token: this.$config.mapBoxToken,
           center: MAP_CENTER,
           zoom: MAP_ZOOM,
-          style: this.$config.mapBoxStyle || MAPBOX_STYLE,
+          style: this.$config.mapBoxStyle || MAPBOX_STYLE_LIGHT,
         },
       }
     },
