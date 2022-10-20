@@ -2,6 +2,12 @@
   display: flex;
   text-align: center;
   color: $color-white;
+  align-items: center;
+  justify-content: center;
+}
+
+.message__icon {
+  margin-right: 10px;
 }
 
 .message--error {

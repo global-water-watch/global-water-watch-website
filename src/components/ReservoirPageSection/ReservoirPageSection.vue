@@ -18,6 +18,13 @@
           v-else-if="generatingSatelliteImageUrl.error.state"
           :message="generatingSatelliteImageUrl.error.message"
           type="error"
+          icon="mdi-alert"
+        />
+        <Message
+          v-else
+          message="Select a data point in the graph to generate a satellite image"
+          type="info"
+          icon="mdi-information-outline"
         />
       </div>
 

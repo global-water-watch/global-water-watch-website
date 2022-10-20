@@ -1,6 +1,13 @@
 <template>
   <div class="message">
-    <p class="p message__paragraph" :class="`message--${type}`">
+    <v-icon
+      v-if="icon"
+      :size="iconSize"
+      class="message__icon"
+    >
+      {{ icon }}
+    </v-icon>
+    <p class="message__paragraph" :class="`message--${type}`">
       {{ message }}
     </p>
   </div>
@@ -16,6 +23,14 @@
       message: {
         type: String,
         default: '',
+      },
+      icon: {
+        type: String,
+        default: '',
+      },
+      iconSize: {
+        type: Number,
+        default: 23,
       },
     },
   }
