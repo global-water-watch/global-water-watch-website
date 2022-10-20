@@ -26,6 +26,7 @@
 <script>
   import qs from 'qs'
   import { LAYER_FADE_DURATION_MS } from '@/lib/constants'
+  import { compressQuery, decompressQuery } from '@/lib/compress-query-helpers'
 
   export default {
     data () {
@@ -375,7 +376,10 @@
           const coordinates = this.drawnFeatures.map(({ geometry }) => geometry.coordinates)
           const geometry = { type: 'MultiPolygon', coordinates }
           const query = qs.stringify(geometry)
-          this.$router.push({ path: `/custom-selection/?${query}` })
+          console.log('original query:', query)
+          const compressedQuery = compressQuery(query)
+          console.log('compressed query:', compressedQuery)
+          this.$router.push({ path: `/custom-selection/?${compressedQuery}` })
         } else {
           const { $mbDraw } = this.$root
           if (!$mbDraw) { return }

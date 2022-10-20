@@ -29,6 +29,7 @@
 <script>
   import qs from 'qs'
   import { getPageContent } from '~/lib/shared-pages/page-content'
+  import { decompressQuery } from '~/lib/compress-query-helpers'
 
   export default {
     data: () => ({
@@ -80,7 +81,10 @@
 
       doQueryBasedData () {
         const qstring = this.$route.fullPath.split('?')?.[1]
-        const { type, coordinates } = qs.parse(qstring)
+        console.log('qstring', qstring)
+        const decompressedString = decompressQuery(qstring)
+        console.log('decompressedString', decompressedString)
+        const { type, coordinates } = qs.parse(decompressedString)
         if (!type || !coordinates) {
           console.warn('Invalid coordinates, can\'t fetch data')
           return
