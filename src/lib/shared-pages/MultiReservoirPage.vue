@@ -40,14 +40,6 @@
       pageContent: {},
     }),
 
-    async fetch () {
-      try {
-        this.timeSeries = await this.$repo.reservoir.getTimeSeriesByGeometry()
-      } catch (e) {
-        console.error(e)
-      }
-    },
-
     computed: {
       cachedGeometry () {
         return this.$store.getters['zoomable-layers/cachedGeometry']
@@ -75,6 +67,7 @@
         if (this.cachedGeometry?.UID + '' === id + '') {
           console.log('using cached geometry')
           this.onGeometry(this.cachedGeometry.geometry)
+          this.getTimeSeriesOnGeometry(this.cachedGeometry.geometry)
         // Otherwise use mapbox to find the geometry
         } else {
           this.mapboxQueryData = {
@@ -94,6 +87,7 @@
           return
         }
         this.onGeometry({ type, coordinates })
+        this.getTimeSeriesOnGeometry({ type, coordinates })
       },
 
       onGeometry (geometry) {
@@ -101,6 +95,16 @@
           .then((reservoirs) => {
             this.reservoirs = reservoirs
             this.reservoirsLoading = false
+          })
+          .catch((err) => {
+            console.error(err)
+          })
+      },
+
+      getTimeSeriesOnGeometry (geometry) {
+        this.$repo.reservoir.getTimeSeriesByGeometry(geometry, 'surface_water_area', 'monthly')
+          .then((timeSeries) => {
+            this.timeSeries = timeSeries
           })
           .catch((err) => {
             console.error(err)
