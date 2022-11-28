@@ -12,6 +12,7 @@
         :time-series="timeSeries"
         :satellite-image-url="satelliteImageUrl"
         :generating-satellite-image-url="generatingSatelliteImageUrl"
+        :show-comparison-map="true"
         @onSelectedTimeChanged="onSelectedTimeChanged"
       />
     </client-only>
