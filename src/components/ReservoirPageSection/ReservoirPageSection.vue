@@ -4,7 +4,23 @@
       <DetailMap
         v-if="reservoirs.length"
         :reservoirs="reservoirs"
+        :satellite-image-url="satelliteImageUrl"
       />
+
+      <div class="reservoir-page-section__loader">
+        <Loader
+          v-if="generatingSatelliteImageUrl.loading.state"
+          :loading="generatingSatelliteImageUrl.loading.state"
+          :message="generatingSatelliteImageUrl.loading.message"
+          no-margin
+        />
+        <Message
+          v-else-if="generatingSatelliteImageUrl.error.state"
+          :message="generatingSatelliteImageUrl.error.message"
+          type="error"
+        />
+      </div>
+
       <data-chart
         v-if="timeSeries"
         :title="chartTitle"
@@ -15,6 +31,7 @@
         :show-legend="true"
         :use-zoom="true"
         :use-toolbox="false"
+        @selectedTimeChanged="onSelectedTimeChanged"
       />
 
       <!-- Temporary hide share project for custom selection since this url isn't nice to share -->
@@ -34,7 +51,26 @@
         type: [Object, null],
         default: null,
       },
+      generatingSatelliteImageUrl: {
+        type: Object,
+        default: () => {
+          return {
+            loading: {
+              state: false,
+              message: '',
+            },
+            error: {
+              state: false,
+              message: '',
+            },
+          }
+        },
+      },
       areaType: {
+        type: String,
+        default: '',
+      },
+      satelliteImageUrl: {
         type: String,
         default: '',
       },
@@ -56,6 +92,12 @@
 
       series () {
         return this.timeSeries.series
+      },
+    },
+
+    methods: {
+      onSelectedTimeChanged (time) {
+        this.$emit('onSelectedTimeChanged', time)
       },
     },
   }

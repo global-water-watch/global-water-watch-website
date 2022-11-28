@@ -6,12 +6,23 @@
           {{ reservoirId }}
         </p>
       </PageHeroesDetailHero>
-      <ReservoirPageSection :reservoirs="[reservoir]" :time-series="timeSeries" />
+
+      <ReservoirPageSection
+        :reservoirs="[reservoir]"
+        :time-series="timeSeries"
+        :satellite-image-url="satelliteImageUrl"
+        :generating-satellite-image-url="generatingSatelliteImageUrl"
+        @onSelectedTimeChanged="onSelectedTimeChanged"
+      />
     </client-only>
   </Fragment>
 </template>
 
 <script>
+  import debounce from 'lodash.debounce'
+
+  const DEBOUNCE_TIME = 1000
+
   export default {
     data: () => ({
       reservoir: {},
@@ -19,6 +30,17 @@
         xAxis: [],
         yAxis: [],
         series: [],
+      },
+      satelliteImageUrl: '',
+      generatingSatelliteImageUrl: {
+        loading: {
+          state: false,
+          message: '',
+        },
+        error: {
+          state: false,
+          message: '',
+        },
       },
     }),
 
@@ -45,6 +67,40 @@
 
       reservoirId () {
         return this.reservoir.id ? `#${this.reservoir.id}` : ''
+      },
+    },
+
+    methods: {
+      onSelectedTimeChanged (time) {
+        debounce(async () => {
+          this.generatingSatelliteImageUrl.loading.state = true
+          this.generatingSatelliteImageUrl.loading.message = 'Generating satellite image from the selected data point. ' +
+            'This feature is not optimized for larger reservoirs'
+
+          if (this.reservoir && time) {
+            const geometry = {
+              ...this.reservoir,
+              properties: {
+                t: time,
+              },
+            }
+
+            const data = await this.$repo.image.getSatelliteImage(geometry)
+
+            if (data.url) {
+              this.generatingSatelliteImageUrl.error.state = false
+              this.generatingSatelliteImageUrl.loading.state = false
+              this.satelliteImageUrl = data.url
+            } else if (data.error) {
+              this.generatingSatelliteImageUrl.error.state = true
+              this.generatingSatelliteImageUrl.loading.state = false
+              this.generatingSatelliteImageUrl.error.message = `${data.error} ${this.reservoirId}`
+            } else {
+              this.generatingSatelliteImageUrl.error.state = false
+              this.generatingSatelliteImageUrl.loading.state = false
+            }
+          }
+        }, DEBOUNCE_TIME)()
       },
     },
   }

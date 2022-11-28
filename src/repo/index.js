@@ -1,4 +1,5 @@
 import reservoirRepo from '~/repo/reservoirRepo'
+import imageRepo from '~/repo/imageRepo'
 
 /**
  * Create repository function that passes axios from nuxt/axios
@@ -8,5 +9,6 @@ import reservoirRepo from '~/repo/reservoirRepo'
 export default function createRepo (axios) {
   return {
     reservoir: reservoirRepo(axios),
+    image: imageRepo(axios),
   }
 }

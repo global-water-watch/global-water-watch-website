@@ -16,12 +16,17 @@ const formatTimeSeries = (timeSeries) => {
   })
 
   return {
-    xAxis: [
-      {
-        data: data.t,
-        type: 'time',
+    xAxis: [{
+      type: 'time',
+      axisPointer: {
+        label: {
+          show: true,
+        },
+        handle: {
+          show: true,
+        },
       },
-    ],
+    }],
     yAxis: [
       {
         name: `${valueName} (${valueUnit})`,
