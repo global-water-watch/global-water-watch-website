@@ -52,14 +52,17 @@ const formatTimeSeriesByGeometry = ({ data }) => {
     .map(capitalize)
     .join(' ')
 
-  const valueUnit = data?.variable_unit
+  // TODO: make sure this km2 comes from the backend again as an unit
+  // const valueUnit = timeSeries[0]?.unit
+  const valueUnit = 'km2'
 
   if (data?.data?.length > 0) {
     series.push({
       name: 'Sum',
       type: 'line',
       areaStyle: {},
-      data: data?.data?.map(({ t, value }) => {
+      data: data?.data?.map(({ t, value: valueInM2 }) => {
+        const value = (valueInM2 / 1000000).toFixed(2)
         return [t, value]
       }),
     })
@@ -70,7 +73,8 @@ const formatTimeSeriesByGeometry = ({ data }) => {
       series.push({
         name: `${valueName} (${key})`,
         type: 'line',
-        data: data.source_data[key].map(({ t, value }) => {
+        data: data.source_data[key].map(({ t, value: valueInM2 }) => {
+          const value = (valueInM2 / 1000000).toFixed(2)
           return [t, value]
         }),
       })
