@@ -54,7 +54,7 @@ const formatTimeSeriesByGeometry = ({ data }) => {
 
   const valueUnit = data?.variable_unit
 
-  if (data.agg_type === 'sum') {
+  if (data?.data?.length > 0) {
     series.push({
       name: 'Sum',
       type: 'line',
