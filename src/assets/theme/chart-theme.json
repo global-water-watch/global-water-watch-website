@@ -28,7 +28,7 @@
             "width": 2
         },
         "symbolSize": "5",
-        "symbol": "rect",
+        "symbol": "emptyCircle",
         "smooth": false
     },
     "radar": {
@@ -376,7 +376,6 @@
         ]
     },
     "dataZoom": {
-        "handleSize": "undefined%",
         "textStyle": {}
     },
     "markPoint": {
