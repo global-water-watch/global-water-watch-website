@@ -3,9 +3,12 @@ import { capitalize } from '@/lib/primitive-helpers'
 const formatTimeSeries = (timeSeries) => {
   const valueName = timeSeries[0]?.name?.split('_').map(capitalize).join(' ')
 
-  const valueUnit = timeSeries[0]?.unit
+  // TODO: make sure this km2 comes from the backend again as an unit
+  // const valueUnit = timeSeries[0]?.unit
+  const valueUnit = 'km2'
 
-  const data = timeSeries.map(({ t, value }) => {
+  const data = timeSeries.map(({ t, value: valueInM2 }) => {
+    const value = (valueInM2 / 1000000).toFixed(2)
     return [t, value]
   })
 

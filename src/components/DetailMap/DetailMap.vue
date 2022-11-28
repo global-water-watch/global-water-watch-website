@@ -16,14 +16,9 @@
 
 <script>
   import { bbox, featureCollection } from '@turf/turf'
+  import { MAP_CENTER, MAP_ZOOM, MAPBOX_STYLE_DARK } from '@/lib/constants'
 
   let map
-
-  const MAP_ZOOM = 3
-  const WORLD_CENTER_LONGITUDE = 78.836854
-  const WORLD_CENTER_LATITUDE = 22.662175
-  const MAP_CENTER = [WORLD_CENTER_LONGITUDE, WORLD_CENTER_LATITUDE]
-  const MAPBOX_STYLE = 'mapbox://styles/mapbox/dark-v9'
 
   export default {
     props: {
@@ -43,7 +38,7 @@
           token: this.$config.mapBoxToken,
           center: MAP_CENTER,
           zoom: MAP_ZOOM,
-          style: MAPBOX_STYLE,
+          style: MAPBOX_STYLE_DARK,
         },
       }
     },
@@ -110,8 +105,8 @@
             source: reservoirName,
             layout: {},
             paint: {
-              'fill-color': '#8fdfef',
-              'fill-opacity': 0.2,
+              'fill-color': '#0AB6FF',
+              'fill-opacity': 0.7,
             },
           })
           map.addLayer({
@@ -120,7 +115,7 @@
             source: reservoirName,
             layout: {},
             paint: {
-              'line-color': '#8fdfef',
+              'line-color': '#0AB6FF',
               'line-width': 1,
             },
           })
@@ -129,11 +124,67 @@
           const boundingBox = bbox(allFeatures)
           map.fitBounds(boundingBox, { padding: 40 })
         })
+
+        map.addSource('reservoirsv10', {
+          type: 'vector',
+          url: 'mapbox://global-water-watch.reservoirs-v10',
+          promoteId: 'fid',
+        })
+
+        map.addLayer({
+          id: 'reservoirsv10-fill',
+          type: 'fill',
+          source: 'reservoirsv10',
+          'source-layer': 'reservoirsv10',
+          layout: {},
+          paint: {
+            'fill-color': '#8fdfef',
+            'fill-opacity': 0.4,
+          },
+        })
+
+        map.addLayer({
+          id: 'reservoirsv10-line',
+          type: 'line',
+          source: 'reservoirsv10',
+          'source-layer': 'reservoirsv10',
+          layout: {},
+          paint: {
+            'line-color': '#8fdfef',
+            'line-width': 0.8,
+          },
+        })
+
+        map.on('click', 'reservoirsv10-fill', (evt) => {
+          this.onReservoirClick(evt)
+        })
+
+        map.on('click', 'reservoirsv10-line', (evt) => {
+          this.onReservoirClick(evt)
+        })
+
+        if (this.reservoirs.length === 1) {
+          map.setFilter('reservoirsv10-fill', ['!=', 'fid', this.reservoirs[0]?.id])
+          map.setFilter('reservoirsv10-line', ['!=', 'fid', this.reservoirs[0]?.id])
+        } else {
+          map.setFilter('reservoirsv10-fill', ['in', 'fid', ''])
+          map.setFilter('reservoirsv10-line', ['in', 'fid', ''])
+        }
       },
 
       onMapCreated (map) {
         map.removeControl(map._logoControl)
         map.addControl(map._logoControl, 'top-right')
+      },
+
+      onReservoirClick (evt) {
+        const reservoir = evt.features?.[0]
+        if (!reservoir) {
+          return
+        }
+        const { fid } = reservoir.properties
+
+        this.$router.push({ path: `/reservoir/${fid}` })
       },
     },
   }
