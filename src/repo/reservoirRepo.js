@@ -1,40 +1,44 @@
 import { capitalize } from '@/lib/primitive-helpers'
 
 const formatTimeSeries = (timeSeries) => {
-  const valueName = timeSeries[0]?.name
-    ?.split('_')
-    .map(capitalize)
-    .join(' ')
+  const valueName = timeSeries[0]?.name?.split('_').map(capitalize).join(' ')
 
-  const valueUnit = timeSeries[0]?.unit
+  // TODO: make sure this km2 comes from the backend again as an unit
+  // const valueUnit = timeSeries[0]?.unit
+  const valueUnit = 'km2'
 
-  const data = timeSeries.map(({ t, value }) => {
+  const data = timeSeries.map(({ t, value: valueInM2 }) => {
+    const value = (valueInM2 / 1000000).toFixed(2)
     return [t, value]
   })
 
   return {
-    xAxis: [{
-      type: 'time',
-      axisPointer: {
-        label: {
-          show: true,
-        },
-        handle: {
-          show: true,
+    xAxis: [
+      {
+        type: 'time',
+        axisPointer: {
+          label: {
+            show: true,
+          },
+          handle: {
+            show: true,
+          },
         },
       },
-    }],
+    ],
     yAxis: [
       {
         name: `${valueName} (${valueUnit})`,
         type: 'value',
       },
     ],
-    series: [{
-      name: valueName,
-      type: 'line',
-      data,
-    }],
+    series: [
+      {
+        name: valueName,
+        type: 'line',
+        data,
+      },
+    ],
   }
 }
 
@@ -98,10 +102,16 @@ export default function (axios) {
     // Get reservoir by id (fid)
     getById: id => axios.$get(`reservoir/${id}`),
 
-    getTimeSeriesById: id => axios.$get(`reservoir/${id}/ts`)
-      .then(formatTimeSeries),
+    // Get only the service water area (raw data)
+    getTimeSeriesById: id =>
+      axios
+        .$get(`reservoir/${id}/ts/surface_water_area`)
+        .then(formatTimeSeries),
 
+    getByGeometry: geometry =>
+      axios.post('reservoir/geometry', geometry).then(({ data }) => data),
     // getTimeSeriesByGeometry: variableName => axios.$get(`reservoir/geometry/ts/${variableName}`).then(formatTimeSeriesByGeometry),
+
     getTimeSeriesByGeometry: variableName => Promise.resolve({
   agg_type: 'sum',
       variable_name: 'surface_water_area',
@@ -8541,9 +8551,5 @@ export default function (axios) {
         ],
       },
 }).then(formatTimeSeriesByGeometry),
-
-    getByGeometry: geometry => axios
-      .post('reservoir/geometry', geometry)
-      .then(({ data }) => data),
   }
 }
