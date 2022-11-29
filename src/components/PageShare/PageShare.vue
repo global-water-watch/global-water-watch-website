@@ -1,5 +1,5 @@
 <template>
-  <section class="layout-section layout-section--padded-small layout-section--lined project-share ma-3">
+  <section class="layout-section layout-section--padded-small layout-section--lined page-share ma-3">
     <div class="layout-container">
       <v-row class="mb-3">
         <h3 class="p normal">
@@ -28,7 +28,7 @@
             mdi-content-copy
           </v-icon>
         </v-btn>
-        <input type="text" class="project-share__input" :value="shareUrl" readonly>
+        <input type="text" class="page-share__input" :value="shareUrl" readonly>
       </v-row>
     </div>
   </section>
@@ -68,4 +68,4 @@
   }
 </script>
 
-<style src="./ProjectShare.scss" lang="scss"/>
+<style src="./PageShare.scss" lang="scss"/>
