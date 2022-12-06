@@ -26,9 +26,6 @@
 </template>
 
 <script>
-  import debounce from 'lodash.debounce'
-
-  const DEBOUNCE_TIME = 1000
   let oldMap, currentMap
 
   export default {
@@ -41,7 +38,6 @@
 
     data () {
       return {
-        showComparison: false,
         oldSatelliteImageUrl: '',
         satelliteImageUrl: '',
       }
@@ -75,34 +71,31 @@
         oldMap = map
       },
       async initializeMap () {
+        // Importing mapbox-gl-compare here to avoid https://github.com/mapbox/mapbox-gl-compare/issues/1
         const MapboxCompare = (await import('mapbox-gl-compare')).default
         // eslint-disable-next-line no-new
         new MapboxCompare(oldMap, currentMap, '#comparison-map-container')
       },
-      loadSatelliteImages () {
-        debounce(async () => {
-          if (this.reservoirs[0]) {
-            const geometry = {
-              ...this.reservoirs[0],
-              properties: {
-                t: Math.floor(this.date.getTime() / 1000),
-              },
-            }
+      async loadSatelliteImages () {
+        const geometry = {
+          ...this.reservoirs[0],
+          properties: {
+            t: Math.floor(this.date.getTime() / 1000),
+          },
+        }
 
-            const oldGeometry = {
-              ...this.reservoirs[0],
-              properties: {
-                t: Math.floor(this.oldDate.getTime() / 1000),
-              },
-            }
+        const oldGeometry = {
+          ...this.reservoirs[0],
+          properties: {
+            t: Math.floor(this.oldDate.getTime() / 1000),
+          },
+        }
 
-            const data = await this.$repo.image.getSatelliteImage(geometry)
-            const oldData = await this.$repo.image.getSatelliteImage(oldGeometry)
+        const data = await this.$repo.image.getSatelliteImage(geometry)
+        const oldData = await this.$repo.image.getSatelliteImage(oldGeometry)
 
-            this.satelliteImageUrl = data.url
-            this.oldSatelliteImageUrl = oldData.url
-          }
-        }, DEBOUNCE_TIME)()
+        this.satelliteImageUrl = data.url
+        this.oldSatelliteImageUrl = oldData.url
       },
     },
   }
