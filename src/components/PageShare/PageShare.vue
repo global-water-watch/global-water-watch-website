@@ -7,17 +7,6 @@
         </h3>
       </v-row>
       <v-row>
-        <a
-          v-if="downloadUrl"
-          download
-          :href="`${downloadUrl}?format=csv&file=1`"
-          class="v-btn v-btn--has-bg v-size--default blue-grey darken-3 white--text mr-2"
-        >
-          Download as .csv
-          <v-icon right>
-            mdi-download
-          </v-icon>
-        </a>
         <v-btn
           color="blue-grey darken-3"
           class="mr-2"
@@ -40,11 +29,6 @@
       title: {
         type: String,
         required: true,
-      },
-
-      downloadUrl: {
-        type: String,
-        default: undefined,
       },
     },
 
