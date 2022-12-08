@@ -34,6 +34,11 @@
         @selectedTimeChanged="onSelectedTimeChanged"
       />
 
+      <ComparisonMap
+        v-if="showComparisonMap && reservoirs.length"
+        :reservoirs="reservoirs"
+      />
+
       <!-- Temporary hide share page for custom selection since this url isn't nice to share -->
       <PageShare v-if="areaType !== 'custom-selection'" title="Share this page" />
     </div>
@@ -73,6 +78,10 @@
       satelliteImageUrl: {
         type: String,
         default: '',
+      },
+      showComparisonMap: {
+        type: Boolean,
+        default: false,
       },
     },
 
