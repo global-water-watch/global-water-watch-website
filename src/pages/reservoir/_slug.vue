@@ -13,6 +13,7 @@
         :satellite-image-url="satelliteImageUrl"
         :generating-satellite-image-url="generatingSatelliteImageUrl"
         :show-comparison-map="true"
+        :show-export-button="true"
         @onSelectedTimeChanged="onSelectedTimeChanged"
       />
     </client-only>

@@ -24,6 +24,7 @@
       <data-chart
         v-if="timeSeries"
         :title="chartTitle"
+        :show-export-button="showExportButton"
         :x-axis="xAxis"
         :y-axis="yAxis"
         :series="series"
@@ -83,12 +84,19 @@
         type: Boolean,
         default: false,
       },
+      showExportButton: {
+        type: Boolean,
+        default: false,
+      },
     },
 
     computed: {
       chartTitle () {
-        // @TODO :: Fix this
-        return this.reservoir?.name ? `Reservoir area of ${this.reservoir.name}` : ''
+        if (this.reservoirs.length > 1) {
+          return ''
+        }
+
+        return this.reservoirs[0]?.properties.name ? `Reservoir area of ${this.reservoirs[0].properties.name}` : ''
       },
 
       xAxis () {
