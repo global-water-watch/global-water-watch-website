@@ -5,6 +5,9 @@
         <p class="p">
           {{ reservoirId }}
         </p>
+        <p v-if="reservoir.properties.grand_id" class="p">
+          This reservoir was curated by <a href="https://www.globaldamwatch.org/grand/" target="_blank">Global Dam Watch</a> (based on the GRAND database).
+        </p>
       </PageHeroesDetailHero>
 
       <ReservoirPageSection
