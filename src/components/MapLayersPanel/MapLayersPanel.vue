@@ -14,6 +14,7 @@
     </v-radio-group>
 
     <v-btn
+      v-if="showExperimentalFeatures"
       small
       :disabled="!mapReady || isDrawing"
       @click="onDrawButtonClick"

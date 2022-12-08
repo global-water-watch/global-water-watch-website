@@ -39,8 +39,8 @@
         :reservoirs="reservoirs"
       />
 
-      <!-- Temporary hide share project for custom selection since this url isn't nice to share -->
-      <ProjectShare v-if="areaType !== 'custom-selection'" title="Share this project" />
+      <!-- Temporary hide share page for custom selection since this url isn't nice to share -->
+      <PageShare v-if="areaType !== 'custom-selection'" title="Share this page" />
     </div>
   </section>
 </template>
