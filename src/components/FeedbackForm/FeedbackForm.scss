@@ -1,0 +1,25 @@
+.feedback-form {
+  margin-bottom: $space-xlarge;
+}
+
+.feedback-form__form {
+  width: 50%;
+}
+
+.feedback-form__field {
+  margin-bottom: $space-medium;
+  padding-right: 24px;
+}
+
+.feedback-form__textarea-field {
+  resize: none;
+}
+
+.feedback-form__input-field, .feedback-form__textarea-field {
+  width: 100%;
+  padding: 5px $space-medium;
+  border: 1px solid $color-white;
+  border-radius: $border-radius-small;
+  background-color: transparent;
+  color: $color-white;
+}

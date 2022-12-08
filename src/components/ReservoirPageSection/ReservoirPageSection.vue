@@ -41,6 +41,11 @@
 
       <!-- Temporary hide share page for custom selection since this url isn't nice to share -->
       <PageShare v-if="areaType !== 'custom-selection'" title="Share this page" />
+
+      <FeedbackForm
+        v-if="showFeedbackForm"
+        :reservoir="reservoirs[0]"
+      />
     </div>
   </section>
 </template>
@@ -80,6 +85,10 @@
         default: '',
       },
       showComparisonMap: {
+        type: Boolean,
+        default: false,
+      },
+      showFeedbackForm: {
         type: Boolean,
         default: false,
       },
