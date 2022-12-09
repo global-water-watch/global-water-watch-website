@@ -21,7 +21,7 @@
           icon="mdi-alert"
         />
         <MessageBox
-          v-else
+          v-else-if="reservoirs.length === 1"
           message="Select a data point in the graph to generate a satellite image"
           type="info"
           icon="mdi-information-outline"
