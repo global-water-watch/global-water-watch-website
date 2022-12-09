@@ -89,6 +89,21 @@
       },
 
       onGeometry (geometry) {
+        this.getReservoirsOnGeometry(geometry)
+        this.getTimeSeriesOnGeometry(geometry)
+      },
+
+      getTimeSeriesOnGeometry (geometry) {
+        this.$repo.reservoir.getTimeSeriesByGeometry(geometry, 'surface_water_area', 'monthly')
+          .then((timeSeries) => {
+            this.timeSeries = timeSeries
+          })
+          .catch((err) => {
+            console.error(err)
+          })
+      },
+
+      getReservoirsOnGeometry (geometry) {
         this.$repo.reservoir.getByGeometry(geometry)
           .then((reservoirs) => {
             this.reservoirs = reservoirs

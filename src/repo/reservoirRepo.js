@@ -42,6 +42,67 @@ const formatTimeSeries = (timeSeries) => {
   }
 }
 
+const formatTimeSeriesByGeometry = ({ data }) => {
+  if (!data) { return null }
+
+  const series = []
+
+  const valueName = data?.variable_name
+    ?.split('_')
+    .map(capitalize)
+    .join(' ')
+
+  // TODO: make sure this km2 comes from the backend again as an unit
+  // const valueUnit = timeSeries[0]?.unit
+  const valueUnit = 'km2'
+
+  if (data?.data?.length > 0) {
+    series.push({
+      name: 'Sum',
+      type: 'line',
+      areaStyle: {},
+      data: data?.data?.map(({ t, value: valueInM2 }) => {
+        const value = (valueInM2 / 1000000).toFixed(2)
+        return [t, value]
+      }),
+    })
+  }
+
+  if (data.source_data) {
+    Object.keys(data.source_data).forEach((key) => {
+      series.push({
+        name: `${valueName} (${key})`,
+        type: 'line',
+        data: data.source_data[key].map(({ t, value: valueInM2 }) => {
+          const value = (valueInM2 / 1000000).toFixed(2)
+          return [t, value]
+        }),
+      })
+    })
+  }
+
+  return {
+    xAxis: [{
+      type: 'time',
+      axisPointer: {
+        label: {
+          show: true,
+        },
+        handle: {
+          show: true,
+        },
+      },
+    }],
+    yAxis: [
+      {
+        name: `${valueName} (${valueUnit})`,
+        type: 'value',
+      },
+    ],
+    series,
+  }
+}
+
 export default function (axios) {
   return {
     // Get reservoir by id (fid)
@@ -55,5 +116,8 @@ export default function (axios) {
 
     getByGeometry: geometry =>
       axios.post('reservoir/geometry', geometry).then(({ data }) => data),
+
+    getTimeSeriesByGeometry: (geometry, variableName, period) =>
+      axios.post(`reservoir/geometry/ts/${variableName}?agg_period=${period}`, geometry).then(formatTimeSeriesByGeometry),
   }
 }
