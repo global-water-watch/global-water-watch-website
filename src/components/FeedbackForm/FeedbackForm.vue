@@ -18,6 +18,16 @@
             <input v-model="form.reservoirId" type="hidden" name="reservoirId">
 
             <div class="feedback-form__field">
+              <v-alert v-if="successMessage" type="success">
+                {{ successMessage }}
+              </v-alert>
+
+              <v-alert v-if="errorMessage" type="error">
+                {{ errorMessage }}
+              </v-alert>
+            </div>
+
+            <div class="feedback-form__field">
               <label for="reservoirNameSuggestion">Reservoir name suggestion?</label>
               <input
                 id="reservoirNameSuggestion"
@@ -67,6 +77,8 @@
     data () {
       return {
         formIsValid: false,
+        successMessage: '',
+        errorMessage: '',
         form: {
           reservoirId: this.reservoir.id,
           reservoirNameSuggestion: '',
@@ -79,9 +91,30 @@
         this.formIsValid = this.$refs.feedbackForm?.checkValidity() || false
       },
 
-      submitForm () {
-        console.log('submitting form')
-        console.log(this.form)
+      async submitForm () {
+        try {
+          const response = await this.$axios({
+            method: 'post',
+            baseURL: '',
+            url: '/.netlify/functions/feedback-form',
+            data: {
+              ...this.form,
+            },
+          })
+
+          this.successMessage = ''
+          this.errorMessage = ''
+
+          if (response.status === 200) {
+            this.successMessage = 'Thanks for your feedback!'
+            this.form.reservoirNameSuggestion = ''
+            this.form.notes = ''
+          } else {
+            this.errorMessage = 'Something went wrong. Please try again.'
+          }
+        } catch (e) {
+          console.error(e)
+        }
       },
     },
   }
