@@ -22,3 +22,11 @@
   justify-content: space-between;
   margin-top: $space-medium;
 }
+
+.comparison-map__skeleton-loader {
+  margin: $space-xlarge 0;
+
+  .v-skeleton-loader__image {
+    height: 465px;
+  }
+}

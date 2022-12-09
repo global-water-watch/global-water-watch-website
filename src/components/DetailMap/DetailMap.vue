@@ -1,6 +1,11 @@
 <template>
+  <v-skeleton-loader
+    v-if="isLoading"
+    class="mb-6 detail-map__skeleton-loader"
+    type="image"
+  />
   <v-mapbox
-    v-if="mapConfig"
+    v-else-if="mapConfig"
     class="detail-map"
     :access-token="mapConfig.token"
     :center="mapConfig.center"
@@ -29,6 +34,10 @@
       satelliteImageUrl: {
         type: String,
         default: '',
+      },
+      isLoading: {
+        type: Boolean,
+        default: false,
       },
     },
 

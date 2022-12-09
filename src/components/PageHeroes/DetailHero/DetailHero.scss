@@ -5,3 +5,14 @@
     padding-top: 100px;
   }
 }
+
+.detail-hero__skeleton-loader {
+  .v-skeleton-loader__heading {
+    height: 60px;
+    margin-bottom: $space-medium;
+  }
+
+  .v-skeleton-loader__text {
+    height: 24px;
+  }
+}

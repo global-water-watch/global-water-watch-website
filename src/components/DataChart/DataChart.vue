@@ -1,8 +1,14 @@
 <template>
   <div
     ref="$chart"
-    class="data-chart"
-  />
+    :class="{'data-chart': true, 'data-chart--loading': isLoading}"
+  >
+    <v-skeleton-loader
+      v-if="isLoading"
+      class="data-chart__skeleton-loader"
+      type="image"
+    />
+  </div>
 </template>
 
 <script>
@@ -70,6 +76,10 @@
         default: false,
       },
       useToolbox: {
+        type: Boolean,
+        default: false,
+      },
+      isLoading: {
         type: Boolean,
         default: false,
       },
@@ -165,16 +175,20 @@
 
     watch: {
       option (newVal) {
-        this.chart.setOption(newVal)
+        if (this.chart) {
+          this.chart.setOption(newVal)
+        }
       },
-    },
-    mounted () {
-      const { $chart } = this.$refs
-      const chart = init($chart, 'gww')
-      this.chart = chart
+      isLoading (newVal) {
+        if (!newVal) {
+          const { $chart } = this.$refs
+          const chart = init($chart, 'gww')
+          this.chart = chart
 
-      chart.setOption(this.option)
-      this.subscribeChartEvents(chart)
+          chart.setOption(this.option)
+          this.subscribeChartEvents(chart)
+        }
+      },
     },
     methods: {
       subscribeChartEvents (chart) {

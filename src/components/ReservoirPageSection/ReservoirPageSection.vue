@@ -5,6 +5,7 @@
         v-if="reservoirs.length"
         :reservoirs="reservoirs"
         :satellite-image-url="satelliteImageUrl"
+        :is-loading="isLoading"
       />
 
       <div class="reservoir-page-section__loader">
@@ -19,12 +20,14 @@
           :message="generatingSatelliteImageUrl.error.message"
           type="error"
           icon="mdi-alert"
+          :is-loading="isLoading"
         />
         <MessageBox
           v-else-if="reservoirs.length === 1"
           message="Select a data point in the graph to generate a satellite image"
           type="info"
           icon="mdi-information-outline"
+          :is-loading="isLoading"
         />
       </div>
 
@@ -38,16 +41,22 @@
         :show-legend="true"
         :use-zoom="true"
         :use-toolbox="false"
+        :is-loading="isLoading"
         @selectedTimeChanged="onSelectedTimeChanged"
       />
 
       <ComparisonMap
         v-if="showComparisonMap && reservoirs.length"
         :reservoirs="reservoirs"
+        :is-loading="isLoading"
       />
 
       <!-- Temporary hide share page for custom selection since this url isn't nice to share -->
-      <PageShare v-if="areaType !== 'custom-selection'" title="Share this page" />
+      <PageShare
+        v-if="areaType !== 'custom-selection'"
+        title="Share this page"
+        :is-loading="isLoading"
+      />
     </div>
   </section>
 </template>
@@ -87,6 +96,10 @@
         default: '',
       },
       showComparisonMap: {
+        type: Boolean,
+        default: false,
+      },
+      isLoading: {
         type: Boolean,
         default: false,
       },

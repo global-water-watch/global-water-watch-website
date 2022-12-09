@@ -1,5 +1,10 @@
 <template>
-  <div class="comparison-map">
+  <v-skeleton-loader
+    v-if="isLoading"
+    class="comparison-map__skeleton-loader"
+    type="image"
+  />
+  <div v-else class="comparison-map">
     <div id="comparison-map-container" class="comparison-map__map-container">
       <ComparisonDetailMap
         v-if="reservoirs.length"
@@ -34,6 +39,10 @@
         type: Array,
         required: true,
       },
+      isLoading: {
+        type: Boolean,
+        default: false,
+      },
     },
 
     data () {
@@ -54,9 +63,13 @@
       },
     },
 
-    async mounted () {
-      this.loadSatelliteImages()
-      await this.initializeMap()
+    watch: {
+      async isLoading (newValue) {
+        if (!newValue) {
+          this.loadSatelliteImages()
+          await this.initializeMap()
+        }
+      },
     },
 
     methods: {

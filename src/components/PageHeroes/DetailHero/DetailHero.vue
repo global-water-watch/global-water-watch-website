@@ -2,10 +2,17 @@
   <section class="detail-hero">
     <div class="layout-section">
       <div class="layout-container">
-        <h1 class="h1">
-          {{ title }}
-        </h1>
-        <slot />
+        <v-skeleton-loader
+          v-if="isLoading"
+          class="detail-hero__skeleton-loader"
+          type="heading, text"
+        />
+        <Fragment v-else>
+          <h1 class="h1">
+            {{ title }}
+          </h1>
+          <slot />
+        </Fragment>
       </div>
     </div>
   </section>
@@ -17,6 +24,10 @@
       title: {
         type: String,
         required: true,
+      },
+      isLoading: {
+        type: Boolean,
+        default: false,
       },
     },
   }

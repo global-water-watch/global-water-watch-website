@@ -1,5 +1,10 @@
 <template>
-  <div class="message">
+  <v-skeleton-loader
+    v-if="isLoading"
+    class="message__skeleton-loader"
+    type="text"
+  />
+  <div v-else class="message">
     <v-icon
       v-if="icon"
       :size="iconSize"
@@ -31,6 +36,10 @@
       iconSize: {
         type: Number,
         default: 23,
+      },
+      isLoading: {
+        type: Boolean,
+        default: false,
       },
     },
   }

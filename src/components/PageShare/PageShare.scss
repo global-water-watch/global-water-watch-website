@@ -8,3 +8,14 @@
   opacity: 0.6;
   font-size: $font-size-small;
 }
+
+.page-share__skeleton-loader {
+  .v-skeleton-loader__heading {
+    margin-bottom: $space-medium;
+  }
+
+  .v-skeleton-loader__button {
+    height: 36px;
+    width: 100%;
+  }
+}

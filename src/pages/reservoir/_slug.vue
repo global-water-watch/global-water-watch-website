@@ -1,7 +1,7 @@
 <template>
-  <Fragment v-if="!$fetchState.pending && reservoir">
+  <Fragment>
     <client-only>
-      <PageHeroesDetailHero :title="title">
+      <PageHeroesDetailHero :title="title" :is-loading="isLoading">
         <p class="p">
           {{ reservoirId }}
         </p>
@@ -13,6 +13,7 @@
         :satellite-image-url="satelliteImageUrl"
         :generating-satellite-image-url="generatingSatelliteImageUrl"
         :show-comparison-map="true"
+        :is-loading="isLoading"
         @onSelectedTimeChanged="onSelectedTimeChanged"
       />
     </client-only>
@@ -68,6 +69,10 @@
 
       reservoirId () {
         return this.reservoir.id ? `#${this.reservoir.id}` : ''
+      },
+
+      isLoading () {
+        return this.$fetchState.pending || !this.reservoir
       },
     },
 
