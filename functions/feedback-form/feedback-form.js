@@ -17,17 +17,28 @@ const handler = async (event) => {
 
     const { data, error } = await supabase
       .from('Feedback form')
-      .insert([
+      .insert(
         {
           reservoir_id: reservoirId,
           reservoir_suggested_name: reservoirNameSuggestion,
           notes
         }
-      ])
+      )
+      .select('*');
 
-    return {
-      statusCode: 200,
-      body: 'success',
+
+    if (data) {
+      return {
+        statusCode: 200,
+        body: JSON.stringify(data)
+      }
+    }
+
+    if (error) {
+      return {
+        statusCode: 500,
+        body: JSON.stringify(error)
+      }
     }
   } catch (error) {
     return {
