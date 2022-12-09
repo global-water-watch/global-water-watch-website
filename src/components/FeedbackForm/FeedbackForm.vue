@@ -106,7 +106,7 @@
           this.errorMessage = ''
 
           if (response.status === 200) {
-            this.successMessage = 'Thanks for your feedback!'
+            this.successMessage = 'Thank you for your feedback, we\'ll work on it!'
             this.form.reservoirNameSuggestion = ''
             this.form.notes = ''
           } else {
