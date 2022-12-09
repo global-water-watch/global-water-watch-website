@@ -120,4 +120,4 @@
   }
 </script>
 
-<style src="./feedbackForm.scss" lang="sss"></style>
+<style src="./FeedbackForm.scss" lang="sss"></style>
