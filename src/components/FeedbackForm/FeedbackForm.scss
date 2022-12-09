@@ -3,12 +3,17 @@
 }
 
 .feedback-form__form {
-  width: 50%;
+  @media screen and (min-width: $breakpoint-medium) {
+    width: 50%;
+  }
 }
 
 .feedback-form__field {
   margin-bottom: $space-medium;
-  padding-right: 24px;
+
+  @media screen and (min-width: $breakpoint-medium) {
+    padding-right: 24px;
+  }
 }
 
 .feedback-form__textarea-field {
