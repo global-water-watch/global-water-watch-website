@@ -28,13 +28,13 @@
             </div>
 
             <div class="feedback-form__field">
-              <label for="reservoirNameSuggestion">Reservoir name suggestion?</label>
+              <label for="reservoirNameSuggestion">Reservoir name suggestion</label>
               <input
                 id="reservoirNameSuggestion"
                 v-model="form.reservoirNameSuggestion"
                 class="feedback-form__input-field"
                 name="reservoirNameSuggestion"
-                :placeholder="reservoir.name || 'Reservoir name'"
+                :placeholder="reservoir.properties.name || 'Reservoir name'"
                 autocomplete="off"
               >
             </div>
