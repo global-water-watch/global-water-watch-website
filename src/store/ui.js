@@ -3,7 +3,7 @@ import { MAP_CENTER, MAP_ZOOM } from '@/lib/constants'
 export const state = () => ({
   mapReady: false,
   activeLayerName: 'Reservoirs',
-  showExperimentalFeatures: process.env.IS_DEV,
+  showExperimentalFeatures: true,
   mapCoordinates: {
     zoom: MAP_ZOOM,
     center: MAP_CENTER,
