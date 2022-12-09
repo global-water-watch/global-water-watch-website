@@ -1206,6 +1206,11 @@
   resolved "https://registry.npmjs.org/@mapbox/mapbox-gl-supported/-/mapbox-gl-supported-2.0.1.tgz"
   integrity sha512-HP6XvfNIzfoMVfyGjBckjiAOQK9WfX0ywdLubuPMPv+Vqf5fj0uCbgBQYpiqcWZT6cbyyRnTSXDheT1ugvF6UQ==
 
+"@mapbox/mapbox-gl-sync-move@^0.3.1":
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/@mapbox/mapbox-gl-sync-move/-/mapbox-gl-sync-move-0.3.1.tgz#0dc0376799c46f121ba3b883a11381d07bc0f1be"
+  integrity sha512-Y3PMyj0m/TBJa9OkQnO2TiVDu8sFUPmLF7q/THUHrD/g42qrURpMJJ4kufq4sR60YFMwZdCGBshrbgK5v2xXWw==
+
 "@mapbox/mapbox-sdk@^0.13.2":
   version "0.13.3"
   resolved "https://registry.npmjs.org/@mapbox/mapbox-sdk/-/mapbox-sdk-0.13.3.tgz"
@@ -10849,6 +10854,13 @@ map-visit@^1.0.0:
   integrity sha1-7Nyo8TFE5mDxtb1B8S80edmN+48=
   dependencies:
     object-visit "^1.0.0"
+
+mapbox-gl-compare@^0.4.0:
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/mapbox-gl-compare/-/mapbox-gl-compare-0.4.1.tgz#eb4b951bba33ec254ceb1967267015775df25b9d"
+  integrity sha512-aLE1GK5oZywGwtRWjVnVz50Fudcod6d0tIxl4X5Rv/nhE8Kc64692S37F150amYvOFzzST+ylP25KgM6ApiPRA==
+  dependencies:
+    "@mapbox/mapbox-gl-sync-move" "^0.3.1"
 
 mapbox-gl-draw-rectangle-mode@^1.0.4:
   version "1.0.4"
