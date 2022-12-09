@@ -12,14 +12,16 @@
           target="_blank"
           rel="noopener noreferrer"
           @input="checkFormValidity"
+          @submit.prevent="submitForm"
         >
           <div class="feedback-form__section">
-            <input type="hidden" name="reservoirId" :value="reservoir.id">
+            <input v-model="form.reservoirId" type="hidden" name="reservoirId">
 
             <div class="feedback-form__field">
               <label for="reservoirNameSuggestion">Reservoir name suggestion?</label>
               <input
                 id="reservoirNameSuggestion"
+                v-model="form.reservoirNameSuggestion"
                 class="feedback-form__input-field"
                 name="reservoirNameSuggestion"
                 :placeholder="reservoir.name || 'Reservoir name'"
@@ -31,6 +33,7 @@
               <label for="notes">Notes</label>
               <textarea
                 id="notes"
+                v-model="form.notes"
                 class="feedback-form__textarea-field"
                 name="notes"
                 placeholder="Any additional notes about this reservoir"
@@ -64,11 +67,21 @@
     data () {
       return {
         formIsValid: false,
+        form: {
+          reservoirId: this.reservoir.id,
+          reservoirNameSuggestion: '',
+          notes: '',
+        },
       }
     },
     methods: {
       checkFormValidity () {
         this.formIsValid = this.$refs.feedbackForm?.checkValidity() || false
+      },
+
+      submitForm () {
+        console.log('submitting form')
+        console.log(this.form)
       },
     },
   }
