@@ -36,4 +36,4 @@
   }
 </script>
 
-<style src="./Message.scss" lang="scss"></style>
+<style src="./MessageBox.scss" lang="scss"></style>
