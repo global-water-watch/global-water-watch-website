@@ -2,7 +2,7 @@
   <section class="reservoir-page-section layout-section layout-section--lined">
     <div class="layout-container">
       <DetailMap
-        v-if="reservoirs.length"
+        v-if="reservoirs.length || isLoading"
         :reservoirs="reservoirs"
         :satellite-image-url="satelliteImageUrl"
         :is-loading="isLoading"
@@ -32,7 +32,7 @@
       </div>
 
       <data-chart
-        v-if="timeSeries"
+        v-if="timeSeries || isLoading || isLoadingChart"
         :title="chartTitle"
         :x-axis="xAxis"
         :y-axis="yAxis"
@@ -41,7 +41,7 @@
         :show-legend="true"
         :use-zoom="true"
         :use-toolbox="false"
-        :is-loading="isLoading"
+        :is-loading="isLoading || isLoadingChart"
         @selectedTimeChanged="onSelectedTimeChanged"
       />
 
@@ -103,6 +103,10 @@
         type: Boolean,
         default: false,
       },
+      isLoadingChart: {
+        type: Boolean,
+        default: false,
+      },
     },
 
     computed: {
@@ -112,15 +116,15 @@
       },
 
       xAxis () {
-        return this.timeSeries.xAxis
+        return this.timeSeries?.xAxis
       },
 
       yAxis () {
-        return this.timeSeries.yAxis
+        return this.timeSeries?.yAxis
       },
 
       series () {
-        return this.timeSeries.series
+        return this.timeSeries?.series
       },
     },
 

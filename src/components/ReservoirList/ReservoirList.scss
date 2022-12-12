@@ -12,3 +12,17 @@
 .reservoir-list__button {
   background: $color-blue;
 }
+
+.reservoir-list__skeleton-loader {
+  .v-skeleton-loader__text {
+    height: 24px;
+    width: 200px;
+  }
+
+  .v-skeleton-loader__chip {
+    display: inline-block;
+    height: 26px;
+  margin-top: .6em;
+  margin-right: .6em;
+  }
+}

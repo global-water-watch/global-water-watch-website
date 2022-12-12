@@ -1,22 +1,4 @@
-.data-chart {
-  // Make chart absolute so it doesn't add any height
-  :not(.data-chart--loading) > div {
-    position: absolute !important;
-  }
-
-  // Height is determined 'responsively'
-  &::after {
-    display: block;
-    content: "";
-    width: 100%;
-    padding-bottom: 75%;
-  }
-}
-
 .data-chart__skeleton-loader {
-  width: 100%;
-  height: 465px;
-
   .v-skeleton-loader__image {
     width: 100%;
     height: 465px;
