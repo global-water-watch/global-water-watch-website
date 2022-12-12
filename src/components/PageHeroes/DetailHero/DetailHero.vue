@@ -5,14 +5,12 @@
         <v-skeleton-loader
           v-if="isLoading"
           class="detail-hero__skeleton-loader"
-          type="heading, text"
+          type="heading"
         />
-        <Fragment v-else>
-          <h1 class="h1">
-            {{ title }}
-          </h1>
-          <slot />
-        </Fragment>
+        <h1 v-else class="h1">
+          {{ title }}
+        </h1>
+        <slot />
       </div>
     </div>
   </section>

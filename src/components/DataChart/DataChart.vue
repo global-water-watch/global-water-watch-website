@@ -180,15 +180,13 @@
         }
       },
       isLoading (newVal) {
-        if (!newVal) {
-          const { $chart } = this.$refs
-          const chart = init($chart, 'gww')
-          this.chart = chart
-
-          chart.setOption(this.option)
-          this.subscribeChartEvents(chart)
-        }
+        if (newVal) { return }
+        this.setupChart()
       },
+    },
+    mounted () {
+      if (this.isLoading) { return }
+      this.setupChart()
     },
     methods: {
       subscribeChartEvents (chart) {
@@ -201,6 +199,14 @@
           // emit that the selected time changed
           this.$emit('selectedTimeChanged', value)
         })
+      },
+      setupChart () {
+        const { $chart } = this.$refs
+        const chart = init($chart, 'gww')
+        this.chart = chart
+
+        chart.setOption(this.option)
+        this.subscribeChartEvents(chart)
       },
     },
   }

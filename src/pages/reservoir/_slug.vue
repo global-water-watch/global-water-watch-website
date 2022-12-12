@@ -2,7 +2,12 @@
   <Fragment>
     <client-only>
       <PageHeroesDetailHero :title="title" :is-loading="isLoading">
-        <p class="p">
+        <v-skeleton-loader
+          v-if="isLoading"
+          class="reservoir__skeleton-loader"
+          type="text"
+        />
+        <p v-else class="p">
           {{ reservoirId }}
         </p>
       </PageHeroesDetailHero>
@@ -111,3 +116,5 @@
     },
   }
 </script>
+
+<style src="./_slug.scss" lang="scss" />
