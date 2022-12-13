@@ -5,3 +5,7 @@ export const WORLD_CENTER_LATITUDE = 23
 export const MAP_CENTER = [WORLD_CENTER_LONGITUDE, WORLD_CENTER_LATITUDE]
 export const MAPBOX_STYLE_LIGHT = 'mapbox://styles/mapbox/light-v9'
 export const MAPBOX_STYLE_DARK = 'mapbox://styles/mapbox/dark-v9'
+export const MAP_CUSTOM_ATTRIBUTIONS = [
+  '<a href="https://www.hydrosheds.org/hydroatlas" target="_blank">HydroATLAS</a>',
+  '<a href="https://www.globaldamwatch.org/grand" target="_blank">Global Dam Watch</a>',
+]

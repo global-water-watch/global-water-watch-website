@@ -13,6 +13,9 @@
           {{ pageContent.description }}
         </p>
         <ReservoirList :reservoirs="reservoirs" :is-loading="reservoirsLoading" />
+        <p v-if="curatedByGlobalDamWatch" class="p">
+          Some of these reservoirs were curated by <a href="https://www.globaldamwatch.org/grand/" target="_blank" rel="noopener">Global Dam Watch</a> (based on the GRAND database).
+        </p>
       </PageHeroesDetailHero>
 
       <Loader
@@ -50,6 +53,10 @@
     computed: {
       cachedGeometry () {
         return this.$store.getters['zoomable-layers/cachedGeometry']
+      },
+
+      curatedByGlobalDamWatch () {
+        return this.reservoirs.length > 0 && this.reservoirs.some(reservoir => reservoir.properties.grand_id)
       },
     },
 
