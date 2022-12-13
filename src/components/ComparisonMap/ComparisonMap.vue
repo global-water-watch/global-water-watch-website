@@ -4,7 +4,7 @@
       <ComparisonDetailMap
         v-if="reservoirs.length"
         :reservoirs="reservoirs"
-        :satellite-image-url="oldSatelliteImageUrl"
+        :date="oldDate"
         class="comparison-map__detail-map"
         @setMap="onSetOldMap"
       />
@@ -12,7 +12,7 @@
       <ComparisonDetailMap
         v-if="reservoirs.length"
         :reservoirs="reservoirs"
-        :satellite-image-url="satelliteImageUrl"
+        :date="date"
         class="comparison-map__detail-map"
         @setMap="onSetCurrentMap"
       />
@@ -55,7 +55,6 @@
     },
 
     async mounted () {
-      this.loadSatelliteImages()
       await this.initializeMap()
     },
 
@@ -75,27 +74,6 @@
         const MapboxCompare = (await import('mapbox-gl-compare')).default
         // eslint-disable-next-line no-new
         new MapboxCompare(oldMap, currentMap, '#comparison-map-container')
-      },
-      async loadSatelliteImages () {
-        const geometry = {
-          ...this.reservoirs[0],
-          properties: {
-            t: Math.floor(this.date.getTime() / 1000),
-          },
-        }
-
-        const oldGeometry = {
-          ...this.reservoirs[0],
-          properties: {
-            t: Math.floor(this.oldDate.getTime() / 1000),
-          },
-        }
-
-        const data = await this.$repo.image.getSatelliteImage(geometry)
-        const oldData = await this.$repo.image.getSatelliteImage(oldGeometry)
-
-        this.satelliteImageUrl = data.url
-        this.oldSatelliteImageUrl = oldData.url
       },
     },
   }
