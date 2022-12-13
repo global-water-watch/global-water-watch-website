@@ -3,7 +3,7 @@
     <li v-for="item in items" :key="item.id">
       <CardItem
         :author="item.heroes[0].author"
-        :created-at="item.createdAt"
+        :first-published-at="item.firstPublishedAt"
         :image="item.heroes[0].image"
         :slug="item.slug"
         :text="item.heroes[0].text"
