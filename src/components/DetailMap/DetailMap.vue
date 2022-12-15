@@ -1,18 +1,47 @@
 <template>
-  <v-mapbox
-    v-if="mapConfig"
-    class="detail-map"
-    :access-token="mapConfig.token"
-    :center="mapConfig.center"
-    :zoom="mapConfig.zoom"
-    :map-style="mapConfig.style"
-    :custom-attribution="mapConfig.customAttribution"
-    @mb-created="onMapCreated"
-    @mb-load="addReservoirsToMap"
-  >
-    <!-- Controls -->
-    <v-mapbox-navigation-control position="bottom-right" />
-  </v-mapbox>
+  <div class="detail-map">
+    <v-mapbox
+      v-if="mapConfig"
+      class="detail-map__map"
+      :access-token="mapConfig.token"
+      :center="mapConfig.center"
+      :zoom="mapConfig.zoom"
+      :map-style="mapConfig.style"
+      :custom-attribution="mapConfig.customAttribution"
+      @mb-created="onMapCreated"
+      @mb-load="onMapLoaded"
+    >
+      <!-- Controls -->
+      <v-mapbox-navigation-control position="bottom-right" />
+    </v-mapbox>
+
+    <div v-if="satelliteVideo" class="detail-map__layers-panel">
+      <v-switch
+        v-model="showSatelliteImage"
+        inset
+        label="Satellite image"
+        :disabled="!satelliteImageUrl"
+      />
+      <v-switch
+        v-if="satelliteVideo"
+        v-model="showSatelliteVideo"
+        inset
+        label="Satellite video"
+      />
+      <v-btn
+        v-if="satelliteVideo"
+        color="blue-grey darken-3"
+        class="mr-2"
+        :href="satelliteVideo.properties.url"
+        target="_blank"
+      >
+        Satellite video
+        <v-icon right>
+          mdi-open-in-new
+        </v-icon>
+      </v-btn>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -31,6 +60,10 @@
         type: String,
         default: '',
       },
+      satelliteVideo: {
+        type: Object,
+        default: null,
+      },
     },
 
     data () {
@@ -42,6 +75,8 @@
           style: MAPBOX_STYLE_DARK,
           customAttribution: MAP_CUSTOM_ATTRIBUTIONS,
         },
+        showSatelliteImage: true,
+        showSatelliteVideo: true,
       }
     },
 
@@ -88,15 +123,26 @@
             paint: {
               'raster-opacity': 1,
             },
+            layout: {
+              visibility: 'visible',
+            },
           }, layerId)
+        }
+      },
+      showSatelliteImage (newVal) {
+        if (map.getLayer('satellite')) {
+          map.setLayoutProperty('satellite', 'visibility', newVal ? 'visible' : 'none')
+        }
+      },
+      showSatelliteVideo (newVal) {
+        if (map.getLayer('video')) {
+          map.setLayoutProperty('video', 'visibility', newVal ? 'visible' : 'none')
         }
       },
     },
 
     methods: {
-      addReservoirsToMap (event) {
-        map = event.target
-
+      addReservoirsToMap (map) {
         this.transformedReservoirs.forEach((reservoir) => {
           const reservoirName = `reservoir-${reservoir.data.id}`
 
@@ -174,9 +220,37 @@
         }
       },
 
+      addSatelliteVideoToMap (map) {
+        // add satellite source as raster to the map
+        map.addSource('video', {
+          type: 'video',
+          urls: [this.satelliteVideo.properties.url],
+          coordinates: this.satelliteVideo.geometry.coordinates[0].slice(0, 4),
+        })
+
+        // add satellite layer to the map
+        map.addLayer({
+          id: 'video',
+          type: 'raster',
+          source: 'video',
+          paint: {
+            'raster-opacity': 0.5,
+          },
+          layout: {
+            visibility: 'visible',
+          },
+        })
+      },
+
       onMapCreated (map) {
         map.removeControl(map._logoControl)
         map.addControl(map._logoControl, 'top-right')
+      },
+
+      onMapLoaded (event) {
+        map = event.target
+        this.addReservoirsToMap(map)
+        if (this.satelliteVideo) { this.addSatelliteVideoToMap(map) }
       },
 
       onReservoirClick (evt) {

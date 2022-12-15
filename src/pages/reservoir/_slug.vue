@@ -16,6 +16,7 @@
         :satellite-image-url="satelliteImageUrl"
         :generating-satellite-image-url="generatingSatelliteImageUrl"
         :show-comparison-map="true"
+        :satellite-video="satelliteVideo"
         @onSelectedTimeChanged="onSelectedTimeChanged"
       />
     </client-only>
@@ -24,6 +25,7 @@
 
 <script>
   import debounce from 'lodash.debounce'
+  import { RESERVOIR_VIDEOS } from '@/lib/constants'
 
   const DEBOUNCE_TIME = 1000
 
@@ -71,6 +73,10 @@
 
       reservoirId () {
         return this.reservoir.id ? `#${this.reservoir.id}` : ''
+      },
+
+      satelliteVideo () {
+        return RESERVOIR_VIDEOS.find(video => video.id === this.reservoir.id)
       },
     },
 

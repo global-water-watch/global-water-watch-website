@@ -5,6 +5,7 @@
         v-if="reservoirs.length"
         :reservoirs="reservoirs"
         :satellite-image-url="satelliteImageUrl"
+        :satellite-video="satelliteVideo"
       />
 
       <div class="reservoir-page-section__loader">
@@ -85,6 +86,10 @@
       satelliteImageUrl: {
         type: String,
         default: '',
+      },
+      satelliteVideo: {
+        type: Object,
+        default: null,
       },
       showComparisonMap: {
         type: Boolean,

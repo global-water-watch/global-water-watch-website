@@ -1,8 +1,31 @@
 .detail-map {
+  position: relative;
+}
+
+.detail-map__map {
   width: 100%;
   height: 465px;
 }
 
 .detail-map .mapboxgl-ctrl-attrib a {
   color: rgba(0,0,0,.75);
+}
+
+.detail-map__layers-panel {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  padding: 5px 15px 12px;
+  border-radius: 4px;
+  background-color: $gradient-top;
+  box-shadow: 0 0 10px 2px rgb(0 0 0 / 10%);
+  z-index: 2;
+
+  .v-input--selection-controls {
+    margin: 5px 0;
+  }
+
+  .v-messages {
+    display: none;
+  }
 }
