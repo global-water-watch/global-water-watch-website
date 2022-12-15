@@ -44,6 +44,7 @@
       <ComparisonMap
         v-if="showComparisonMap && reservoirs.length"
         :reservoirs="reservoirs"
+        :time-series="series[0].data"
       />
 
       <!-- Temporary hide share page for custom selection since this url isn't nice to share -->
