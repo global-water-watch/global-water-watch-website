@@ -47,7 +47,7 @@
           <v-icon>mdi-chevron-right</v-icon>
         </v-btn>
       </div>
-      <div class="comparison-map__loading">
+      <div v-if="isLoadingSatelliteImages" class="comparison-map__loading">
         <div>
           Loading satellite images
           <v-progress-circular indeterminate :size="18" :width="2" class="comparison-map__loading-icon" :aria-hidden="true" />
@@ -114,7 +114,7 @@
         return this.timeSeriesDates[this.oldDateIndex]
       },
       timeSeriesDates () {
-        return this.timeSeries.map(item => new Date(item[0]))
+        return this.timeSeries[0].data.map(item => new Date(item[0]))
       },
       previousDateIndex () {
         return this.dateIndex - 1

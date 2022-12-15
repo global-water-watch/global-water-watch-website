@@ -48,7 +48,7 @@
       <ComparisonMap
         v-if="showComparisonMap && (reservoirs.length || isLoading)"
         :reservoirs="reservoirs"
-        :time-series="series[0].data"
+        :time-series="series"
         :is-loading="isLoading"
       />
 
