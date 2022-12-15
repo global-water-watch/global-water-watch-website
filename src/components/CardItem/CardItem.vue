@@ -31,7 +31,7 @@
         <span class="p small bold">
           {{ author.name }}
         </span>
-        <time class="p small" :datetime="createdAt">{{ parsedDate }}</time>
+        <time class="p small" :datetime="firstPublishedAt">{{ parsedDate }}</time>
       </div>
     </address>
     <article />
@@ -45,7 +45,7 @@
         type: Object,
         required: true,
       },
-      createdAt: {
+      firstPublishedAt: {
         type: String,
         required: true,
       },
@@ -75,7 +75,7 @@
         return `/blog/${this.slug}`
       },
       parsedDate () {
-        const date = new Date(this.createdAt)
+        const date = new Date(this.firstPublishedAt)
         const options = { year: 'numeric', month: 'long', day: 'numeric' }
         return date.toLocaleDateString('en-EN', options)
       },

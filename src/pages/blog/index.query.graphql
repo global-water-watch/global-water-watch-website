@@ -33,8 +33,8 @@ query BlogQuery {
       ... on NewsletterSectionRecord { ...newsletterSectionFragment }
     }
   }
-  allBlogposts(orderBy: createdAt_ASC) {
-    createdAt
+  allBlogposts(orderBy: _firstPublishedAt_ASC) {
+    firstPublishedAt: _firstPublishedAt
     _modelApiKey
     id
     slug

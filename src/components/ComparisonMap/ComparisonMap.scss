@@ -24,6 +24,16 @@
   margin-top: $space-medium;
 }
 
+.comparison-map__loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.comparison-map__loading-icon {
+  margin-left: 5px;
+}
+
 .comparison-map__skeleton-loader {
   margin: $space-xlarge 0;
 

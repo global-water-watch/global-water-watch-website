@@ -5,7 +5,7 @@
 fragment relatedBlogpostFragment on BlogpostRecord {
   id
   _modelApiKey
-  createdAt
+  firstPublishedAt: _firstPublishedAt
   slug
   title
   heroes {
