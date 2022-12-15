@@ -2,8 +2,14 @@
   <Fragment>
     <div
       ref="$chart"
-      class="data-chart"
-    />
+      :class="{'data-chart': true, 'data-chart--loading': isLoading}"
+    >
+      <v-skeleton-loader
+        v-if="isLoading"
+        class="data-chart__skeleton-loader"
+        type="image"
+      />
+    </div>
     <v-btn
       v-if="showExportButton"
       color="blue-grey darken-3"
@@ -94,6 +100,10 @@
         type: Boolean,
         default: false,
       },
+      isLoading: {
+        type: Boolean,
+        default: false,
+      },
     },
 
     computed: {
@@ -102,7 +112,7 @@
 
         const styledSeries = series.map(serie => ({
           ...serie,
-          lineStyle: { width: 1 },
+          lineStyle: { width: 2, opacity: 0.8 },
           // emphasis: { focus: 'series' },
 
           // markArea: {
@@ -186,30 +196,20 @@
 
     watch: {
       option (newVal) {
-        this.chart.setOption(newVal)
+        if (this.chart) {
+          this.chart.setOption(newVal)
+        }
+      },
+      isLoading (newVal) {
+        if (newVal) { return }
+        this.setupChart()
       },
     },
     mounted () {
-      const { $chart } = this.$refs
-      const chart = init($chart, 'gww')
-      this.chart = chart
-
-      chart.setOption(this.option)
-      this.subscribeChartEvents(chart)
+      if (this.isLoading) { return }
+      this.setupChart()
     },
     methods: {
-      subscribeChartEvents (chart) {
-        chart.on('updateAxisPointer', (evt) => {
-          if (evt.dataIndexInside) {
-            // we're just moving
-            return
-          }
-          const value = evt.axesInfo[0].value
-          // emit that the selected time changed
-          this.$emit('selectedTimeChanged', value)
-        })
-      },
-
       exportTimeSeries () {
         let csv = `${this.xAxis[0].type},${this.yAxis[0].name}\n`
         this.series[0].data.forEach((row) => {
@@ -222,6 +222,25 @@
         anchor.target = '_blank'
         anchor.download = `${this.title || 'reservoir'}.csv`
         anchor.click()
+      },
+      subscribeChartEvents (chart) {
+        chart.on('updateAxisPointer', (evt) => {
+          if (evt.dataIndexInside) {
+            // we're just moving
+            return
+          }
+          const value = evt.axesInfo[0].value
+          // emit that the selected time changed
+          this.$emit('selectedTimeChanged', value)
+        })
+      },
+      setupChart () {
+        const { $chart } = this.$refs
+        const chart = init($chart, 'gww')
+        this.chart = chart
+
+        chart.setOption(this.option)
+        this.subscribeChartEvents(chart)
       },
     },
   }

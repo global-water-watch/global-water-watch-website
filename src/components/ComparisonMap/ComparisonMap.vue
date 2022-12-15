@@ -1,26 +1,80 @@
 <template>
-  <div class="comparison-map">
+  <v-skeleton-loader
+    v-if="isLoading"
+    class="comparison-map__skeleton-loader"
+    type="image"
+  />
+  <div v-else class="comparison-map">
     <div id="comparison-map-container" class="comparison-map__map-container">
       <ComparisonDetailMap
         v-if="reservoirs.length"
         :reservoirs="reservoirs"
-        :satellite-image-url="oldSatelliteImageUrl"
+        :date="oldDate"
         class="comparison-map__detail-map"
         @setMap="onSetOldMap"
+        @loading="onLoadingSatelliteImage"
       />
 
       <ComparisonDetailMap
         v-if="reservoirs.length"
         :reservoirs="reservoirs"
-        :satellite-image-url="satelliteImageUrl"
+        :date="date"
         class="comparison-map__detail-map"
         @setMap="onSetCurrentMap"
+        @loading="onLoadingSatelliteImage"
       />
     </div>
 
     <div class="comparison-map__dates">
-      <span>{{ parseDate(oldDate) }}</span>
-      <span>{{ parseDate(date) }}</span>
+      <div>
+        <v-btn
+          icon
+          color="primary"
+          :disabled="!previousOldDate || isLoadingSatelliteImages"
+          :title="parseDate(previousOldDate)"
+          @click="() => oldDateIndex = previousOldDateIndex"
+        >
+          <v-icon>mdi-chevron-left</v-icon>
+        </v-btn>
+        <span>{{ parseDate(oldDate) }}</span>
+        <v-btn
+          icon
+          color="primary"
+          :disabled="!nextOldDate || isLoadingSatelliteImages"
+          :title="parseDate(nextOldDate)"
+          @click="() => oldDateIndex = nextOldDateIndex"
+        >
+          <v-icon>mdi-chevron-right</v-icon>
+        </v-btn>
+      </div>
+      <div v-if="isLoadingSatelliteImages" class="comparison-map__loading">
+        <div>
+          Loading satellite images
+          <v-progress-circular indeterminate :size="18" :width="2" class="comparison-map__loading-icon" :aria-hidden="true" />
+        </div>
+        This feature is not optimized for larger reservoirs.
+      </div>
+      <div>
+        <v-btn
+          icon
+          color="primary"
+          :disabled="!previousDate || isLoadingSatelliteImages"
+          :title="parseDate(previousDate)"
+          @click="() => dateIndex = previousDateIndex"
+        >
+          <v-icon>mdi-chevron-left</v-icon>
+        </v-btn>
+        <span>{{ parseDate(date) }}</span>
+        <v-btn
+          icon
+          color="primary"
+          :disabled="!nextDate || isLoadingSatelliteImages"
+          :title="parseDate(nextDate)"
+          @click="() => dateIndex = nextDateIndex"
+        >
+          <v-icon>mdi-chevron-right</v-icon>
+        </v-btn>
+      </div>
     </div>
   </div>
 </template>
@@ -34,35 +88,85 @@
         type: Array,
         required: true,
       },
+      timeSeries: {
+        type: Array,
+        default: () => [],
+      },
+      isLoading: {
+        type: Boolean,
+        default: false,
+      },
     },
 
     data () {
       return {
-        oldSatelliteImageUrl: '',
-        satelliteImageUrl: '',
+        dateIndex: -1,
+        oldDateIndex: -1,
+        isLoadingSatelliteImages: false,
       }
     },
 
     computed: {
       date () {
-        return new Date()
+        return this.timeSeriesDates[this.dateIndex]
       },
       oldDate () {
-        const date = new Date()
-        date.setFullYear(date.getFullYear() - 1)
-        return date
+        return this.timeSeriesDates[this.oldDateIndex]
+      },
+      timeSeriesDates () {
+        return this.timeSeries[0].data.map(item => new Date(item[0]))
+      },
+      previousDateIndex () {
+        return this.dateIndex - 1
+      },
+      nextDateIndex () {
+        return this.dateIndex + 1
+      },
+      previousDate () {
+        return this.timeSeriesDates[this.previousDateIndex]
+      },
+      nextDate () {
+        return this.timeSeriesDates[this.nextDateIndex]
+      },
+      previousOldDateIndex () {
+        return this.oldDateIndex - 1
+      },
+      nextOldDateIndex () {
+        return this.oldDateIndex + 1
+      },
+      previousOldDate () {
+        return this.timeSeriesDates[this.previousOldDateIndex]
+      },
+      nextOldDate () {
+        return this.timeSeriesDates[this.nextOldDateIndex]
       },
     },
 
-    async mounted () {
-      this.loadSatelliteImages()
-      await this.initializeMap()
+    watch: {
+      // isLoading is false while the reservoir information is being queried
+      // we need to wait until we have that information to initialize the map
+      // the initialization is async because we need to wait for 'mapbox-gl-compare' to be imported
+      async isLoading (newValue) {
+        if (!newValue) {
+          this.initializeDates()
+          await this.initializeMap()
+        }
+      },
     },
 
     methods: {
+      initializeDates () {
+        // On mounted, `date` is the last date in the time series
+        // `oldDate` is the closest date in the time series one year before `date`
+        const date = this.timeSeriesDates[this.timeSeriesDates.length - 1]
+        const oldDate = new Date(date.getTime())
+        oldDate.setFullYear(date.getFullYear() - 1)
+        this.dateIndex = this.timeSeriesDates.length - 1
+        this.oldDateIndex = this.getNearestDateIndex(oldDate)
+      },
       parseDate (date) {
         const options = { year: 'numeric', month: 'long', day: 'numeric' }
-        return date.toLocaleDateString('en-EN', options)
+        return date?.toLocaleDateString('en-EN', options)
       },
       onSetCurrentMap (map) {
         currentMap = map
@@ -76,26 +180,24 @@
         // eslint-disable-next-line no-new
         new MapboxCompare(oldMap, currentMap, '#comparison-map-container')
       },
-      async loadSatelliteImages () {
-        const geometry = {
-          ...this.reservoirs[0],
-          properties: {
-            t: Math.floor(this.date.getTime() / 1000),
-          },
-        }
+      onLoadingSatelliteImage (isLoading) {
+        this.isLoadingSatelliteImages = isLoading
+      },
+      getNearestDateIndex (target) {
+        let bestDate = this.timeSeriesDates.length
 
-        const oldGeometry = {
-          ...this.reservoirs[0],
-          properties: {
-            t: Math.floor(this.oldDate.getTime() / 1000),
-          },
-        }
+        let bestDiff = Infinity
+        let currDiff = 0
 
-        const data = await this.$repo.image.getSatelliteImage(geometry)
-        const oldData = await this.$repo.image.getSatelliteImage(oldGeometry)
+        this.timeSeriesDates.forEach((date, index) => {
+          currDiff = Math.abs(target - date)
+          if (currDiff < bestDiff) {
+            bestDate = index
+            bestDiff = currDiff
+          }
+        })
 
-        this.satelliteImageUrl = data.url
-        this.oldSatelliteImageUrl = oldData.url
+        return bestDate
       },
     },
   }

@@ -6,8 +6,9 @@
     :center="mapConfig.center"
     :zoom="mapConfig.zoom"
     :map-style="mapConfig.style"
+    :custom-attribution="mapConfig.customAttribution"
     @mb-created="onMapCreated"
-    @mb-load="addReservoirsToMap"
+    @mb-load="onMapLoaded"
   >
     <!-- Controls -->
     <v-mapbox-navigation-control position="bottom-right" />
@@ -16,7 +17,7 @@
 
 <script>
   import { bbox, featureCollection } from '@turf/turf'
-  import { MAP_CENTER, MAP_ZOOM, MAPBOX_STYLE_DARK } from '@/lib/constants'
+  import { MAP_CENTER, MAP_ZOOM, MAP_CUSTOM_ATTRIBUTIONS, MAPBOX_STYLE_DARK } from '@/lib/constants'
 
   export default {
     props: {
@@ -24,9 +25,9 @@
         type: Array,
         required: true,
       },
-      satelliteImageUrl: {
-        type: String,
-        default: '',
+      date: {
+        type: Date,
+        default: null,
       },
     },
 
@@ -37,8 +38,10 @@
           center: MAP_CENTER,
           zoom: MAP_ZOOM,
           style: MAPBOX_STYLE_DARK,
+          customAttribution: MAP_CUSTOM_ATTRIBUTIONS,
         },
         map: undefined,
+        isLoadingSatelliteImage: false,
       }
     },
 
@@ -54,46 +57,61 @@
     },
 
     watch: {
-      satelliteImageUrl (newURL, oldURL) {
-        // check if there is a layer id that contains the words 'reservoir' and 'line'
-        const layers = this.map.getStyle().layers
-        const layerId = layers.find(layer => layer.id.includes('reservoir') && layer.id.includes('line')).id
-
-        // check if the new URL is different from the old one
-        if (newURL !== oldURL) {
-          // remove the old layer
-          if (this.map.getLayer('satellite')) {
-            this.map.removeLayer('satellite')
-          }
-          // remove the old source
-          if (this.map.getSource('satellite')) {
-            this.map.removeSource('satellite')
-          }
-
-          // add satellite source as raster to the map
-          this.map.addSource('satellite', {
-            type: 'raster',
-            tiles: [newURL],
-            tileSize: 256,
-          })
-
-          // add satellite layer to the map
-          this.map.addLayer({
-            id: 'satellite',
-            type: 'raster',
-            source: 'satellite',
-            paint: {
-              'raster-opacity': 1,
-            },
-          }, layerId)
+      date () {
+        if (this.map) {
+          this.addSatelliteImageToMap()
         }
+      },
+
+      isLoadingSatelliteImage (newVal) {
+        this.$emit('loading', newVal)
       },
     },
 
     methods: {
-      addReservoirsToMap (event) {
-        this.map = event.target
+      async addSatelliteImageToMap () {
+        this.isLoadingSatelliteImage = true
+        const geometry = {
+          ...this.reservoirs[0],
+          properties: {
+            t: Math.floor(this.date.getTime() / 1000),
+          },
+        }
 
+        const data = await this.$repo.image.getSatelliteImage(geometry)
+
+        const layers = this.map.getStyle().layers
+        const layerId = layers.find(layer => layer.id.includes('reservoir') && layer.id.includes('line')).id
+
+        // remove the old layer
+        if (this.map.getLayer('satellite')) {
+          this.map.removeLayer('satellite')
+        }
+        // remove the old source
+        if (this.map.getSource('satellite')) {
+          this.map.removeSource('satellite')
+        }
+
+        // add satellite source as raster to the map
+        this.map.addSource('satellite', {
+          type: 'raster',
+          tiles: [data.url],
+          tileSize: 256,
+        })
+
+        // add satellite layer to the map
+        this.map.addLayer({
+          id: 'satellite',
+          type: 'raster',
+          source: 'satellite',
+          paint: {
+            'raster-opacity': 1,
+          },
+        }, layerId)
+        this.isLoadingSatelliteImage = false
+      },
+
+      addReservoirsToMap () {
         this.transformedReservoirs.forEach((reservoir) => {
           const reservoirName = `reservoir-${reservoir.data.id}`
 
@@ -108,6 +126,7 @@
               'fill-opacity': 0.7,
             },
           })
+
           this.map.addLayer({
             id: `${reservoirName}-line`,
             type: 'line',
@@ -129,6 +148,12 @@
         map.removeControl(map._logoControl)
         map.addControl(map._logoControl, 'top-right')
         this.$emit('setMap', map)
+      },
+
+      onMapLoaded (event) {
+        this.map = event.target
+        this.addReservoirsToMap()
+        this.addSatelliteImageToMap()
       },
     },
   }
