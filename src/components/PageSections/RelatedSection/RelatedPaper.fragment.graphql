@@ -5,7 +5,7 @@
 fragment relatedPaperFragment on PaperRecord {
   id
   _modelApiKey
-  createdAt
+  firstPublishedAt: _firstPublishedAt
   slug
   title
   heroes {
