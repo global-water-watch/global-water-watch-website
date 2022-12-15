@@ -46,7 +46,7 @@
       />
 
       <ComparisonMap
-        v-if="showComparisonMap && reservoirs.length"
+        v-if="showComparisonMap && (reservoirs.length || isLoading)"
         :reservoirs="reservoirs"
         :is-loading="isLoading"
       />

@@ -64,6 +64,9 @@
     },
 
     watch: {
+      // isLoading is false while the reservoir information is being queried
+      // we need to wait until we have that information to initialize the map
+      // the initialization is async because we need to wait for 'mapbox-gl-compare' to be imported
       async isLoading (newValue) {
         if (!newValue) {
           await this.initializeMap()
