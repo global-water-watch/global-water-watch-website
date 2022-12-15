@@ -10,9 +10,14 @@
         type="image"
       />
     </div>
+    <v-skeleton-loader
+      v-if="showExportButton && isLoading"
+      class="data-chart__skeleton-loader"
+      type="button"
+    />
     <v-btn
-      v-if="showExportButton"
-      color="blue-grey darken-3"
+      v-else-if="showExportButton"
+      color="blue-grey darken-3 data-chart__button"
       class="mr-2"
       @click="exportTimeSeries"
     >

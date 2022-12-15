@@ -121,7 +121,7 @@
           return ''
         }
 
-        return this.reservoirs[0]?.properties.name ? `Reservoir area of ${this.reservoirs[0].properties.name}` : ''
+        return this.reservoirs[0]?.properties?.name ? `Reservoir area of ${this.reservoirs[0].properties.name}` : ''
       },
 
       xAxis () {
