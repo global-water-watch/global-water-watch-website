@@ -1,5 +1,10 @@
 <template>
-  <div class="comparison-map">
+  <v-skeleton-loader
+    v-if="isLoading"
+    class="comparison-map__skeleton-loader"
+    type="image"
+  />
+  <div v-else class="comparison-map">
     <div id="comparison-map-container" class="comparison-map__map-container">
       <ComparisonDetailMap
         v-if="reservoirs.length"
@@ -42,7 +47,7 @@
           <v-icon>mdi-chevron-right</v-icon>
         </v-btn>
       </div>
-      <div class="comparison-map__loading">
+      <div v-if="isLoadingSatelliteImages" class="comparison-map__loading">
         <div>
           Loading satellite images
           <v-progress-circular indeterminate :size="18" :width="2" class="comparison-map__loading-icon" :aria-hidden="true" />
@@ -87,6 +92,10 @@
         type: Array,
         default: () => [],
       },
+      isLoading: {
+        type: Boolean,
+        default: false,
+      },
     },
 
     data () {
@@ -105,7 +114,7 @@
         return this.timeSeriesDates[this.oldDateIndex]
       },
       timeSeriesDates () {
-        return this.timeSeries.map(item => new Date(item[0]))
+        return this.timeSeries[0].data.map(item => new Date(item[0]))
       },
       previousDateIndex () {
         return this.dateIndex - 1
@@ -133,19 +142,28 @@
       },
     },
 
-    // On mounted, `date` is the last date in the time series
-    // `oldDate` is the closest date in the time series one year before `date`
-    async mounted () {
-      const date = this.timeSeriesDates[this.timeSeriesDates.length - 1]
-      const oldDate = new Date(date.getTime())
-      oldDate.setFullYear(date.getFullYear() - 1)
-      this.dateIndex = this.timeSeriesDates.length - 1
-      this.oldDateIndex = this.getNearestDateIndex(oldDate)
-
-      await this.initializeMap()
+    watch: {
+      // isLoading is false while the reservoir information is being queried
+      // we need to wait until we have that information to initialize the map
+      // the initialization is async because we need to wait for 'mapbox-gl-compare' to be imported
+      async isLoading (newValue) {
+        if (!newValue) {
+          this.initializeDates()
+          await this.initializeMap()
+        }
+      },
     },
 
     methods: {
+      initializeDates () {
+        // On mounted, `date` is the last date in the time series
+        // `oldDate` is the closest date in the time series one year before `date`
+        const date = this.timeSeriesDates[this.timeSeriesDates.length - 1]
+        const oldDate = new Date(date.getTime())
+        oldDate.setFullYear(date.getFullYear() - 1)
+        this.dateIndex = this.timeSeriesDates.length - 1
+        this.oldDateIndex = this.getNearestDateIndex(oldDate)
+      },
       parseDate (date) {
         const options = { year: 'numeric', month: 'long', day: 'numeric' }
         return date?.toLocaleDateString('en-EN', options)

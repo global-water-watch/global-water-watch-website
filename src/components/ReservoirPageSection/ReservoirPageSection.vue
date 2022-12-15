@@ -2,9 +2,10 @@
   <section class="reservoir-page-section layout-section layout-section--lined">
     <div class="layout-container">
       <DetailMap
-        v-if="reservoirs.length"
+        v-if="reservoirs.length || isLoading"
         :reservoirs="reservoirs"
         :satellite-image-url="satelliteImageUrl"
+        :is-loading="isLoading"
       />
 
       <div class="reservoir-page-section__loader">
@@ -19,17 +20,19 @@
           :message="generatingSatelliteImageUrl.error.message"
           type="error"
           icon="mdi-alert"
+          :is-loading="isLoading"
         />
         <MessageBox
           v-else-if="reservoirs.length === 1"
           message="Select a data point in the graph to generate a satellite image"
           type="info"
           icon="mdi-information-outline"
+          :is-loading="isLoading"
         />
       </div>
 
       <data-chart
-        v-if="timeSeries"
+        v-if="timeSeries || isLoading || isLoadingChart"
         :title="chartTitle"
         :x-axis="xAxis"
         :y-axis="yAxis"
@@ -38,17 +41,23 @@
         :show-legend="true"
         :use-zoom="true"
         :use-toolbox="false"
+        :is-loading="isLoading || isLoadingChart"
         @selectedTimeChanged="onSelectedTimeChanged"
       />
 
       <ComparisonMap
-        v-if="showComparisonMap && reservoirs.length"
+        v-if="showComparisonMap && (reservoirs.length || isLoading)"
         :reservoirs="reservoirs"
-        :time-series="series[0].data"
+        :time-series="series"
+        :is-loading="isLoading"
       />
 
       <!-- Temporary hide share page for custom selection since this url isn't nice to share -->
-      <PageShare v-if="areaType !== 'custom-selection'" title="Share this page" />
+      <PageShare
+        v-if="areaType !== 'custom-selection'"
+        title="Share this page"
+        :is-loading="isLoading"
+      />
     </div>
   </section>
 </template>
@@ -91,6 +100,14 @@
         type: Boolean,
         default: false,
       },
+      isLoading: {
+        type: Boolean,
+        default: false,
+      },
+      isLoadingChart: {
+        type: Boolean,
+        default: false,
+      },
     },
 
     computed: {
@@ -100,15 +117,15 @@
       },
 
       xAxis () {
-        return this.timeSeries.xAxis
+        return this.timeSeries?.xAxis
       },
 
       yAxis () {
-        return this.timeSeries.yAxis
+        return this.timeSeries?.yAxis
       },
 
       series () {
-        return this.timeSeries.series
+        return this.timeSeries?.series
       },
     },
 

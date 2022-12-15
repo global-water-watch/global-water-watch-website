@@ -9,3 +9,10 @@
 .detail-hero p {
   margin-bottom: 0;
 }
+
+.detail-hero__skeleton-loader {
+  .v-skeleton-loader__heading {
+    height: 60px;
+    margin-bottom: $space-medium;
+  }
+}

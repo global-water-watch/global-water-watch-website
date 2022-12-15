@@ -17,3 +17,13 @@
 .message--error {
   color: red;
 }
+
+.message__skeleton-loader {
+  display: flex;
+  text-align: center;
+  width: 80%;
+
+  .v-skeleton-loader__text {
+    height: 24px;
+  }
+}

@@ -6,3 +6,9 @@
 .detail-map .mapboxgl-ctrl-attrib a {
   color: rgba(0,0,0,.75);
 }
+
+.detail-map__skeleton-loader {
+  .v-skeleton-loader__image {
+    height: 465px;
+  }
+}
