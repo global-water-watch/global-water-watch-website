@@ -1,5 +1,10 @@
 <template>
-  <div class="detail-map">
+  <v-skeleton-loader
+    v-if="isLoading"
+    class="mb-6 detail-map__skeleton-loader"
+    type="image"
+  />
+  <div v-else class="detail-map">
     <v-mapbox
       v-if="mapConfig"
       class="detail-map__map"
@@ -63,6 +68,10 @@
       satelliteVideo: {
         type: Object,
         default: null,
+      },
+      isLoading: {
+        type: Boolean,
+        default: false,
       },
     },
 

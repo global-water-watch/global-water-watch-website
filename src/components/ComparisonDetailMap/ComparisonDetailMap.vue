@@ -41,6 +41,7 @@
           customAttribution: MAP_CUSTOM_ATTRIBUTIONS,
         },
         map: undefined,
+        isLoadingSatelliteImage: false,
       }
     },
 
@@ -55,8 +56,21 @@
       },
     },
 
+    watch: {
+      date () {
+        if (this.map) {
+          this.addSatelliteImageToMap()
+        }
+      },
+
+      isLoadingSatelliteImage (newVal) {
+        this.$emit('loading', newVal)
+      },
+    },
+
     methods: {
       async addSatelliteImageToMap () {
+        this.isLoadingSatelliteImage = true
         const geometry = {
           ...this.reservoirs[0],
           properties: {
@@ -68,6 +82,15 @@
 
         const layers = this.map.getStyle().layers
         const layerId = layers.find(layer => layer.id.includes('reservoir') && layer.id.includes('line')).id
+
+        // remove the old layer
+        if (this.map.getLayer('satellite')) {
+          this.map.removeLayer('satellite')
+        }
+        // remove the old source
+        if (this.map.getSource('satellite')) {
+          this.map.removeSource('satellite')
+        }
 
         // add satellite source as raster to the map
         this.map.addSource('satellite', {
@@ -85,6 +108,7 @@
             'raster-opacity': 1,
           },
         }, layerId)
+        this.isLoadingSatelliteImage = false
       },
 
       addReservoirsToMap () {

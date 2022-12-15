@@ -29,3 +29,9 @@
     display: none;
   }
 }
+
+.detail-map__skeleton-loader {
+  .v-skeleton-loader__image {
+    height: 465px;
+  }
+}
