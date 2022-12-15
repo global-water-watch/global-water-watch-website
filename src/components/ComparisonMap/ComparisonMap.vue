@@ -42,10 +42,13 @@
           <v-icon>mdi-chevron-right</v-icon>
         </v-btn>
       </div>
-      <span v-if="isLoadingSatelliteImages">
-        Loading satellite images
-        <v-progress-circular indeterminate :size="18" :width="2" class="comparison-map__loading" />
-      </span>
+      <div class="comparison-map__loading">
+        <div>
+          Loading satellite images
+          <v-progress-circular indeterminate :size="18" :width="2" class="comparison-map__loading-icon" :aria-hidden="true" />
+        </div>
+        This feature is not optimized for larger reservoirs.
+      </div>
       <div>
         <v-btn
           icon
@@ -130,6 +133,8 @@
       },
     },
 
+    // On mounted, `date` is the last date in the time series
+    // `oldDate` is the closest date in the time series one year before `date`
     async mounted () {
       const date = this.timeSeriesDates[this.timeSeriesDates.length - 1]
       const oldDate = new Date(date.getTime())
