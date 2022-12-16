@@ -1,0 +1,43 @@
+@import "mapbox-gl-compare/dist/mapbox-gl-compare.css";
+
+.comparison-map {
+  margin-top: 150px;
+  margin-bottom: $space-xlarge;
+}
+
+.comparison-map__map-container {
+  position: relative;
+  width: 100%;
+  height: 465px;
+}
+
+.comparison-map__detail-map {
+  position: absolute !important;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+}
+
+.comparison-map__dates {
+  display: flex;
+  justify-content: space-between;
+  margin-top: $space-medium;
+}
+
+.comparison-map__loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.comparison-map__loading-icon {
+  margin-left: 5px;
+}
+
+.comparison-map__skeleton-loader {
+  margin: $space-xlarge 0;
+
+  .v-skeleton-loader__image {
+    height: 465px;
+  }
+}

@@ -2,9 +2,10 @@
   <section class="reservoir-page-section layout-section layout-section--lined">
     <div class="layout-container">
       <DetailMap
-        v-if="reservoirs.length"
+        v-if="reservoirs.length || isLoading"
         :reservoirs="reservoirs"
         :satellite-image-url="satelliteImageUrl"
+        :is-loading="isLoading"
       />
 
       <div class="reservoir-page-section__loader">
@@ -14,16 +15,26 @@
           :message="generatingSatelliteImageUrl.loading.message"
           no-margin
         />
-        <Message
+        <MessageBox
           v-else-if="generatingSatelliteImageUrl.error.state"
           :message="generatingSatelliteImageUrl.error.message"
           type="error"
+          icon="mdi-alert"
+          :is-loading="isLoading"
+        />
+        <MessageBox
+          v-else-if="reservoirs.length === 1"
+          message="Select a data point in the graph to generate a satellite image"
+          type="info"
+          icon="mdi-information-outline"
+          :is-loading="isLoading"
         />
       </div>
 
       <data-chart
-        v-if="timeSeries"
+        v-if="timeSeries || isLoading || isLoadingChart"
         :title="chartTitle"
+        :show-export-button="showExportButton"
         :x-axis="xAxis"
         :y-axis="yAxis"
         :series="series"
@@ -31,11 +42,28 @@
         :show-legend="true"
         :use-zoom="true"
         :use-toolbox="false"
+        :is-loading="isLoading || isLoadingChart"
         @selectedTimeChanged="onSelectedTimeChanged"
       />
 
-      <!-- Temporary hide share project for custom selection since this url isn't nice to share -->
-      <ProjectShare v-if="areaType !== 'custom-selection'" title="Share this project" />
+      <ComparisonMap
+        v-if="showComparisonMap && (reservoirs.length || isLoading)"
+        :reservoirs="reservoirs"
+        :time-series="series"
+        :is-loading="isLoading"
+      />
+
+      <!-- Temporary hide share page for custom selection since this url isn't nice to share -->
+      <PageShare
+        v-if="areaType !== 'custom-selection'"
+        title="Share this page"
+        :is-loading="isLoading"
+      />
+
+      <FeedbackForm
+        v-if="showFeedbackForm && !isLoading"
+        :reservoir="reservoirs[0]"
+      />
     </div>
   </section>
 </template>
@@ -74,24 +102,47 @@
         type: String,
         default: '',
       },
+      showComparisonMap: {
+        type: Boolean,
+        default: false,
+      },
+      showFeedbackForm: {
+        type: Boolean,
+        default: false,
+      },
+      showExportButton: {
+        type: Boolean,
+        default: false,
+      },
+      isLoading: {
+        type: Boolean,
+        default: false,
+      },
+      isLoadingChart: {
+        type: Boolean,
+        default: false,
+      },
     },
 
     computed: {
       chartTitle () {
-        // @TODO :: Fix this
-        return this.reservoir?.name ? `Reservoir area of ${this.reservoir.name}` : ''
+        if (this.reservoirs.length > 1) {
+          return ''
+        }
+
+        return this.reservoirs[0]?.properties?.name ? `Reservoir area of ${this.reservoirs[0].properties.name}` : ''
       },
 
       xAxis () {
-        return this.timeSeries.xAxis
+        return this.timeSeries?.xAxis
       },
 
       yAxis () {
-        return this.timeSeries.yAxis
+        return this.timeSeries?.yAxis
       },
 
       series () {
-        return this.timeSeries.series
+        return this.timeSeries?.series
       },
     },
 

@@ -1,10 +1,20 @@
 <template>
-  <Fragment v-if="!$fetchState.pending && reservoir">
+  <Fragment>
     <client-only>
-      <PageHeroesDetailHero :title="title">
-        <p class="p">
-          {{ reservoirId }}
-        </p>
+      <PageHeroesDetailHero :title="title" :is-loading="isLoading">
+        <v-skeleton-loader
+          v-if="isLoading"
+          class="reservoir__skeleton-loader"
+          type="text"
+        />
+        <Fragment v-else>
+          <p class="p">
+            {{ reservoirId }}
+          </p>
+          <p v-if="reservoir.properties.grand_id" class="p">
+            This reservoir was curated by <a href="https://www.globaldamwatch.org/grand/" target="_blank" rel="noopener">Global Dam Watch</a> (based on the GRAND database).
+          </p>
+        </Fragment>
       </PageHeroesDetailHero>
 
       <ReservoirPageSection
@@ -12,6 +22,10 @@
         :time-series="timeSeries"
         :satellite-image-url="satelliteImageUrl"
         :generating-satellite-image-url="generatingSatelliteImageUrl"
+        :show-comparison-map="true"
+        :show-feedback-form="true"
+        :show-export-button="true"
+        :is-loading="isLoading"
         @onSelectedTimeChanged="onSelectedTimeChanged"
       />
     </client-only>
@@ -68,6 +82,10 @@
       reservoirId () {
         return this.reservoir.id ? `#${this.reservoir.id}` : ''
       },
+
+      isLoading () {
+        return this.$fetchState.pending || !this.reservoir
+      },
     },
 
     methods: {
@@ -105,3 +123,5 @@
     },
   }
 </script>
+
+<style src="./_slug.scss" lang="scss" />

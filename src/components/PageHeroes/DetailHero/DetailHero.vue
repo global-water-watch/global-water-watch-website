@@ -2,7 +2,12 @@
   <section class="detail-hero">
     <div class="layout-section">
       <div class="layout-container">
-        <h1 class="h1">
+        <v-skeleton-loader
+          v-if="isLoading"
+          class="detail-hero__skeleton-loader"
+          type="heading"
+        />
+        <h1 v-else class="h1">
           {{ title }}
         </h1>
         <slot />
@@ -17,6 +22,10 @@
       title: {
         type: String,
         required: true,
+      },
+      isLoading: {
+        type: Boolean,
+        default: false,
       },
     },
   }

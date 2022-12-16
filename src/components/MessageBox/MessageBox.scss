@@ -1,0 +1,29 @@
+.message {
+  display: flex;
+  text-align: center;
+  color: $color-white;
+  align-items: center;
+  justify-content: center;
+}
+
+.message p {
+  margin: 0;
+}
+
+.message__icon {
+  margin-right: 10px;
+}
+
+.message--error {
+  color: red;
+}
+
+.message__skeleton-loader {
+  display: flex;
+  text-align: center;
+  width: 80%;
+
+  .v-skeleton-loader__text {
+    height: 24px;
+  }
+}

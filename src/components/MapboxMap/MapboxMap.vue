@@ -5,6 +5,7 @@
     :center="mapConfig.center"
     :zoom="mapConfig.zoom"
     :map-style="mapConfig.style"
+    :custom-attribution="mapConfig.customAttribution"
     @mb-created="onMapCreated"
     @mb-load="onMapLoaded"
   >
@@ -30,11 +31,7 @@
 </template>
 
 <script>
-  const MAP_ZOOM = 3
-  const WORLD_CENTER_LONGITUDE = 18.4
-  const WORLD_CENTER_LATITUDE = 23
-  const MAP_CENTER = [WORLD_CENTER_LONGITUDE, WORLD_CENTER_LATITUDE]
-  const MAPBOX_STYLE = 'mapbox://styles/mapbox/light-v9'
+  import { MAP_ZOOM, MAP_CENTER, MAP_CUSTOM_ATTRIBUTIONS, MAPBOX_STYLE_LIGHT } from '@/lib/constants'
 
   export default {
     data () {
@@ -43,7 +40,8 @@
           token: this.$config.mapBoxToken,
           center: MAP_CENTER,
           zoom: MAP_ZOOM,
-          style: this.$config.mapBoxStyle || MAPBOX_STYLE,
+          style: this.$config.mapBoxStyle || MAPBOX_STYLE_LIGHT,
+          customAttribution: MAP_CUSTOM_ATTRIBUTIONS,
         },
       }
     },
@@ -51,6 +49,9 @@
     computed: {
       showExperimentalFeatures () {
         return this.$store.getters['ui/showExperimentalFeatures']
+      },
+      mapCoordinates () {
+        return this.$store.getters['ui/mapCoordinates']
       },
       reservoirLayers () {
         return this.$store.getters['reservoir-layers/layers']
@@ -64,6 +65,12 @@
       onMapCreated (map) {
         map.removeControl(map._logoControl)
         map.addControl(map._logoControl, 'top-right')
+
+        this.mapConfig = {
+          ...this.mapConfig,
+          zoom: this.mapCoordinates.zoom,
+          center: this.mapCoordinates.center,
+        }
       },
 
       onMapLoaded () {
