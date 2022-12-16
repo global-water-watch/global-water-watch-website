@@ -59,6 +59,11 @@
         title="Share this page"
         :is-loading="isLoading"
       />
+
+      <FeedbackForm
+        v-if="showFeedbackForm"
+        :reservoir="reservoirs[0]"
+      />
     </div>
   </section>
 </template>
@@ -98,6 +103,10 @@
         default: '',
       },
       showComparisonMap: {
+        type: Boolean,
+        default: false,
+      },
+      showFeedbackForm: {
         type: Boolean,
         default: false,
       },
