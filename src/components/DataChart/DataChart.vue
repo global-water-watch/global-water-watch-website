@@ -1,8 +1,32 @@
 <template>
-  <div
-    ref="$chart"
-    class="data-chart"
-  />
+  <Fragment>
+    <div
+      ref="$chart"
+      :class="{'data-chart': true, 'data-chart--loading': isLoading}"
+    >
+      <v-skeleton-loader
+        v-if="isLoading"
+        class="data-chart__skeleton-loader"
+        type="image"
+      />
+    </div>
+    <v-skeleton-loader
+      v-if="showExportButton && isLoading"
+      class="data-chart__skeleton-loader"
+      type="button"
+    />
+    <v-btn
+      v-else-if="showExportButton"
+      color="blue-grey darken-3 data-chart__button"
+      class="mr-2"
+      @click="exportTimeSeries"
+    >
+      Download .csv
+      <v-icon right>
+        mdi-download
+      </v-icon>
+    </v-btn>
+  </Fragment>
 </template>
 
 <script>
@@ -45,6 +69,10 @@
         type: String,
         default: '',
       },
+      exportTitle: {
+        type: String,
+        default: '',
+      },
       xAxis: {
         type: Array,
         default: () => [],
@@ -56,6 +84,10 @@
       series: {
         type: Array,
         default: () => [],
+      },
+      showExportButton: {
+        type: Boolean,
+        default: false,
       },
       showTooltip: {
         type: Boolean,
@@ -70,6 +102,10 @@
         default: false,
       },
       useToolbox: {
+        type: Boolean,
+        default: false,
+      },
+      isLoading: {
         type: Boolean,
         default: false,
       },
@@ -165,18 +201,33 @@
 
     watch: {
       option (newVal) {
-        this.chart.setOption(newVal)
+        if (this.chart) {
+          this.chart.setOption(newVal)
+        }
+      },
+      isLoading (newVal) {
+        if (newVal) { return }
+        this.setupChart()
       },
     },
     mounted () {
-      const { $chart } = this.$refs
-      const chart = init($chart, 'gww')
-      this.chart = chart
-
-      chart.setOption(this.option)
-      this.subscribeChartEvents(chart)
+      if (this.isLoading) { return }
+      this.setupChart()
     },
     methods: {
+      exportTimeSeries () {
+        let csv = `${this.xAxis[0].type},${this.yAxis[0].name}\n`
+        this.series[0].data.forEach((row) => {
+          csv += row.join(',')
+          csv += '\n'
+        })
+
+        const anchor = document.createElement('a')
+        anchor.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv)
+        anchor.target = '_blank'
+        anchor.download = `${this.title || 'reservoir'}.csv`
+        anchor.click()
+      },
       subscribeChartEvents (chart) {
         chart.on('updateAxisPointer', (evt) => {
           if (evt.dataIndexInside) {
@@ -187,6 +238,14 @@
           // emit that the selected time changed
           this.$emit('selectedTimeChanged', value)
         })
+      },
+      setupChart () {
+        const { $chart } = this.$refs
+        const chart = init($chart, 'gww')
+        this.chart = chart
+
+        chart.setOption(this.option)
+        this.subscribeChartEvents(chart)
       },
     },
   }

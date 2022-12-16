@@ -12,15 +12,24 @@
         <p class="p">
           {{ pageContent.description }}
         </p>
-        <ReservoirList v-if="reservoirs.length > 0" :reservoirs="reservoirs" />
+        <ReservoirList :reservoirs="reservoirs" :is-loading="reservoirsLoading" />
+        <p v-if="curatedByGlobalDamWatch" class="p">
+          Some of these reservoirs were curated by <a href="https://www.globaldamwatch.org/grand/" target="_blank" rel="noopener">Global Dam Watch</a> (based on the GRAND database).
+        </p>
       </PageHeroesDetailHero>
 
-      <Loader :loading="reservoirsLoading" message="Depending on the amount of reservoirs in this area, it may take a while to load all data" />
+      <Loader
+        :loading="reservoirsLoading"
+        message="Depending on the amount of reservoirs in this area, it may take a while to load all data"
+        class="multi-reservoir-page__loader"
+      />
 
       <ReservoirPageSection
         :reservoirs="reservoirs"
         :time-series="timeSeries"
         :area-type="areaType"
+        :is-loading="reservoirsLoading"
+        :is-loading-chart="timeSeriesLoading"
       />
     </client-only>
   </Fragment>
@@ -36,6 +45,7 @@
       areaType: null,
       reservoirs: [],
       reservoirsLoading: true,
+      timeSeriesLoading: true,
       timeSeries: null,
       pageContent: {},
     }),
@@ -43,6 +53,10 @@
     computed: {
       cachedGeometry () {
         return this.$store.getters['zoomable-layers/cachedGeometry']
+      },
+
+      curatedByGlobalDamWatch () {
+        return this.reservoirs.length > 0 && this.reservoirs.some(reservoir => reservoir.properties.grand_id)
       },
     },
 
@@ -97,6 +111,7 @@
         this.$repo.reservoir.getTimeSeriesByGeometry(geometry, 'surface_water_area', 'monthly')
           .then((timeSeries) => {
             this.timeSeries = timeSeries
+            this.timeSeriesLoading = false
           })
           .catch((err) => {
             console.error(err)
@@ -116,3 +131,5 @@
     },
   }
 </script>
+
+<style src="./MultiReservoirPage.scss" lang="scss" />

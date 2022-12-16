@@ -16361,10 +16361,10 @@ vue-template-es2015-compiler@^1.9.0:
   resolved "https://registry.npmjs.org/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.9.1.tgz"
   integrity sha512-4gDntzrifFnCEvyoO8PqyJDmguXgVPxKiIxrBKjIowvL9l+N66196+72XVYR8BBf1Uv1Fgt3bGevJ+sEmxfZzw==
 
-vue2mapbox-gl@^0.13.0:
-  version "0.13.0"
-  resolved "https://registry.npmjs.org/vue2mapbox-gl/-/vue2mapbox-gl-0.13.0.tgz"
-  integrity sha512-D1cYDGz37lHSmRfrQWzdKYaPWxqiVZn+hQMyIq8f89tTKxwQwdsGCnLscxTGLt+NY+8DtADqKcJt/3IcQVYfBA==
+vue2mapbox-gl@^0.14.0:
+  version "0.14.0"
+  resolved "https://registry.yarnpkg.com/vue2mapbox-gl/-/vue2mapbox-gl-0.14.0.tgz#09af2626fce70fff66b10d97b38cce9bbbee7dfc"
+  integrity sha512-9OnHimNf6bpKOtwUCbhc+jaxhUfESxDcRMzeZ0l/8Aeh7dFaIN6LqxuNVT7uvXsSqnw2WXjCwFTpMtI99FZxLQ==
   dependencies:
     "@mapbox/mapbox-gl-geocoder" "^4.4.1"
     resize-observer-polyfill "^1.5.1"

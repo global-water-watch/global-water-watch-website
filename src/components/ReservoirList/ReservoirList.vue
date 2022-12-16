@@ -1,5 +1,10 @@
 <template>
-  <div class="reservoir-list">
+  <v-skeleton-loader
+    v-if="isLoading"
+    class="reservoir-list__skeleton-loader"
+    type="text, chip@4"
+  />
+  <div v-else-if="reservoirs.length > 0" class="reservoir-list">
     <p class="p">
       Included reservoirs:
     </p>
@@ -26,6 +31,10 @@
       reservoirs: {
         type: Array,
         required: true,
+      },
+      isLoading: {
+        type: Boolean,
+        default: false,
       },
     },
 

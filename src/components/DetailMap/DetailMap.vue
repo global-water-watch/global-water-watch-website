@@ -1,11 +1,17 @@
 <template>
+  <v-skeleton-loader
+    v-if="isLoading"
+    class="mb-6 detail-map__skeleton-loader"
+    type="image"
+  />
   <v-mapbox
-    v-if="mapConfig"
+    v-else-if="mapConfig"
     class="detail-map"
     :access-token="mapConfig.token"
     :center="mapConfig.center"
     :zoom="mapConfig.zoom"
     :map-style="mapConfig.style"
+    :custom-attribution="mapConfig.customAttribution"
     @mb-created="onMapCreated"
     @mb-load="addReservoirsToMap"
   >
@@ -16,7 +22,7 @@
 
 <script>
   import { bbox, featureCollection } from '@turf/turf'
-  import { MAP_CENTER, MAP_ZOOM, MAPBOX_STYLE_DARK } from '@/lib/constants'
+  import { MAP_CENTER, MAP_ZOOM, MAP_CUSTOM_ATTRIBUTIONS, MAPBOX_STYLE_DARK } from '@/lib/constants'
 
   let map
 
@@ -30,6 +36,10 @@
         type: String,
         default: '',
       },
+      isLoading: {
+        type: Boolean,
+        default: false,
+      },
     },
 
     data () {
@@ -39,6 +49,7 @@
           center: MAP_CENTER,
           zoom: MAP_ZOOM,
           style: MAPBOX_STYLE_DARK,
+          customAttribution: MAP_CUSTOM_ATTRIBUTIONS,
         },
       }
     },

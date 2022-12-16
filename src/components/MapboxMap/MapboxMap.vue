@@ -5,6 +5,7 @@
     :center="mapConfig.center"
     :zoom="mapConfig.zoom"
     :map-style="mapConfig.style"
+    :custom-attribution="mapConfig.customAttribution"
     @mb-created="onMapCreated"
     @mb-load="onMapLoaded"
   >
@@ -30,7 +31,7 @@
 </template>
 
 <script>
-  import { MAP_ZOOM, MAP_CENTER, MAPBOX_STYLE_LIGHT } from '@/lib/constants'
+  import { MAP_ZOOM, MAP_CENTER, MAP_CUSTOM_ATTRIBUTIONS, MAPBOX_STYLE_LIGHT } from '@/lib/constants'
 
   export default {
     data () {
@@ -40,6 +41,7 @@
           center: MAP_CENTER,
           zoom: MAP_ZOOM,
           style: this.$config.mapBoxStyle || MAPBOX_STYLE_LIGHT,
+          customAttribution: MAP_CUSTOM_ATTRIBUTIONS,
         },
       }
     },
