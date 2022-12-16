@@ -61,7 +61,7 @@
       />
 
       <FeedbackForm
-        v-if="showFeedbackForm"
+        v-if="showFeedbackForm && !isLoading"
         :reservoir="reservoirs[0]"
       />
     </div>
