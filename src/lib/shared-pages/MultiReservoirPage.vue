@@ -28,6 +28,7 @@
         :reservoirs="reservoirs"
         :time-series="timeSeries"
         :area-type="areaType"
+        :geometry="geometry"
         :is-loading="reservoirsLoading"
         :is-loading-chart="timeSeriesLoading"
       />
@@ -48,6 +49,7 @@
       timeSeriesLoading: true,
       timeSeries: null,
       pageContent: {},
+      geometry: {},
     }),
 
     computed: {
@@ -103,6 +105,7 @@
       },
 
       onGeometry (geometry) {
+        this.geometry = geometry
         this.getReservoirsOnGeometry(geometry)
         this.getTimeSeriesOnGeometry(geometry)
       },

@@ -4,6 +4,7 @@
       <DetailMap
         v-if="reservoirs.length || isLoading"
         :reservoirs="reservoirs"
+        :geometry="geometry"
         :satellite-image-url="satelliteImageUrl"
         :is-loading="isLoading"
       />
@@ -97,6 +98,10 @@
       areaType: {
         type: String,
         default: '',
+      },
+      geometry: {
+        type: Object,
+        default: () => {},
       },
       satelliteImageUrl: {
         type: String,
