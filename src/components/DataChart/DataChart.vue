@@ -214,6 +214,9 @@
       if (this.isLoading) { return }
       this.setupChart()
     },
+    beforeUnmount () {
+      window.removeEventListener('resize', this.resizeChart)
+    },
     methods: {
       exportTimeSeries () {
         let csv = `${this.xAxis[0].type},${this.yAxis[0].name}\n`
@@ -239,6 +242,9 @@
           this.$emit('selectedTimeChanged', value)
         })
       },
+      resizeChart () {
+        this.chart?.resize()
+      },
       setupChart () {
         const { $chart } = this.$refs
         const chart = init($chart, 'gww')
@@ -246,6 +252,8 @@
 
         chart.setOption(this.option)
         this.subscribeChartEvents(chart)
+
+        window.addEventListener('resize', this.resizeChart)
       },
     },
   }
