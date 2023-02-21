@@ -25,27 +25,29 @@
       />
     </div>
 
-    <div class="comparison-map__dates">
+    <div class="comparison-map__dates ma-3">
       <div>
-        <v-btn
-          icon
-          color="primary"
-          :disabled="!previousOldDate || isLoadingSatelliteImages"
-          :title="parseDate(previousOldDate)"
-          @click="() => oldDateIndex = previousOldDateIndex"
+        <v-menu
+          transition="scale-transition"
+          offset-y
+          max-width="290px"
+          min-width="auto"
         >
-          <v-icon>mdi-chevron-left</v-icon>
-        </v-btn>
-        <span>{{ parseDate(oldDate) }}</span>
-        <v-btn
-          icon
-          color="primary"
-          :disabled="!nextOldDate || isLoadingSatelliteImages"
-          :title="parseDate(nextOldDate)"
-          @click="() => oldDateIndex = nextOldDateIndex"
-        >
-          <v-icon>mdi-chevron-right</v-icon>
-        </v-btn>
+          <template #activator="{ on, attrs }">
+            <v-text-field
+              v-model="formattedOldDate"
+              readonly
+              v-bind="attrs"
+              v-on="on"
+            />
+          </template>
+          <v-date-picker
+            v-model="isoOldDate"
+            :allowed-dates="allowedDates"
+            no-title
+            scrollable
+          />
+        </v-menu>
       </div>
       <div v-if="isLoadingSatelliteImages" class="comparison-map__loading">
         <div>
@@ -55,25 +57,30 @@
         This feature is not optimized for larger reservoirs.
       </div>
       <div>
-        <v-btn
-          icon
-          color="primary"
-          :disabled="!previousDate || isLoadingSatelliteImages"
-          :title="parseDate(previousDate)"
-          @click="() => dateIndex = previousDateIndex"
+        <v-menu
+          :close-on-content-click="true"
+          transition="scale-transition"
+          location="bottom center"
+          origin="overlap"
+          offset-y
+          max-width="290px"
+          min-width="auto"
         >
-          <v-icon>mdi-chevron-left</v-icon>
-        </v-btn>
-        <span>{{ parseDate(date) }}</span>
-        <v-btn
-          icon
-          color="primary"
-          :disabled="!nextDate || isLoadingSatelliteImages"
-          :title="parseDate(nextDate)"
-          @click="() => dateIndex = nextDateIndex"
-        >
-          <v-icon>mdi-chevron-right</v-icon>
-        </v-btn>
+          <template #activator="{ on, attrs }">
+            <v-text-field
+              v-model="formattedDate"
+              readonly
+              v-bind="attrs"
+              v-on="on"
+            />
+          </template>
+          <v-date-picker
+            v-model="isoDate"
+            :allowed-dates="allowedDates"
+            no-title
+            scrollable
+          />
+        </v-menu>
       </div>
     </div>
   </div>
@@ -100,45 +107,30 @@
 
     data () {
       return {
-        dateIndex: -1,
-        oldDateIndex: -1,
+        isoDate: (new Date()).toISOString().substring(0, 10),
+        isoOldDate: (new Date()).toISOString().substring(0, 10),
         isLoadingSatelliteImages: false,
       }
     },
 
     computed: {
-      date () {
-        return this.timeSeriesDates[this.dateIndex]
-      },
-      oldDate () {
-        return this.timeSeriesDates[this.oldDateIndex]
-      },
       timeSeriesDates () {
         return this.timeSeries[0].data.map(item => new Date(item[0]))
       },
-      previousDateIndex () {
-        return this.dateIndex - 1
+      isoTimeSeriesDates () {
+        return this.timeSeriesDates.map(date => date.toISOString().substring(0, 10))
       },
-      nextDateIndex () {
-        return this.dateIndex + 1
+      date () {
+        return new Date(this.isoDate)
       },
-      previousDate () {
-        return this.timeSeriesDates[this.previousDateIndex]
+      oldDate () {
+        return new Date(this.isoOldDate)
       },
-      nextDate () {
-        return this.timeSeriesDates[this.nextDateIndex]
+      formattedDate () {
+        return this.formatDate(this.isoDate)
       },
-      previousOldDateIndex () {
-        return this.oldDateIndex - 1
-      },
-      nextOldDateIndex () {
-        return this.oldDateIndex + 1
-      },
-      previousOldDate () {
-        return this.timeSeriesDates[this.previousOldDateIndex]
-      },
-      nextOldDate () {
-        return this.timeSeriesDates[this.nextOldDateIndex]
+      formattedOldDate () {
+        return this.formatDate(this.isoOldDate)
       },
     },
 
@@ -159,14 +151,16 @@
         // On mounted, `date` is the last date in the time series
         // `oldDate` is the closest date in the time series one year before `date`
         const date = this.timeSeriesDates[this.timeSeriesDates.length - 1]
+        this.isoDate = date.toISOString().substring(0, 10)
         const oldDate = new Date(date.getTime())
         oldDate.setFullYear(date.getFullYear() - 1)
-        this.dateIndex = this.timeSeriesDates.length - 1
-        this.oldDateIndex = this.getNearestDateIndex(oldDate)
+        this.isoOldDate = this.timeSeriesDates[this.getNearestDateIndex(oldDate)].toISOString().substring(0, 10)
       },
-      parseDate (date) {
-        const options = { year: 'numeric', month: 'long', day: 'numeric' }
-        return date?.toLocaleDateString('en-EN', options)
+      formatDate (date) {
+        if (!date) { return null }
+
+        const [year, month, day] = date.split('-')
+        return `${day}/${month}/${year}`
       },
       onSetCurrentMap (map) {
         currentMap = map
@@ -198,6 +192,9 @@
         })
 
         return bestDate
+      },
+      allowedDates (date) {
+        return this.isoTimeSeriesDates.includes(date)
       },
     },
   }

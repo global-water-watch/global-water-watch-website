@@ -22,6 +22,11 @@
   display: flex;
   justify-content: space-between;
   margin-top: $space-medium;
+
+  .v-input {
+    padding: 0;
+    margin: 0;
+  }
 }
 
 .comparison-map__loading {

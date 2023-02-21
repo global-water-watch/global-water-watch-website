@@ -16,3 +16,8 @@
   padding-left: 0;
   list-style: none;
 }
+
+.v-application .accent {
+  background-color: $color-blue-light !important;
+  border-color: $color-blue-light !important;
+}
