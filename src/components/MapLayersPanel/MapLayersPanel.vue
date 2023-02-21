@@ -20,6 +20,9 @@
       @click="onDrawButtonClick"
     >
       {{ drawButtonText }}
+      <v-icon v-if="!isDrawing && !drawnFeatures.length" right>
+        mdi-vector-polyline-edit
+      </v-icon>
     </v-btn>
   </div>
 </template>
@@ -276,9 +279,9 @@
         return this.$store.getters['drawn-geometry/isDrawing']
       },
       drawButtonText () {
-        if (this.isDrawing) { return 'Drawing geometry' }
-        if (this.drawnFeatures.length) { return 'View geometry details' }
-        return 'Draw custom geometry'
+        if (this.isDrawing) { return 'Selecting reservoir' }
+        if (this.drawnFeatures.length) { return 'View selected reservoir details' }
+        return 'Select custom reservoir'
       },
     },
 

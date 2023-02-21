@@ -2,8 +2,8 @@
   <section class="reservoir-page-section layout-section layout-section--lined">
     <div class="layout-container">
       <DetailMap
-        v-if="reservoirs.length || isLoading"
         :reservoirs="reservoirs"
+        :geometry="geometry"
         :satellite-image-url="satelliteImageUrl"
         :is-loading="isLoading"
       />
@@ -32,7 +32,7 @@
       </div>
 
       <data-chart
-        v-if="timeSeries || isLoading || isLoadingChart"
+        v-if="(reservoirs.length && timeSeries) || isLoading || isLoadingChart"
         :title="chartTitle"
         :show-export-button="showExportButton"
         :x-axis="xAxis"
@@ -41,7 +41,7 @@
         :show-tooltip="true"
         :show-legend="true"
         :use-zoom="true"
-        :use-toolbox="false"
+        :use-toolbox="true"
         :is-loading="isLoading || isLoadingChart"
         @selectedTimeChanged="onSelectedTimeChanged"
       />
@@ -56,8 +56,10 @@
       <!-- Temporary hide share page for custom selection since this url isn't nice to share -->
       <PageShare
         v-if="areaType !== 'custom-selection'"
-        title="Share this page"
         :is-loading="isLoading"
+        :single-reservoir="reservoirs.length === 1"
+        @exportTimeSeries="exportTimeSeries"
+        @exportGeometry="exportGeometry"
       />
 
       <FeedbackForm
@@ -97,6 +99,10 @@
       areaType: {
         type: String,
         default: '',
+      },
+      geometry: {
+        type: Object,
+        default: () => {},
       },
       satelliteImageUrl: {
         type: String,
@@ -149,6 +155,28 @@
     methods: {
       onSelectedTimeChanged (time) {
         this.$emit('onSelectedTimeChanged', time)
+      },
+      exportTimeSeries () {
+        let csv = `${this.xAxis[0].type},${this.yAxis[0].name}\n`
+        this.series[0].data.forEach((row) => {
+          csv += row.join(',')
+          csv += '\n'
+        })
+
+        const anchor = document.createElement('a')
+        anchor.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv)
+        anchor.target = '_blank'
+        anchor.download = `${this.chartTitle || 'reservoir'}.csv`
+        anchor.click()
+      },
+      exportGeometry () {
+        const geometry = JSON.stringify(this.reservoirs[0])
+
+        const anchor = document.createElement('a')
+        anchor.href = 'data:application/geo+json;charset=utf-8,' + encodeURIComponent(geometry)
+        anchor.target = '_blank'
+        anchor.download = `${this.reservoirs[0].properties.name || 'reservoir'}.geojson`
+        anchor.click()
       },
     },
   }
