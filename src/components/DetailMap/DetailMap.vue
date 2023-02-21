@@ -13,7 +13,7 @@
     :map-style="mapConfig.style"
     :custom-attribution="mapConfig.customAttribution"
     @mb-created="onMapCreated"
-    @mb-load="addReservoirsToMap"
+    @mb-load="onMapLoaded"
   >
     <!-- Controls -->
     <v-mapbox-navigation-control position="bottom-right" />
@@ -31,6 +31,10 @@
       reservoirs: {
         type: Array,
         required: true,
+      },
+      geometry: {
+        type: Object,
+        default: () => {},
       },
       satelliteImageUrl: {
         type: String,
@@ -103,9 +107,22 @@
     },
 
     methods: {
-      addReservoirsToMap (event) {
+      onMapCreated (map) {
+        map.removeControl(map._logoControl)
+        map.addControl(map._logoControl, 'top-right')
+      },
+
+      onMapLoaded (event) {
         map = event.target
 
+        this.addTransformedReservoirsToMap(map)
+        this.addOtherReservoirsToMap(map)
+        if (this.geometry) {
+          this.addGeometryToMap(map)
+        }
+      },
+
+      addTransformedReservoirsToMap (map) {
         this.transformedReservoirs.forEach((reservoir) => {
           const reservoirName = `reservoir-${reservoir.data.id}`
 
@@ -138,7 +155,9 @@
           const boundingBox = bbox(allFeatures)
           map.fitBounds(boundingBox, { padding: 40 })
         })
+      },
 
+      addOtherReservoirsToMap (map) {
         map.addSource('reservoirsv10', {
           type: 'vector',
           url: 'mapbox://global-water-watch.reservoirs-v10',
@@ -186,9 +205,38 @@
         }
       },
 
-      onMapCreated (map) {
-        map.removeControl(map._logoControl)
-        map.addControl(map._logoControl, 'top-right')
+      addGeometryToMap (map) {
+        map.addSource('selected-geometry', {
+          type: 'geojson',
+          data: {
+            type: 'Feature',
+            geometry: this.geometry,
+          },
+        })
+
+        map.addLayer({
+          id: 'selected-geometry-fill',
+          type: 'fill',
+          source: 'selected-geometry',
+          layout: {},
+          paint: {
+            'fill-color': '#fbb03b',
+            'fill-opacity': 0.1,
+          },
+        })
+
+        map.addLayer({
+          id: 'selected-geometry-outline',
+          type: 'line',
+          source: 'selected-geometry',
+          layout: {},
+          paint: {
+            'line-color': '#fbb03b',
+            'line-width': 2,
+            'line-opacity': 0.5,
+            'line-dasharray': [2, 1],
+          },
+        })
       },
 
       onReservoirClick (evt) {
