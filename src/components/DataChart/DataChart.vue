@@ -1,32 +1,14 @@
 <template>
-  <Fragment>
-    <div
-      ref="$chart"
-      :class="{'data-chart': true, 'data-chart--loading': isLoading}"
-    >
-      <v-skeleton-loader
-        v-if="isLoading"
-        class="data-chart__skeleton-loader"
-        type="image"
-      />
-    </div>
+  <div
+    ref="$chart"
+    :class="{'data-chart': true, 'data-chart--loading': isLoading}"
+  >
     <v-skeleton-loader
-      v-if="showExportButton && isLoading"
+      v-if="isLoading"
       class="data-chart__skeleton-loader"
-      type="button"
+      type="image"
     />
-    <v-btn
-      v-else-if="showExportButton"
-      color="blue-grey darken-3 data-chart__button"
-      class="mr-2"
-      @click="exportTimeSeries"
-    >
-      Download .csv
-      <v-icon right>
-        mdi-download
-      </v-icon>
-    </v-btn>
-  </Fragment>
+  </div>
 </template>
 
 <script>
@@ -69,10 +51,6 @@
         type: String,
         default: '',
       },
-      exportTitle: {
-        type: String,
-        default: '',
-      },
       xAxis: {
         type: Array,
         default: () => [],
@@ -84,10 +62,6 @@
       series: {
         type: Array,
         default: () => [],
-      },
-      showExportButton: {
-        type: Boolean,
-        default: false,
       },
       showTooltip: {
         type: Boolean,
@@ -160,11 +134,11 @@
           },
 
           toolbox: useToolbox && {
-            left: 'center',
+            show: true,
+            top: 'bottom',
+            left: 'left',
+            orient: 'vertical',
             feature: {
-              dataZoom: {
-                yAxisIndex: 'none',
-              },
               restore: {},
               saveAsImage: {},
             },
@@ -215,19 +189,6 @@
       this.setupChart()
     },
     methods: {
-      exportTimeSeries () {
-        let csv = `${this.xAxis[0].type},${this.yAxis[0].name}\n`
-        this.series[0].data.forEach((row) => {
-          csv += row.join(',')
-          csv += '\n'
-        })
-
-        const anchor = document.createElement('a')
-        anchor.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv)
-        anchor.target = '_blank'
-        anchor.download = `${this.title || 'reservoir'}.csv`
-        anchor.click()
-      },
       subscribeChartEvents (chart) {
         chart.on('updateAxisPointer', (evt) => {
           if (evt.dataIndexInside) {
