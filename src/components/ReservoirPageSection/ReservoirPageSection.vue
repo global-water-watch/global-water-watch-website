@@ -2,7 +2,6 @@
   <section class="reservoir-page-section layout-section layout-section--lined">
     <div class="layout-container">
       <DetailMap
-        v-if="reservoirs.length || isLoading"
         :reservoirs="reservoirs"
         :geometry="geometry"
         :satellite-image-url="satelliteImageUrl"
@@ -33,7 +32,7 @@
       </div>
 
       <data-chart
-        v-if="timeSeries || isLoading || isLoadingChart"
+        v-if="(reservoirs.length && timeSeries) || isLoading || isLoadingChart"
         :title="chartTitle"
         :show-export-button="showExportButton"
         :x-axis="xAxis"

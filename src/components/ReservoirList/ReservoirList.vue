@@ -21,6 +21,11 @@
       </li>
     </ul>
   </div>
+  <div v-else-if="reservoirs.length === 0" class="reservoir-list">
+    <p class="p">
+      No reservoirs included.
+    </p>
+  </div>
 </template>
 
 <script>
