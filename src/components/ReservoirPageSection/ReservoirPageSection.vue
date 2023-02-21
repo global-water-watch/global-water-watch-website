@@ -169,7 +169,7 @@
         const geometry = JSON.stringify(this.reservoirs[0])
 
         const anchor = document.createElement('a')
-        anchor.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(geometry)
+        anchor.href = 'data:application/geo+json;charset=utf-8,' + encodeURIComponent(geometry)
         anchor.target = '_blank'
         anchor.download = `${this.reservoirs[0].properties.name || 'reservoir'}.geojson`
         anchor.click()
