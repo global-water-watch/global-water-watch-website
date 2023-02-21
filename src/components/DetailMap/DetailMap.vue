@@ -120,6 +120,7 @@
         if (this.geometry) {
           this.addGeometryToMap(map)
         }
+        this.setBoundingBox(map)
       },
 
       addTransformedReservoirsToMap (map) {
@@ -147,10 +148,6 @@
               'line-width': 1,
             },
           })
-
-          const allFeatures = featureCollection(this.transformedReservoirs.map(reservoir => reservoir.data))
-          const boundingBox = bbox(allFeatures)
-          map.fitBounds(boundingBox, { padding: 40 })
         })
       },
 
@@ -234,6 +231,16 @@
             'line-dasharray': [2, 1],
           },
         })
+      },
+
+      setBoundingBox (map) {
+        const allFeatures = featureCollection(
+          this.transformedReservoirs.length
+            ? this.transformedReservoirs.map(reservoir => reservoir.data)
+            : [{ type: 'Feature', geometry: this.geometry }],
+        )
+        const boundingBox = bbox(allFeatures)
+        map.fitBounds(boundingBox, { padding: 40 })
       },
 
       onReservoirClick (evt) {
