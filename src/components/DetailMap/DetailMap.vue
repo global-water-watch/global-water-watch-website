@@ -130,6 +130,9 @@
               'line-width': 1,
             },
           })
+          map.on('click', `${reservoirName}-fill`, (evt) => {
+            this.onReservoirClick(evt)
+          })
 
           const allFeatures = featureCollection(this.transformedReservoirs.map(reservoir => reservoir.data))
           const boundingBox = bbox(allFeatures)
@@ -193,7 +196,7 @@
         if (!reservoir) {
           return
         }
-        const { fid } = reservoir.properties
+        const fid = reservoir.properties?.fid || reservoir.id
 
         this.$router.push({ path: `/reservoir/${fid}` })
       },
