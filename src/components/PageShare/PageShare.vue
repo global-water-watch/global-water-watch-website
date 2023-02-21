@@ -8,8 +8,8 @@
       />
       <Fragment v-else>
         <v-row class="mb-3">
-          <h3 class="p normal">
-            {{ title }}
+          <h3>
+            Export options
           </h3>
         </v-row>
         <v-row>
@@ -25,6 +25,28 @@
           </v-btn>
           <input type="text" class="page-share__input" :value="shareUrl" readonly>
         </v-row>
+        <v-row v-if="singleReservoir">
+          <v-btn
+            color="blue-grey darken-3 data-chart__button"
+            class="mr-2"
+            @click="exportTimeSeries"
+          >
+            Download .csv
+            <v-icon right>
+              mdi-download
+            </v-icon>
+          </v-btn>
+          <v-btn
+            color="blue-grey darken-3 data-chart__button"
+            class="mr-2"
+            @click="exportGeometry"
+          >
+            Download .geojson
+            <v-icon right>
+              mdi-download
+            </v-icon>
+          </v-btn>
+        </v-row>
       </Fragment>
     </div>
   </section>
@@ -33,11 +55,11 @@
 <script>
   export default {
     props: {
-      title: {
-        type: String,
-        required: true,
-      },
       isLoading: {
+        type: Boolean,
+        default: false,
+      },
+      singleReservoir: {
         type: Boolean,
         default: false,
       },
@@ -58,6 +80,12 @@
         } catch (err) {
           throw new Error('Error: Copy to clipboard')
         }
+      },
+      exportTimeSeries () {
+        this.$emit('exportTimeSeries')
+      },
+      exportGeometry () {
+        this.$emit('exportGeometry')
       },
     },
   }

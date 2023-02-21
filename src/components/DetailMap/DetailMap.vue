@@ -148,6 +148,10 @@
               'line-width': 1,
             },
           })
+
+          map.on('click', `${reservoirName}-fill`, (evt) => {
+            this.onReservoirClick(evt)
+          })
         })
       },
 
@@ -248,7 +252,7 @@
         if (!reservoir) {
           return
         }
-        const { fid } = reservoir.properties
+        const fid = reservoir.properties?.fid || reservoir.id
 
         this.$router.push({ path: `/reservoir/${fid}` })
       },
