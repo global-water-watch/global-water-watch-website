@@ -157,6 +157,7 @@ export default {
 
         // 2. Only after finishing the opacity transition do we fully remove the layer
         setTimeout(() => {
+          if (!map) { return }
           map.removeLayer(layerUniqueId)
 
           // Only remove source when no other layers depend on it
