@@ -1,7 +1,7 @@
 <template>
   <div class="map-layers-panels">
     <div class="map-layers-panel">
-      <h2>Select</h2>
+      <h3>Select</h3>
       <v-radio-group
         v-model="activeLayerName"
         :disabled="disablePanelControls"
@@ -29,7 +29,7 @@
     </div>
 
     <div class="map-layers-panel">
-      <h2>Visualize</h2>
+      <h3>Visualize</h3>
       <v-radio-group
         v-model="activeLayerName"
         :disabled="disablePanelControls"
