@@ -1,9 +1,10 @@
 <template>
   <div class="map-layers-panels">
     <div class="map-layers-panel">
+      <h2>Select</h2>
       <v-radio-group
         v-model="activeLayerName"
-        :disabled="!mapReady || isDrawing || isTransitioningLayer"
+        :disabled="disablePanelControls"
       >
         <v-radio
           v-for="layer in filteredLayers"
@@ -28,9 +29,10 @@
     </div>
 
     <div class="map-layers-panel">
+      <h2>Visualize</h2>
       <v-radio-group
         v-model="activeLayerName"
-        :disabled="!mapReady || isDrawing || isTransitioningLayer"
+        :disabled="disablePanelControls"
       >
         <v-radio
           :key="anomaliesLayer.name"
@@ -46,7 +48,7 @@
         offset-y
         max-width="290px"
         min-width="auto"
-        :disabled="activeLayerName !== 'Anomalies'"
+        :disabled="activeLayerName !== anomaliesLayer.name || disablePanelControls"
       >
         <template #activator="{ on, attrs }">
           <v-text-field
@@ -55,7 +57,7 @@
             readonly
             v-bind="attrs"
             class="map-layers-panel__anomalies-date-input"
-            :disabled="activeLayerName !== 'Anomalies'"
+            :disabled="activeLayerName !== anomaliesLayer.name || disablePanelControls"
             v-on="on"
           />
         </template>
@@ -406,6 +408,9 @@
         set (date) {
           this.$store.commit('anomalies-layers/SET_ANOMALIES_DATE', date)
         },
+      },
+      disablePanelControls () {
+        return !this.mapReady || this.isDrawing || this.isTransitioningLayer
       },
     },
 

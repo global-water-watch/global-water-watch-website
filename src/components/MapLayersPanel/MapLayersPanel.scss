@@ -1,7 +1,7 @@
 .map-layers-panels {
   position: absolute;
-  top: 20px;
-  left: 20px;
+  top: $space-default;
+  left: $space-default;
   z-index: 2;
 }
 
@@ -10,13 +10,18 @@
   border-radius: 4px;
   background-color: $gradient-top;
   box-shadow: 0 0 10px 2px rgb(0 0 0 / 10%);
+
+  h2 {
+    margin-top: $space-medium;
+  }
 }
 
 .map-layers-panel + .map-layers-panel {
-  margin-top: 10px;
+  margin-top: $space-medium;
 }
 
 .map-layers-panel__anomalies-date-input.v-text-field {
+  margin-left: $space-large;
+  margin-top: -$space-medium;
   padding-top: 0;
-  margin-top: 0;
 }
