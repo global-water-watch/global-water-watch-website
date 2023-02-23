@@ -300,7 +300,7 @@
           name: 'Anomalies',
           type: 'anomalies',
           firstLayerDate: '1995-01',
-          lastLayerDate: '2022-08',
+          lastLayerDate: this.$config.lastAnomalyLayerDate,
           styles: [
             {
               type: 'circle',
