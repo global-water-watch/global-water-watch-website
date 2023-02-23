@@ -357,6 +357,10 @@
                   2,
                   'hsl(215, 80%, 80%)',
                 ],
+                'circle-opacity': 0,
+                'circle-opacity-transition': {
+                  duration: LAYER_FADE_DURATION_MS,
+                },
               },
             },
           ],

@@ -67,6 +67,10 @@ export default {
           layout: {},
           paint: style.paint,
         })
+
+        if (style.type === 'circle' && typeof (style.paint['circle-opacity']) !== 'undefined') {
+          map.setPaintProperty(layerUniqueId, 'circle-opacity', 1)
+        }
       })
     },
 
@@ -79,6 +83,12 @@ export default {
       styles.forEach((style) => {
         const layerUniqueId = `${layerId}-${style.type}`
 
+        // 1. We first set the opacity to 0
+        if (style.type === 'circle' && typeof (style.paint['circle-opacity']) !== 'undefined') {
+          map.setPaintProperty(layerUniqueId, 'circle-opacity', 0)
+        }
+
+        // 2. Only after finishing the opacity transition do we fully remove the layer
         setTimeout(() => {
           map.removeLayer(layerUniqueId)
 
