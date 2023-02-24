@@ -25,13 +25,16 @@
       />
     </div>
 
-    <div class="comparison-map__dates ma-3">
+    <div id="comparison-map" class="comparison-map__dates ma-3">
       <div>
         <v-menu
+          :close-on-content-click="true"
           transition="scale-transition"
+          origin="overlap"
           offset-y
           max-width="290px"
           min-width="auto"
+          right
         >
           <template #activator="{ on, attrs }">
             <v-text-field
@@ -60,15 +63,16 @@
         <v-menu
           :close-on-content-click="true"
           transition="scale-transition"
-          location="bottom center"
           origin="overlap"
           offset-y
           max-width="290px"
           min-width="auto"
+          left
         >
           <template #activator="{ on, attrs }">
             <v-text-field
               v-model="formattedDate"
+              class="comparison-map__date-picker--right"
               readonly
               v-bind="attrs"
               v-on="on"

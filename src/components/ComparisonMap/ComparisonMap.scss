@@ -27,6 +27,12 @@
     padding: 0;
     margin: 0;
   }
+
+  .comparison-map__date-picker--right {
+    input {
+      text-align: right;
+    }
+  }
 }
 
 .comparison-map__loading {
