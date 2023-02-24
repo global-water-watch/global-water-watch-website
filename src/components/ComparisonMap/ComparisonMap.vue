@@ -26,9 +26,10 @@
     </div>
 
     <div id="comparison-map" class="comparison-map__dates ma-3">
-      <div>
+      <div class="comparison-map__date-picker">
         <v-menu
-          :close-on-content-click="true"
+          v-model="oldDatePickerMenu"
+          :close-on-content-click="false"
           transition="scale-transition"
           origin="overlap"
           offset-y
@@ -49,6 +50,7 @@
             :allowed-dates="allowedDates"
             no-title
             scrollable
+            @change="oldDatePickerMenu = false"
           />
         </v-menu>
       </div>
@@ -59,9 +61,10 @@
         </div>
         This feature is not optimized for larger reservoirs.
       </div>
-      <div>
+      <div class="comparison-map__date-picker comparison-map__date-picker--right">
         <v-menu
-          :close-on-content-click="true"
+          v-model="datePickerMenu"
+          :close-on-content-click="false"
           transition="scale-transition"
           origin="overlap"
           offset-y
@@ -72,7 +75,6 @@
           <template #activator="{ on, attrs }">
             <v-text-field
               v-model="formattedDate"
-              class="comparison-map__date-picker--right"
               readonly
               v-bind="attrs"
               v-on="on"
@@ -83,6 +85,7 @@
             :allowed-dates="allowedDates"
             no-title
             scrollable
+            @change="datePickerMenu = false"
           />
         </v-menu>
       </div>
@@ -114,6 +117,8 @@
         isoDate: (new Date()).toISOString().substring(0, 10),
         isoOldDate: (new Date()).toISOString().substring(0, 10),
         isLoadingSatelliteImages: false,
+        datePickerMenu: false,
+        oldDatePickerMenu: false,
       }
     },
 
