@@ -142,7 +142,7 @@ export default {
       const map = this.getMap()
       if (!map) { return }
 
-      const { styles } = this.options
+      const { styles, clickFn } = this.options
       styles.forEach((style) => {
         const layerUniqueId = `${layerId}-${style.type}`
 
@@ -157,7 +157,6 @@ export default {
 
         // 2. Only after finishing the opacity transition do we fully remove the layer
         setTimeout(() => {
-          if (!map) { return }
           map.removeLayer(layerUniqueId)
 
           // Only remove source when no other layers depend on it
@@ -181,9 +180,8 @@ export default {
           delete this.mouseLeaveFnMap[layerUniqueId]
         }
 
-        const { clickFn } = this.options
         if (clickFn) {
-          map.off('click', layerId, clickFn)
+          map.off('click', layerUniqueId, clickFn)
         }
       })
     },
@@ -195,11 +193,16 @@ export default {
 
   mounted () {
     const map = this.getMap()
-    // We can immediately initialize if we have the map ready
-    if (map && map.isStyleLoaded()) {
-      this.initalize()
-      this.isInitialized = true
+    const tryInitialize = () => {
+      if (map && map.isStyleLoaded()) {
+        // We can immediately initialize if we have the map ready
+        this.initalize()
+        this.isInitialized = true
+      } else {
+        setTimeout(tryInitialize, 200)
+      }
     }
+    tryInitialize()
   },
 
   destroyed () {

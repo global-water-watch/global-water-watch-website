@@ -295,7 +295,7 @@
                 },
               },
             ],
-            clickFn: this.onRegionLayerClick,
+            clickFn: this.onRegionClick,
           }),
         ],
         anomaliesLayer: Object.freeze({
@@ -366,6 +366,7 @@
               },
             },
           ],
+          clickFn: this.onAnomalyClick,
         }),
         isTransitioningLayer: false,
         anomaliesDateMenu: false,
@@ -500,7 +501,7 @@
         this.$router.push({ path: `/basin/${source}--${zoom}--${lng}--${lat}--${UID}` })
       },
 
-      onRegionLayerClick (evt) {
+      onRegionClick (evt) {
         const region = evt.features?.[0]
         const UID = region?.properties.shapeID
         if (!UID) { return }
@@ -512,6 +513,14 @@
         const { lng, lat } = evt.target.getCenter()
 
         this.$router.push({ path: `/boundary/${source}--${zoom}--${lng}--${lat}--${UID}` })
+      },
+
+      onAnomalyClick (evt) {
+        const anomaly = evt.features?.[0]
+        if (!anomaly) {
+          return
+        }
+        this.$router.push({ path: `/reservoir/${anomaly.properties.point}` })
       },
 
       onDrawButtonClick () {

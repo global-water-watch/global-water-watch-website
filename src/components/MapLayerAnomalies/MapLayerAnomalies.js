@@ -42,7 +42,7 @@ export default {
     addLayerByDate (layerDate) {
       const map = this.getMap()
       if (!map) { return }
-      const { firstLayerDate, lastLayerDate, styles } = this.options
+      const { firstLayerDate, lastLayerDate, styles, clickFn } = this.options
 
       if (layerDate < firstLayerDate || layerDate > lastLayerDate) {
         console.warn('Layer date is out of range:', layerDate)
@@ -71,6 +71,12 @@ export default {
         if (style.type === 'circle' && typeof (style.paint['circle-opacity']) !== 'undefined') {
           map.setPaintProperty(layerUniqueId, 'circle-opacity', 1)
         }
+
+        if (clickFn) {
+          map.on('click', layerUniqueId, clickFn)
+          map.on('mouseenter', layerUniqueId, this.mouseEnterFn)
+          map.on('mouseleave', layerUniqueId, this.mouseLeaveFn)
+        }
       })
     },
 
@@ -79,7 +85,7 @@ export default {
       if (!map) { return }
 
       const layerId = this.layerId(layerDate)
-      const { styles } = this.options
+      const { styles, clickFn } = this.options
       styles.forEach((style) => {
         const layerUniqueId = `${layerId}-${style.type}`
 
@@ -90,7 +96,6 @@ export default {
 
         // 2. Only after finishing the opacity transition do we fully remove the layer
         setTimeout(() => {
-          if (!map) { return }
           map.removeLayer(layerUniqueId)
 
           // Only remove source when no other layers depend on it
@@ -98,8 +103,25 @@ export default {
             map.removeSource(layerId)
           }
         }, LAYER_FADE_DURATION_MS)
+
+        if (clickFn) {
+          map.off('click', layerUniqueId, clickFn)
+          map.off('mouseenter', layerUniqueId, this.mouseEnterFn)
+          map.off('mouseleave', layerUniqueId, this.mouseLeaveFn)
+        }
       })
     },
+
+    mouseEnterFn () {
+      const map = this.getMap()
+      map.getCanvas().style.cursor = 'pointer'
+    },
+
+    mouseLeaveFn () {
+      const map = this.getMap()
+      map.getCanvas().style.cursor = ''
+    },
+
   },
 
   watch: {
