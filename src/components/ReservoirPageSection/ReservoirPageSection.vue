@@ -55,9 +55,8 @@
 
       <!-- Temporary hide share page for custom selection since this url isn't nice to share -->
       <PageShare
-        v-if="areaType !== 'custom-selection'"
+        v-if="reservoirs.length && areaType !== 'custom-selection'"
         :is-loading="isLoading"
-        :single-reservoir="reservoirs.length === 1"
         @exportTimeSeries="exportTimeSeries"
         @exportGeometry="exportGeometry"
       />
@@ -71,6 +70,7 @@
 </template>
 
 <script>
+  import JSZip from 'jszip'
   export default {
     props: {
       reservoirs: {
@@ -156,26 +156,69 @@
       onSelectedTimeChanged (time) {
         this.$emit('onSelectedTimeChanged', time)
       },
-      exportTimeSeries () {
+      async exportTimeSeries () {
+        if (this.series.length === 1) {
+          const { name, content } = this.timeSeriesCsv(this.series[0])
+
+          this.downloadFile(
+            `${name}.csv`,
+            new Blob([content], { type: 'text/csv;charset=utf-8' }),
+          )
+        } else {
+          const zip = this.timeSeriesZip()
+
+          const content = await zip.generateAsync({ type: 'blob' })
+          this.downloadFile(
+            'Reservoirs - Surface Water Area.zip',
+            content,
+          )
+        }
+      },
+      exportGeometry () {
+        if (this.reservoirs.length === 1) {
+          const geometry = JSON.stringify(this.reservoirs[0])
+
+          this.downloadFile(
+            this.reservoirs[0]?.properties?.name
+              ? `${this.reservoirs[0].properties.name} (#${this.reservoirs[0].id}).geojson`
+              : `#${this.reservoirs[0].id}.geojson`,
+            new Blob([geometry], { type: 'application/geo+json;charset=utf-8' }),
+          )
+        } else {
+          const geometry = JSON.stringify({
+            type: 'FeatureCollection',
+            features: this.reservoirs,
+          })
+
+          this.downloadFile(
+            'Reservoirs.geojson',
+            new Blob([geometry], { type: 'application/geo+json;charset=utf-8' }),
+          )
+        }
+      },
+      timeSeriesCsv (serie) {
         let csv = `${this.xAxis[0].type},${this.yAxis[0].name}\n`
-        this.series[0].data.forEach((row) => {
+        serie.data.forEach((row) => {
           csv += row.join(',')
           csv += '\n'
         })
-
-        const anchor = document.createElement('a')
-        anchor.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv)
-        anchor.target = '_blank'
-        anchor.download = `${this.chartTitle || 'reservoir'}.csv`
-        anchor.click()
+        return { name: serie.name, content: csv }
       },
-      exportGeometry () {
-        const geometry = JSON.stringify(this.reservoirs[0])
-
+      timeSeriesZip () {
+        const zip = new JSZip()
+        const files = this.series.map((serie) => {
+          return this.timeSeriesCsv(serie)
+        })
+        files.forEach(({ name, content }) => {
+          zip.file(`${name}.csv`, content)
+        })
+        return zip
+      },
+      downloadFile (filename, blob) {
         const anchor = document.createElement('a')
-        anchor.href = 'data:application/geo+json;charset=utf-8,' + encodeURIComponent(geometry)
+        anchor.href = (window.URL || window.webkitURL).createObjectURL(blob)
         anchor.target = '_blank'
-        anchor.download = `${this.reservoirs[0].properties.name || 'reservoir'}.geojson`
+        anchor.download = filename
         anchor.click()
       },
     },

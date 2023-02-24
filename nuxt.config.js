@@ -62,6 +62,7 @@ export default {
     { src: '~plugins/vue2mapbox-gl.client.js' },
     { src: '~plugins/create-repository.js' },
     { src: '~plugins/experimental-features.js', mode: 'client' },
+    { src: '~/plugins/jszip', mode: 'client' },
   ],
 
   env: {

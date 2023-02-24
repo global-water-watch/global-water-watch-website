@@ -25,13 +25,13 @@
           </v-btn>
           <input type="text" class="page-share__input" :value="shareUrl" readonly>
         </v-row>
-        <v-row v-if="singleReservoir">
+        <v-row>
           <v-btn
             color="blue-grey darken-3 data-chart__button"
             class="mr-2"
             @click="exportTimeSeries"
           >
-            Download .csv
+            Download .csv(s)
             <v-icon right>
               mdi-download
             </v-icon>
@@ -56,10 +56,6 @@
   export default {
     props: {
       isLoading: {
-        type: Boolean,
-        default: false,
-      },
-      singleReservoir: {
         type: Boolean,
         default: false,
       },
