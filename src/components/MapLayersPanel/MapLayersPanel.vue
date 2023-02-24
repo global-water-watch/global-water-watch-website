@@ -439,13 +439,16 @@
       }
 
       if (initiallyReservoirLayer && initiallySelectedLayer) {
-        this.$store.commit(`${initiallyReservoirLayer.type}-layers/ADD_LAYER`, initiallyReservoirLayer)
+        if (initiallySelectedLayer.type === 'zoomable') {
+          this.$store.commit(`${initiallyReservoirLayer.type}-layers/ADD_LAYER`, initiallyReservoirLayer)
+        }
         this.$store.commit(`${initiallySelectedLayer.type}-layers/ADD_LAYER`, initiallySelectedLayer)
       }
     },
 
     methods: {
       clearAll () {
+        this.$store.commit('reservoir-layers/REMOVE_ALL_LAYERS')
         this.$store.commit('zoomable-layers/REMOVE_ALL_LAYERS')
         this.$store.commit('anomalies-layers/REMOVE_ALL_LAYERS')
       },
@@ -463,6 +466,9 @@
         this.isTransitioningLayer = true
         this.clearAll()
         this.clearMbDraw()
+        if (layer.type === 'zoomable') {
+          this.$store.commit(`${this.reservoirLayer.type}-layers/ADD_LAYER`, this.reservoirLayer)
+        }
         this.$store.commit(`${layer.type}-layers/ADD_LAYER`, layer)
         setTimeout(() => {
           this.isTransitioningLayer = false
