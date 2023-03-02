@@ -114,8 +114,8 @@
 
     data () {
       return {
-        isoDate: (new Date()).toISOString().substring(0, 10),
-        isoOldDate: (new Date()).toISOString().substring(0, 10),
+        isoDate: this.isoFormatDate(new Date()),
+        isoOldDate: this.isoFormatDate(new Date()),
         isLoadingSatelliteImages: false,
         datePickerMenu: false,
         oldDatePickerMenu: false,
@@ -127,7 +127,7 @@
         return this.timeSeries[0].data.map(item => new Date(item[0]))
       },
       isoTimeSeriesDates () {
-        return this.timeSeriesDates.map(date => date.toISOString().substring(0, 10))
+        return this.timeSeriesDates.map(date => this.isoFormatDate(date))
       },
       date () {
         return new Date(this.isoDate)
@@ -160,16 +160,10 @@
         // On mounted, `date` is the last date in the time series
         // `oldDate` is the closest date in the time series one year before `date`
         const date = this.timeSeriesDates[this.timeSeriesDates.length - 1]
-        this.isoDate = date.toISOString().substring(0, 10)
+        this.isoDate = this.isoFormatDate(date)
         const oldDate = new Date(date.getTime())
         oldDate.setFullYear(date.getFullYear() - 1)
-        this.isoOldDate = this.timeSeriesDates[this.getNearestDateIndex(oldDate)].toISOString().substring(0, 10)
-      },
-      formatDate (date) {
-        if (!date) { return null }
-
-        const [year, month, day] = date.split('-')
-        return `${day}/${month}/${year}`
+        this.isoOldDate = this.isoFormatDate(this.timeSeriesDates[this.getNearestDateIndex(oldDate)])
       },
       onSetCurrentMap (map) {
         currentMap = map
@@ -204,6 +198,17 @@
       },
       allowedDates (date) {
         return this.isoTimeSeriesDates.includes(date)
+      },
+      formatDate (date) {
+        if (!date) { return null }
+
+        const [year, month, day] = date.split('-')
+        return `${day}/${month}/${year}`
+      },
+      // v-date-picker accepts ISO 8601 date strings (YYYY-MM-DD)
+      // https://v2.vuetifyjs.com/en/components/date-pickers/#caveats
+      isoFormatDate (date) {
+        return date.toISOString().substring(0, 10)
       },
     },
   }
