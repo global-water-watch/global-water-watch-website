@@ -12,11 +12,13 @@
       >
         <template #label>
           {{ layer.name }}
-          <v-tooltip v-if="layer.description" bottom max-width="300px">
-            <template #activator="{ on }">
-              <v-icon right v-on="on">
-                mdi-information-outline
-              </v-icon>
+          <v-tooltip v-if="layer.description" v-model="layerTooltips[layer.name]" bottom max-width="300px">
+            <template #activator="{ attrs }">
+              <v-btn icon v-bind="attrs" @click="$event => toggleTooltips($event, layer.name)">
+                <v-icon size="medium">
+                  mdi-information-outline
+                </v-icon>
+              </v-btn>
             </template>
             <!-- eslint-disable vue/no-v-html -->
             <p v-html="layer.description" />
@@ -273,6 +275,10 @@
           }),
         ],
         isTransitioningLayer: false,
+        layerTooltips: {
+          Basins: false,
+          'Administrative regions': false,
+        },
       }
     },
 
@@ -410,6 +416,16 @@
           // modechange event, so setting it here manually too
           this.$store.commit('drawn-geometry/SET_IS_DRAWING', true)
         }
+      },
+
+      toggleTooltips (event, layer) {
+        for (const layerName in this.layerTooltips) {
+          if (layerName !== layer) {
+            this.layerTooltips[layerName] = false
+          }
+        }
+        this.layerTooltips[layer] = !this.layerTooltips[layer]
+        event.stopPropagation()
       },
     },
   }
