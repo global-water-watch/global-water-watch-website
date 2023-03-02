@@ -61,6 +61,10 @@
         type: Array,
         required: true,
       },
+      geometry: {
+        type: Object,
+        default: () => {},
+      },
       satelliteImageUrl: {
         type: String,
         default: '',
@@ -151,7 +155,24 @@
     },
 
     methods: {
-      addReservoirsToMap (map) {
+      onMapCreated (map) {
+        map.removeControl(map._logoControl)
+        map.addControl(map._logoControl, 'top-right')
+      },
+
+      onMapLoaded (event) {
+        map = event.target
+
+        this.addTransformedReservoirsToMap(map)
+        this.addOtherReservoirsToMap(map)
+        if (this.geometry) {
+          this.addGeometryToMap(map)
+        }
+        this.setBoundingBox(map)
+        if (this.satelliteVideo) { this.addSatelliteVideoToMap(map) }
+      },
+
+      addTransformedReservoirsToMap (map) {
         this.transformedReservoirs.forEach((reservoir) => {
           const reservoirName = `reservoir-${reservoir.data.id}`
 
@@ -177,11 +198,13 @@
             },
           })
 
-          const allFeatures = featureCollection(this.transformedReservoirs.map(reservoir => reservoir.data))
-          const boundingBox = bbox(allFeatures)
-          map.fitBounds(boundingBox, { padding: 40 })
+          map.on('click', `${reservoirName}-fill`, (evt) => {
+            this.onReservoirClick(evt)
+          })
         })
+      },
 
+      addOtherReservoirsToMap (map) {
         map.addSource('reservoirsv10', {
           type: 'vector',
           url: 'mapbox://global-water-watch.reservoirs-v10',
@@ -248,18 +271,51 @@
           layout: {
             visibility: 'visible',
           },
+        }, 'satellite')
+      },
+
+      addGeometryToMap (map) {
+        map.addSource('selected-geometry', {
+          type: 'geojson',
+          data: {
+            type: 'Feature',
+            geometry: this.geometry,
+          },
+        })
+
+        map.addLayer({
+          id: 'selected-geometry-fill',
+          type: 'fill',
+          source: 'selected-geometry',
+          layout: {},
+          paint: {
+            'fill-color': '#fbb03b',
+            'fill-opacity': 0.1,
+          },
+        })
+
+        map.addLayer({
+          id: 'selected-geometry-outline',
+          type: 'line',
+          source: 'selected-geometry',
+          layout: {},
+          paint: {
+            'line-color': '#fbb03b',
+            'line-width': 2,
+            'line-opacity': 0.5,
+            'line-dasharray': [2, 1],
+          },
         })
       },
 
-      onMapCreated (map) {
-        map.removeControl(map._logoControl)
-        map.addControl(map._logoControl, 'top-right')
-      },
-
-      onMapLoaded (event) {
-        map = event.target
-        this.addReservoirsToMap(map)
-        if (this.satelliteVideo) { this.addSatelliteVideoToMap(map) }
+      setBoundingBox (map) {
+        const allFeatures = featureCollection(
+          this.transformedReservoirs.length
+            ? this.transformedReservoirs.map(reservoir => reservoir.data)
+            : [{ type: 'Feature', geometry: this.geometry }],
+        )
+        const boundingBox = bbox(allFeatures)
+        map.fitBounds(boundingBox, { padding: 40 })
       },
 
       onReservoirClick (evt) {
@@ -267,7 +323,7 @@
         if (!reservoir) {
           return
         }
-        const { fid } = reservoir.properties
+        const fid = reservoir.properties?.fid || reservoir.id
 
         this.$router.push({ path: `/reservoir/${fid}` })
       },
