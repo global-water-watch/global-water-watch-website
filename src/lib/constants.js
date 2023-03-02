@@ -30,4 +30,24 @@ export const RESERVOIR_VIDEOS = [
       ],
     },
   },
+  {
+    id: 87663,
+    type: 'Feature',
+    properties: {
+      url: 'https://storage.googleapis.com/global-water-watch-public/videos/87663ee-export-video17656653312937980998.mp4',
+    },
+    geometry: {
+      geodesic: false,
+      type: 'Polygon',
+      coordinates: [
+        [
+          [19.02500394408913, -33.906022121281296],
+          [19.394626329349823, -33.906022121281296],
+          [19.394626329349823, -34.16396238345478],
+          [19.02500394408913, -34.16396238345478],
+          [19.02500394408913, -33.906022121281296],
+        ],
+      ],
+    },
+  },
 ]

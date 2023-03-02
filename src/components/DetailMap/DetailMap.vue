@@ -271,7 +271,7 @@
           layout: {
             visibility: 'visible',
           },
-        }, 'satellite')
+        })
       },
 
       addGeometryToMap (map) {
