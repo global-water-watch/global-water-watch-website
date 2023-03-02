@@ -7,10 +7,23 @@
       <v-radio
         v-for="layer in filteredLayers"
         :key="layer.name"
-        :label="layer.name"
         :value="layer.name"
         @change="activateLayer(layer)"
-      />
+      >
+        <template #label>
+          {{ layer.name }}
+          <v-tooltip v-if="layer.description" bottom max-width="300px">
+            <template #activator="{ on }">
+              <v-icon right v-on="on">
+                mdi-information-outline
+              </v-icon>
+            </template>
+            <!-- eslint-disable vue/no-v-html -->
+            <p v-html="layer.description" />
+            <!--eslint-enable-->
+          </v-tooltip>
+        </template>
+      </v-radio>
     </v-radio-group>
 
     <v-btn
@@ -94,6 +107,11 @@
             type: 'zoomable',
             promoteId: 'HYBAS_ID', // this id is used to identify the hover id in the map.
             experimentalFeature: false, // disable this feature when you want to display it default
+            description: `You can select reservoirs by basin.
+                          A basin is a topographic region where all water drains to the same point.
+                          The polygons that you can select originate from the
+                          <a href="https://www.hydrosheds.org/products/hydrobasins" target="_blank" rel="noopener noreferrer">HydroBASINS</a> dataset,
+                          a global covering set of nested basins.`,
             layers: [
               {
                 id: 'BasinATLAS_v10_lev01',
@@ -193,6 +211,10 @@
             attribution: '<a href="https://www.geoboundaries.org" target="_blank" rel="noopener noreferrer">geoBoundaries</a>', // this id is used to identify the hover id in the map.
             promoteId: 'shapeID', // this id is used to identify the hover id in the map.
             experimentalFeature: false, // disable this feature when you want to display it default
+            description: `You can select the reservoirs by administrative region.
+                          These nested regions (e.g. country, province, municipality) originate from the
+                          <a href="https://www.geoboundaries.org/" target="_blank" rel="noopener noreferrer">geoBoundaries</a> dataset.
+                          This dataset represents countries as they would represent themselves. That is why, in this dataset, countries can have overlapping borders.`,
             layers: [
               {
                 id: 'geoBoundariesCGAZ_ADM0',
