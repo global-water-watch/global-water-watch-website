@@ -34,7 +34,6 @@
       <data-chart
         v-if="(reservoirs.length && timeSeries) || isLoading || isLoadingChart"
         :title="chartTitle"
-        :show-export-button="showExportButton"
         :x-axis="xAxis"
         :y-axis="yAxis"
         :series="series"
@@ -53,12 +52,12 @@
         :is-loading="isLoading"
       />
 
-      <!-- Temporary hide share page for custom selection since this url isn't nice to share -->
-      <PageShare
-        v-if="reservoirs.length && areaType !== 'custom-selection'"
+      <PageExport
+        v-if="reservoirs.length"
         :is-loading="isLoading"
-        @exportTimeSeries="exportTimeSeries"
-        @exportGeometry="exportGeometry"
+        :area-type="areaType"
+        :reservoirs="reservoirs"
+        :time-series="timeSeries"
       />
 
       <FeedbackForm
@@ -70,7 +69,6 @@
 </template>
 
 <script>
-  import JSZip from 'jszip'
   export default {
     props: {
       reservoirs: {
@@ -116,10 +114,6 @@
         type: Boolean,
         default: false,
       },
-      showExportButton: {
-        type: Boolean,
-        default: false,
-      },
       isLoading: {
         type: Boolean,
         default: false,
@@ -155,71 +149,6 @@
     methods: {
       onSelectedTimeChanged (time) {
         this.$emit('onSelectedTimeChanged', time)
-      },
-      async exportTimeSeries () {
-        if (this.series.length === 1) {
-          const { name, content } = this.timeSeriesCsv(this.series[0])
-
-          this.downloadFile(
-            `${name}.csv`,
-            new Blob([content], { type: 'text/csv;charset=utf-8' }),
-          )
-        } else {
-          const zip = this.timeSeriesZip()
-
-          const content = await zip.generateAsync({ type: 'blob' })
-          this.downloadFile(
-            'Reservoirs - Surface Water Area.zip',
-            content,
-          )
-        }
-      },
-      exportGeometry () {
-        if (this.reservoirs.length === 1) {
-          const geometry = JSON.stringify(this.reservoirs[0])
-
-          this.downloadFile(
-            this.reservoirs[0]?.properties?.name
-              ? `${this.reservoirs[0].properties.name} (#${this.reservoirs[0].id}).geojson`
-              : `#${this.reservoirs[0].id}.geojson`,
-            new Blob([geometry], { type: 'application/geo+json;charset=utf-8' }),
-          )
-        } else {
-          const geometry = JSON.stringify({
-            type: 'FeatureCollection',
-            features: this.reservoirs,
-          })
-
-          this.downloadFile(
-            'Reservoirs.geojson',
-            new Blob([geometry], { type: 'application/geo+json;charset=utf-8' }),
-          )
-        }
-      },
-      timeSeriesCsv (serie) {
-        let csv = `${this.xAxis[0].type},${this.yAxis[0].name}\n`
-        serie.data.forEach((row) => {
-          csv += row.join(',')
-          csv += '\n'
-        })
-        return { name: serie.name, content: csv }
-      },
-      timeSeriesZip () {
-        const zip = new JSZip()
-        const files = this.series.map((serie) => {
-          return this.timeSeriesCsv(serie)
-        })
-        files.forEach(({ name, content }) => {
-          zip.file(`${name}.csv`, content)
-        })
-        return zip
-      },
-      downloadFile (filename, blob) {
-        const anchor = document.createElement('a')
-        anchor.href = (window.URL || window.webkitURL).createObjectURL(blob)
-        anchor.target = '_blank'
-        anchor.download = filename
-        anchor.click()
       },
     },
   }
