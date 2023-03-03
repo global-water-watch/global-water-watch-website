@@ -70,9 +70,9 @@ export default {
 
     addLayer () {
       const map = this.getMap()
-      const { id, source, clickFn } = this.options
+      const { id, source, promoteId, clickFn } = this.options
 
-      map.addSource(id, { id, ...source })
+      map.addSource(id, { id, promoteId, ...source })
 
       this.renderLayers.forEach((layer) => {
         map.addLayer(layer)

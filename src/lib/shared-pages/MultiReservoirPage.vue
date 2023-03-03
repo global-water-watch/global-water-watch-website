@@ -49,7 +49,7 @@
       timeSeriesLoading: true,
       timeSeries: null,
       pageContent: {},
-      geometry: {},
+      geometry: null,
     }),
 
     computed: {
@@ -94,20 +94,38 @@
         }
       },
 
-      doQueryBasedData () {
+      async doQueryBasedData () {
         const qstring = this.$route.fullPath.split('?')?.[1]
-        const { type, coordinates } = qs.parse(qstring)
-        if (!type || !coordinates) {
-          console.warn('Invalid coordinates, can\'t fetch data')
-          return
+        const { type, coordinates, ids } = qs.parse(qstring)
+        if (ids) {
+          await this.onReservoirIds(ids)
+        } else {
+          if (!type || !coordinates) {
+            console.warn('Invalid coordinates, can\'t fetch data')
+            return
+          }
+          this.onGeometry({ type, coordinates })
         }
-        this.onGeometry({ type, coordinates })
       },
 
       onGeometry (geometry) {
         this.geometry = geometry
         this.getReservoirsOnGeometry(geometry)
         this.getTimeSeriesOnGeometry(geometry)
+      },
+
+      async onReservoirIds (ids) {
+        await Promise.all(ids.map(async (id) => {
+          this.reservoirs.push(await this.$repo.reservoir.getById(id))
+          const timeSeries = await this.$repo.reservoir.getTimeSeriesById(id)
+          if (this.timeSeries) {
+            this.timeSeries.series.push(timeSeries.series[0])
+          } else {
+            this.timeSeries = timeSeries
+          }
+        }))
+        this.timeSeriesLoading = false
+        this.reservoirsLoading = false
       },
 
       getTimeSeriesOnGeometry (geometry) {

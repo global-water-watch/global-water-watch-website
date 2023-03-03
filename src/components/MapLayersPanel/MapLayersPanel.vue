@@ -39,6 +39,7 @@
           type: 'reservoir',
           id: 'reservoirsv10',
           checked: true,
+          promoteId: 'fid', // this id is used to identify the hover id in the map.
           source: {
             type: 'vector',
             url: 'mapbox://global-water-watch.reservoirs-v10',
@@ -48,7 +49,12 @@
               type: 'fill',
               paint: {
                 'fill-color': '#8fdfef',
-                'fill-opacity': 0.4,
+                'fill-opacity': [
+                  'case',
+                  ['boolean', ['feature-state', 'selected'], false],
+                  1,
+                  0.4,
+                ],
               },
             },
             {
@@ -67,6 +73,7 @@
             type: 'reservoir',
             id: 'reservoirsv10',
             checked: true,
+            promoteId: 'fid', // this id is used to identify the hover id in the map.
             source: {
               type: 'vector',
               url: 'mapbox://global-water-watch.reservoirs-v10',
@@ -76,7 +83,12 @@
                 type: 'fill',
                 paint: {
                   'fill-color': '#8fdfef',
-                  'fill-opacity': 0.4,
+                  'fill-opacity': [
+                    'case',
+                    ['boolean', ['feature-state', 'selected'], false],
+                    1,
+                    0.4,
+                  ],
                 },
               },
               {
@@ -251,6 +263,7 @@
           }),
         ],
         isTransitioningLayer: false,
+        multiReservoirSelection: [],
       }
     },
 
@@ -313,6 +326,7 @@
 
     methods: {
       clearAll () {
+        this.multiReservoirSelection = []
         this.$store.commit('zoomable-layers/REMOVE_ALL_LAYERS')
       },
 
@@ -338,12 +352,34 @@
       onReservoirClick (evt) {
         // If we click on a reservoir while drawing, do nothing
         if (this.isDrawing) { return }
+
         const reservoir = evt.features?.[0]
         if (!reservoir) {
           return
         }
-        const { fid } = reservoir.properties
-        this.$router.push({ path: `/reservoir/${fid}` })
+
+        if (evt.originalEvent.ctrlKey || evt.originalEvent.metaKey) {
+          if (this.multiReservoirSelection.includes(reservoir.id)) {
+            this.multiReservoirSelection = this.multiReservoirSelection.filter(id => id !== reservoir.id)
+          } else {
+            this.multiReservoirSelection.push(reservoir.id)
+          }
+
+          evt.target.setFeatureState(
+            {
+              source: 'reservoirsv10',
+              sourceLayer: 'reservoirsv10',
+              id: reservoir.id,
+            },
+            { selected: this.multiReservoirSelection.includes(reservoir.id) },
+          )
+        } else if (this.multiReservoirSelection.length > 0 && this.multiReservoirSelection.includes(reservoir.id)) {
+          const geometry = { ids: this.multiReservoirSelection }
+          const query = qs.stringify(geometry)
+          this.$router.push({ path: `/multi-reservoir/?${query}` })
+        } else {
+          this.$router.push({ path: `/reservoir/${reservoir.id}` })
+        }
       },
 
       onBasinClick (evt) {
