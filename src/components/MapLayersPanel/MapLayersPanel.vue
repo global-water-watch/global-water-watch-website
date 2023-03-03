@@ -14,7 +14,9 @@
           {{ layer.name }}
           <v-tooltip
             v-if="layer.description"
+            ref="tooltip"
             v-model="layerTooltips[layer.name]"
+            trigger="focus"
             bottom
             max-width="300px"
             content-class="map-layers-panel__tooltip"
@@ -339,10 +341,16 @@
       const initiallySelectedLayer = this.layers
         .find(({ name }) => name === this.activeLayerName)
 
+      document.addEventListener('click', this.hideTooltip)
+
       if (initiallyReservoirLayer && initiallySelectedLayer) {
         this.$store.commit(`${initiallyReservoirLayer.type}-layers/ADD_LAYER`, initiallyReservoirLayer)
         this.$store.commit(`${initiallySelectedLayer.type}-layers/ADD_LAYER`, initiallySelectedLayer)
       }
+    },
+
+    beforeDestroy () {
+      document.removeEventListener('click', this.hideTooltip)
     },
 
     methods: {
@@ -432,6 +440,18 @@
         }
         this.layerTooltips[layer] = !this.layerTooltips[layer]
         event.stopPropagation()
+      },
+
+      hideTooltip (event) {
+        // Don't hide tooltip if we click on a tooltip
+        if (this.$refs.tooltip && event.target.tagName === 'P') {
+          return
+        }
+
+        // Hide all tooltips
+        Object.keys(this.layerTooltips).forEach((name) => {
+          this.layerTooltips[name] = false
+        })
       },
     },
   }
