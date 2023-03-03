@@ -67,6 +67,9 @@
           },
         }))
       },
+      latestSelectedReservoirCoordinates () {
+        return this.$store.getters['reservoir/latestSelectedReservoirCoordinates']
+      },
     },
 
     watch: {
@@ -110,6 +113,12 @@
       onMapCreated (map) {
         map.removeControl(map._logoControl)
         map.addControl(map._logoControl, 'top-right')
+
+        this.mapConfig = {
+          ...this.mapConfig,
+          zoom: this.latestSelectedReservoirCoordinates.zoom,
+          center: this.latestSelectedReservoirCoordinates.center,
+        }
       },
 
       onMapLoaded (event) {
@@ -247,6 +256,15 @@
         map.fitBounds(boundingBox, { padding: 40 })
       },
 
+      setLatestSelectedReservoirCoordinates (map) {
+        // get zoom and center of the current map when zooming ended
+        this.zoom = map.getZoom()
+        this.center = map.getCenter().toArray()
+
+        // set the current zoom and center to the store
+        this.$store.commit('reservoir/SET_LATEST_SELECTED_RESERVOIR_COORDINATES', { zoom: this.zoom, center: this.center })
+      },
+
       onReservoirClick (evt) {
         const reservoir = evt.features?.[0]
         if (!reservoir) {
@@ -254,6 +272,7 @@
         }
         const fid = reservoir.properties?.fid || reservoir.id
 
+        this.setLatestSelectedReservoirCoordinates(map)
         this.$router.push({ path: `/reservoir/${fid}` })
       },
     },
