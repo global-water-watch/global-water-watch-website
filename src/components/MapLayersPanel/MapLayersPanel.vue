@@ -12,7 +12,13 @@
       >
         <template #label>
           {{ layer.name }}
-          <v-tooltip v-if="layer.description" v-model="layerTooltips[layer.name]" bottom max-width="300px">
+          <v-tooltip
+            v-if="layer.description"
+            v-model="layerTooltips[layer.name]"
+            bottom
+            max-width="300px"
+            content-class="map-layers-panel__tooltip"
+          >
             <template #activator="{ attrs }">
               <v-btn icon v-bind="attrs" @click="$event => toggleTooltips($event, layer.name)">
                 <v-icon size="medium">
