@@ -13,3 +13,7 @@
   opacity: 1;
   background: rgba(97, 97, 97);
 }
+
+.v-tooltip__content {
+  pointer-events: initial;
+}
