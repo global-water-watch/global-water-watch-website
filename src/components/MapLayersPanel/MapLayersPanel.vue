@@ -375,7 +375,7 @@
           )
         } else if (this.multiReservoirSelection.length > 0 && this.multiReservoirSelection.includes(reservoir.id)) {
           const geometry = { ids: this.multiReservoirSelection }
-          const query = qs.stringify(geometry)
+          const query = qs.stringify(geometry, { arrayFormat: 'comma' })
           this.$router.push({ path: `/multi-reservoir/?${query}` })
         } else {
           this.$router.push({ path: `/reservoir/${reservoir.id}` })

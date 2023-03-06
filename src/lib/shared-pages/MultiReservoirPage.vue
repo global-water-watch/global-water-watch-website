@@ -96,7 +96,7 @@
 
       async doQueryBasedData () {
         const qstring = this.$route.fullPath.split('?')?.[1]
-        const { type, coordinates, ids } = qs.parse(qstring)
+        const { type, coordinates, ids } = qs.parse(qstring, { comma: true })
         if (ids) {
           await this.onReservoirIds(ids)
         } else {
