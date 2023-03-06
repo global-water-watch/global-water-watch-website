@@ -22,7 +22,7 @@
 
 <script>
   import { bbox, featureCollection } from '@turf/turf'
-  import { MAP_CENTER, MAP_ZOOM, MAP_CUSTOM_ATTRIBUTIONS, MAPBOX_STYLE_DARK } from '@/lib/constants'
+  import { MAP_CENTER, MAP_ZOOM, MAP_CUSTOM_ATTRIBUTIONS, MAPBOX_STYLE_DARK, LAYER_FADE_DURATION_MS } from '@/lib/constants'
 
   let map
 
@@ -55,6 +55,7 @@
           style: MAPBOX_STYLE_DARK,
           customAttribution: MAP_CUSTOM_ATTRIBUTIONS,
         },
+        hoveredFeatureId: null,
       }
     },
 
@@ -149,9 +150,7 @@
             },
           })
 
-          map.on('click', `${reservoirName}-fill`, (evt) => {
-            this.onReservoirClick(evt)
-          })
+          map.on('click', `${reservoirName}-fill`, this.onReservoirClick)
         })
       },
 
@@ -170,7 +169,15 @@
           layout: {},
           paint: {
             'fill-color': '#8fdfef',
-            'fill-opacity': 0.4,
+            'fill-opacity': [
+              'case',
+              ['boolean', ['feature-state', 'hover'], false],
+              0.75,
+              0.4,
+            ],
+            'fill-opacity-transition': {
+              duration: LAYER_FADE_DURATION_MS,
+            },
           },
         })
 
@@ -186,12 +193,17 @@
           },
         })
 
-        map.on('click', 'reservoirsv10-fill', (evt) => {
-          this.onReservoirClick(evt)
-        })
+        map.on('click', 'reservoirsv10-fill', this.onReservoirClick)
+        map.on('click', 'reservoirsv10-line', this.onReservoirClick)
 
-        map.on('click', 'reservoirsv10-line', (evt) => {
-          this.onReservoirClick(evt)
+        map.on('mouseenter', 'reservoirsv10-fill', () => {
+          this.mouseEnterFn(map)
+        })
+        map.on('mousemove', 'reservoirsv10-fill', (evt) => {
+          this.mouseMoveFn(evt, map)
+        })
+        map.on('mouseleave', 'reservoirsv10-fill', () => {
+          this.mouseLeaveFn(map)
         })
 
         if (this.reservoirs.length === 1) {
@@ -256,6 +268,54 @@
 
         this.$router.push({ path: `/reservoir/${fid}` })
       },
+
+      mouseEnterFn (map) {
+        map.getCanvas().style.cursor = 'pointer'
+      },
+
+      mouseMoveFn (evt, map) {
+        const newHoveredFeatureId = evt.features?.[0]?.id
+        if (!newHoveredFeatureId || newHoveredFeatureId === this.hoveredFeatureId) {
+          return
+        }
+        // Reset previous hover state
+        if (this.hoveredFeatureId !== null) {
+          map.setFeatureState(
+            {
+              source: 'reservoirsv10',
+              sourceLayer: 'reservoirsv10',
+              id: this.hoveredFeatureId,
+            },
+            { hover: false },
+          )
+        }
+        // Set new hover state
+        this.hoveredFeatureId = newHoveredFeatureId
+        map.setFeatureState(
+          {
+            source: 'reservoirsv10',
+            sourceLayer: 'reservoirsv10',
+            id: this.hoveredFeatureId,
+          },
+          { hover: true })
+      },
+
+      mouseLeaveFn (map) {
+        map.getCanvas().style.cursor = ''
+
+        if (this.hoveredFeatureId !== null) {
+          map.setFeatureState(
+            {
+              source: 'reservoirsv10',
+              sourceLayer: 'reservoirsv10',
+              id: this.hoveredFeatureId,
+            },
+            { hover: false },
+          )
+        }
+        this.hoveredFeatureId = null
+      },
+
     },
   }
 </script>
