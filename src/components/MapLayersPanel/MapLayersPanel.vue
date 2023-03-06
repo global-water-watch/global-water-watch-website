@@ -39,6 +39,7 @@
           type: 'reservoir',
           id: 'reservoirsv10',
           checked: true,
+          promoteId: 'fid', // this id is used to identify the hover id in the map.
           source: {
             type: 'vector',
             url: 'mapbox://global-water-watch.reservoirs-v10',
@@ -48,7 +49,15 @@
               type: 'fill',
               paint: {
                 'fill-color': '#8fdfef',
-                'fill-opacity': 0.4,
+                'fill-opacity': [
+                  'case',
+                  ['boolean', ['feature-state', 'hover'], false],
+                  0.75,
+                  0.4,
+                ],
+                'fill-opacity-transition': {
+                  duration: LAYER_FADE_DURATION_MS,
+                },
               },
             },
             {
@@ -67,6 +76,7 @@
             type: 'reservoir',
             id: 'reservoirsv10',
             checked: true,
+            promoteId: 'fid', // this id is used to identify the hover id in the map.
             source: {
               type: 'vector',
               url: 'mapbox://global-water-watch.reservoirs-v10',
@@ -76,7 +86,15 @@
                 type: 'fill',
                 paint: {
                   'fill-color': '#8fdfef',
-                  'fill-opacity': 0.4,
+                  'fill-opacity': [
+                    'case',
+                    ['boolean', ['feature-state', 'hover'], false],
+                    0.75,
+                    0.4,
+                  ],
+                  'fill-opacity-transition': {
+                    duration: LAYER_FADE_DURATION_MS,
+                  },
                 },
               },
               {

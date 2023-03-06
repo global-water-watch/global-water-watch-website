@@ -70,9 +70,9 @@ export default {
 
     addLayer () {
       const map = this.getMap()
-      const { id, source, clickFn } = this.options
+      const { id, source, promoteId, clickFn } = this.options
 
-      map.addSource(id, { id, ...source })
+      map.addSource(id, { id, promoteId, ...source })
 
       this.renderLayers.forEach((layer) => {
         map.addLayer(layer)
@@ -81,6 +81,7 @@ export default {
 
           if (layer.type === 'fill') {
             map.on('mouseenter', layer.id, this.mouseEnterFn)
+            map.on('mousemove', layer.id, this.mouseMoveFn)
             map.on('mouseleave', layer.id, this.mouseLeaveFn)
           }
         }
@@ -92,9 +93,51 @@ export default {
       map.getCanvas().style.cursor = 'pointer'
     },
 
+    mouseMoveFn (evt) {
+      const map = this.getMap()
+      const { id } = this.options
+      const newHoveredFeatureId = evt.features?.[0]?.id
+      if (!newHoveredFeatureId || newHoveredFeatureId === this.hoveredFeatureId) {
+        return
+      }
+      // Reset previous hover state
+      if (this.hoveredFeatureId !== null) {
+        map.setFeatureState(
+          {
+            source: id,
+            sourceLayer: id,
+            id: this.hoveredFeatureId,
+          },
+          { hover: false },
+        )
+      }
+      // Set new hover state
+      this.hoveredFeatureId = newHoveredFeatureId
+      map.setFeatureState(
+        {
+          source: id,
+          sourceLayer: id,
+          id: this.hoveredFeatureId,
+        },
+        { hover: true })
+    },
+
     mouseLeaveFn () {
       const map = this.getMap()
       map.getCanvas().style.cursor = ''
+
+      const { id } = this.options
+      if (this.hoveredFeatureId !== null) {
+        map.setFeatureState(
+          {
+            source: id,
+            sourceLayer: id,
+            id: this.hoveredFeatureId,
+          },
+          { hover: false },
+        )
+      }
+      this.hoveredFeatureId = null
     },
 
     removeLayer () {
@@ -113,6 +156,7 @@ export default {
 
           if (layer.type === 'fill') {
             map.off('mouseenter', layer.id, this.mouseEnterFn)
+            map.on('mousemove', layer.id, this.mouseMoveFn)
             map.off('mouseleave', layer.id, this.mouseLeaveFn)
           }
         }
