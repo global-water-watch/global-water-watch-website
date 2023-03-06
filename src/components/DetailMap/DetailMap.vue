@@ -136,7 +136,15 @@
             layout: {},
             paint: {
               'fill-color': '#0AB6FF',
-              'fill-opacity': 0.7,
+              'fill-opacity': [
+                'case',
+                ['boolean', ['feature-state', 'hover'], false],
+                0.85,
+                0.7,
+              ],
+              'fill-opacity-transition': {
+                duration: LAYER_FADE_DURATION_MS,
+              },
             },
           })
           map.addLayer({
@@ -151,6 +159,15 @@
           })
 
           map.on('click', `${reservoirName}-fill`, this.onReservoirClick)
+          map.on('mouseenter', `${reservoirName}-fill`, () => {
+            this.mouseEnterFn(map)
+          })
+          map.on('mousemove', `${reservoirName}-fill`, (evt) => {
+            this.mouseMoveFn(evt, map, reservoirName)
+          })
+          map.on('mouseleave', `${reservoirName}-fill`, () => {
+            this.mouseLeaveFn(map, reservoirName)
+          })
         })
       },
 
@@ -200,10 +217,10 @@
           this.mouseEnterFn(map)
         })
         map.on('mousemove', 'reservoirsv10-fill', (evt) => {
-          this.mouseMoveFn(evt, map)
+          this.mouseMoveFn(evt, map, 'reservoirsv10', 'reservoirsv10')
         })
         map.on('mouseleave', 'reservoirsv10-fill', () => {
-          this.mouseLeaveFn(map)
+          this.mouseLeaveFn(map, 'reservoirsv10', 'reservoirsv10')
         })
 
         if (this.reservoirs.length === 1) {
@@ -273,7 +290,7 @@
         map.getCanvas().style.cursor = 'pointer'
       },
 
-      mouseMoveFn (evt, map) {
+      mouseMoveFn (evt, map, source, sourceLayer) {
         const newHoveredFeatureId = evt.features?.[0]?.id
         if (!newHoveredFeatureId || newHoveredFeatureId === this.hoveredFeatureId) {
           return
@@ -282,8 +299,8 @@
         if (this.hoveredFeatureId !== null) {
           map.setFeatureState(
             {
-              source: 'reservoirsv10',
-              sourceLayer: 'reservoirsv10',
+              source,
+              sourceLayer,
               id: this.hoveredFeatureId,
             },
             { hover: false },
@@ -293,21 +310,21 @@
         this.hoveredFeatureId = newHoveredFeatureId
         map.setFeatureState(
           {
-            source: 'reservoirsv10',
-            sourceLayer: 'reservoirsv10',
+            source,
+            sourceLayer,
             id: this.hoveredFeatureId,
           },
           { hover: true })
       },
 
-      mouseLeaveFn (map) {
+      mouseLeaveFn (map, source, sourceLayer = null) {
         map.getCanvas().style.cursor = ''
 
         if (this.hoveredFeatureId !== null) {
           map.setFeatureState(
             {
-              source: 'reservoirsv10',
-              sourceLayer: 'reservoirsv10',
+              source,
+              sourceLayer,
               id: this.hoveredFeatureId,
             },
             { hover: false },
