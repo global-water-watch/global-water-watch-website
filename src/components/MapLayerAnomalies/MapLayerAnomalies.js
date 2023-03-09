@@ -45,7 +45,6 @@ export default {
       const { firstLayerDate, lastLayerDate, styles, clickFn } = this.options
 
       if (layerDate < firstLayerDate || layerDate > lastLayerDate) {
-        console.warn('Layer date is out of range:', layerDate)
         return
       }
 
