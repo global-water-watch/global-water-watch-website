@@ -24,7 +24,6 @@
         :generating-satellite-image-url="generatingSatelliteImageUrl"
         :show-comparison-map="true"
         :show-feedback-form="true"
-        :show-export-button="true"
         :is-loading="isLoading"
         @onSelectedTimeChanged="onSelectedTimeChanged"
       />
