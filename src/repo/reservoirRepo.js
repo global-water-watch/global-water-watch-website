@@ -1,7 +1,7 @@
 import { capitalize } from '@/lib/primitive-helpers'
 
-const formatTimeSeries = (timeSeries) => {
-  const valueName = timeSeries[0]?.name?.split('_').map(capitalize).join(' ')
+const formatTimeSeries = (id, timeSeries) => {
+  const valueName = `${timeSeries[0]?.name?.split('_').map(capitalize).join(' ')} (#${id})`
 
   // TODO: make sure this km2 comes from the backend again as an unit
   // const valueUnit = timeSeries[0]?.unit
@@ -71,7 +71,7 @@ const formatTimeSeriesByGeometry = ({ data }) => {
   if (data.source_data) {
     Object.keys(data.source_data).forEach((key) => {
       series.push({
-        name: `${valueName} (${key})`,
+        name: `${valueName} (#${key})`,
         type: 'line',
         data: data.source_data[key].map(({ t, value: valueInM2 }) => {
           const value = (valueInM2 / 1000000).toFixed(2)
@@ -112,7 +112,7 @@ export default function (axios) {
     getTimeSeriesById: id =>
       axios
         .$get(`reservoir/${id}/ts/surface_water_area`)
-        .then(formatTimeSeries),
+        .then(timeSeries => formatTimeSeries(id, timeSeries)),
 
     getByGeometry: geometry =>
       axios.post('reservoir/geometry', geometry).then(({ data }) => data),
