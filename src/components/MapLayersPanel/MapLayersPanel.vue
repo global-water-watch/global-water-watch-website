@@ -146,6 +146,9 @@
             id: 'reservoirsv10',
             checked: true,
             promoteId: 'fid', // this id is used to identify the hover id in the map.
+            description: `You can select multiple reservoirs by pressing cmd/ctrl when clicking on the reservoirs.
+                          To deselect a reservoir click on it again.
+                          To see the details for the selected reservoirs click on one of them without pressing cmd/ctrl.`,
             source: {
               type: 'vector',
               url: 'mapbox://global-water-watch.reservoirs-v10',
@@ -418,6 +421,7 @@
         isTransitioningLayer: false,
         multiReservoirSelection: [],
         layerTooltips: {
+          Reservoirs: false,
           Basins: false,
           'Administrative regions': false,
         },
@@ -545,20 +549,7 @@
         }
 
         if (evt.originalEvent.ctrlKey || evt.originalEvent.metaKey) {
-          if (this.multiReservoirSelection.includes(reservoir.id)) {
-            this.multiReservoirSelection = this.multiReservoirSelection.filter(id => id !== reservoir.id)
-          } else {
-            this.multiReservoirSelection.push(reservoir.id)
-          }
-
-          evt.target.setFeatureState(
-            {
-              source: 'reservoirsv10',
-              sourceLayer: 'reservoirsv10',
-              id: reservoir.id,
-            },
-            { selected: this.multiReservoirSelection.includes(reservoir.id) },
-          )
+          this.onMultiReservoirClick(evt)
         } else if (this.multiReservoirSelection.length > 0 && this.multiReservoirSelection.includes(reservoir.id)) {
           const geometry = { ids: this.multiReservoirSelection }
           const query = qs.stringify(geometry, { arrayFormat: 'comma' })
@@ -566,6 +557,25 @@
         } else {
           this.$router.push({ path: `/reservoir/${reservoir.id}` })
         }
+      },
+
+      onMultiReservoirClick (evt) {
+        const reservoir = evt.features?.[0]
+
+        if (this.multiReservoirSelection.includes(reservoir.id)) {
+          this.multiReservoirSelection = this.multiReservoirSelection.filter(id => id !== reservoir.id)
+        } else {
+          this.multiReservoirSelection.push(reservoir.id)
+        }
+
+        evt.target.setFeatureState(
+          {
+            source: 'reservoirsv10',
+            sourceLayer: 'reservoirsv10',
+            id: reservoir.id,
+          },
+          { selected: this.multiReservoirSelection.includes(reservoir.id) },
+        )
       },
 
       onBasinClick (evt) {
