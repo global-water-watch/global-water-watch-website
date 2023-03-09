@@ -224,7 +224,9 @@
             description: `You can select the reservoirs by administrative region.
                           These nested regions (e.g. country, province, municipality) originate from the
                           <a href="https://www.geoboundaries.org/" target="_blank" rel="noopener noreferrer">geoBoundaries</a> dataset.
-                          This dataset represents countries as they would represent themselves. That is why, in this dataset, countries can have overlapping borders.`,
+                          The Comprehensive Global Administrative Zones
+                          (<a href="https://www.geoboundaries.org/downloadCGAZ.html" target="_blank" rel="noopener noreferrer">CGAZ</a>) variant is used.
+                          This dataset relies on the US Department of State definitions for contested areas.`,
             layers: [
               {
                 id: 'geoBoundariesCGAZ_ADM0',
