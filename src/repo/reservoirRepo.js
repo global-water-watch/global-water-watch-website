@@ -1,3 +1,4 @@
+import qs from 'qs'
 import { capitalize } from '@/lib/primitive-helpers'
 
 const formatTimeSeries = (timeSeries) => {
@@ -42,7 +43,8 @@ const formatTimeSeries = (timeSeries) => {
   }
 }
 
-const formatTimeSeriesByGeometry = ({ data }) => {
+const formatMultipleTimeSeries = (response) => {
+  const data = response.request ? response.data : response
   if (!data) { return null }
 
   const series = []
@@ -118,6 +120,19 @@ export default function (axios) {
       axios.post('reservoir/geometry', geometry).then(({ data }) => data),
 
     getTimeSeriesByGeometry: (geometry, variableName, period) =>
-      axios.post(`reservoir/geometry/ts/${variableName}?agg_period=${period}`, geometry).then(formatTimeSeriesByGeometry),
+      axios.post(`reservoir/geometry/ts/${variableName}?agg_period=${period}`, geometry).then(formatMultipleTimeSeries),
+
+    getByIds: ids => axios.$get(`reservoir?${qs.stringify({ ids }, { indices: false })}`),
+
+    getTimeSeriesByIds: (ids, variableName, period) => {
+      return axios
+        .$get(`ts/?${qs.stringify({
+          reservoir_ids: ids,
+          variable_name: variableName,
+          agg_period: period,
+          limit: 10,
+        }, { indices: false })}`)
+        .then(formatMultipleTimeSeries)
+    },
   }
 }

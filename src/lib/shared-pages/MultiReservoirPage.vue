@@ -115,17 +115,12 @@
       },
 
       async onReservoirIds (ids) {
-        await Promise.all(ids.map(async (id) => {
-          this.reservoirs.push(await this.$repo.reservoir.getById(id))
-          const timeSeries = await this.$repo.reservoir.getTimeSeriesById(id)
-          if (this.timeSeries) {
-            this.timeSeries.series.push(timeSeries.series[0])
-          } else {
-            this.timeSeries = timeSeries
-          }
-        }))
-        this.timeSeriesLoading = false
+        const reservoirs = await this.$repo.reservoir.getByIds(ids)
+        this.reservoirs = reservoirs?.features
         this.reservoirsLoading = false
+
+        this.timeSeries = await this.$repo.reservoir.getTimeSeriesByIds(ids, 'surface_water_area', 'monthly')
+        this.timeSeriesLoading = false
       },
 
       getTimeSeriesOnGeometry (geometry) {
