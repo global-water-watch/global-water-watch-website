@@ -1,4 +1,5 @@
 import { MAP_CENTER, MAP_ZOOM } from '@/lib/constants'
+import { mouseEnterGeometry, mouseMoveGeometry, mouseLeaveGeometry } from '@/lib/map-hover-helpers'
 
 export default {
   name: 'v-mapbox-reservoirs-layer',
@@ -90,53 +91,27 @@ export default {
 
     mouseEnterFn () {
       const map = this.getMap()
-      map.getCanvas().style.cursor = 'pointer'
+      mouseEnterGeometry({ map })
     },
 
     mouseMoveFn (evt) {
       const map = this.getMap()
       const { id } = this.options
+
+      mouseMoveGeometry({ map, evt, source: id, sourceLayer: id, currentHoveredFeatureId: this.hoveredFeatureId })
+
       const newHoveredFeatureId = evt.features?.[0]?.id
-      if (!newHoveredFeatureId || newHoveredFeatureId === this.hoveredFeatureId) {
-        return
+      if (newHoveredFeatureId && newHoveredFeatureId !== this.hoveredFeatureId) {
+        this.hoveredFeatureId = newHoveredFeatureId
       }
-      // Reset previous hover state
-      if (this.hoveredFeatureId !== null) {
-        map.setFeatureState(
-          {
-            source: id,
-            sourceLayer: id,
-            id: this.hoveredFeatureId,
-          },
-          { hover: false },
-        )
-      }
-      // Set new hover state
-      this.hoveredFeatureId = newHoveredFeatureId
-      map.setFeatureState(
-        {
-          source: id,
-          sourceLayer: id,
-          id: this.hoveredFeatureId,
-        },
-        { hover: true })
     },
 
     mouseLeaveFn () {
       const map = this.getMap()
-      map.getCanvas().style.cursor = ''
-
       const { id } = this.options
-      if (this.hoveredFeatureId !== null) {
-        map.setFeatureState(
-          {
-            source: id,
-            sourceLayer: id,
-            id: this.hoveredFeatureId,
-          },
-          { hover: false },
-        )
-      }
+
+      mouseLeaveGeometry({ map, source: id, sourceLayer: id, currentHoveredFeatureId: this.hoveredFeatureId })
+
       this.hoveredFeatureId = null
     },
 
