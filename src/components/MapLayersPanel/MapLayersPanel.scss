@@ -25,3 +25,9 @@
   margin-top: -$space-medium;
   padding-top: 0;
 }
+
+.map-layers-panel__tooltip.v-tooltip__content.menuable__content__active {
+  opacity: 1;
+  background: rgba(97, 97, 97);
+  pointer-events: initial;
+}

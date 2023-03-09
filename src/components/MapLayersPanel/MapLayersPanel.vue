@@ -12,7 +12,31 @@
           :label="layer.name"
           :value="layer.name"
           @change="activateLayer(layer)"
-        />
+        >
+          <template #label>
+            {{ layer.name }}
+            <v-tooltip
+              v-if="layer.description"
+              ref="tooltip"
+              v-model="layerTooltips[layer.name]"
+              trigger="focus"
+              bottom
+              max-width="300px"
+              content-class="map-layers-panel__tooltip"
+            >
+              <template #activator="{ attrs }">
+                <v-btn icon v-bind="attrs" @click="$event => toggleTooltips($event, layer.name)">
+                  <v-icon size="medium">
+                    mdi-information-outline
+                  </v-icon>
+                </v-btn>
+              </template>
+              <!-- eslint-disable vue/no-v-html -->
+              <p v-html="layer.description" />
+              <!--eslint-enable-->
+            </v-tooltip>
+          </template>
+        </v-radio>
       </v-radio-group>
 
       <v-btn
@@ -142,6 +166,11 @@
             type: 'zoomable',
             promoteId: 'HYBAS_ID', // this id is used to identify the hover id in the map.
             experimentalFeature: false, // disable this feature when you want to display it default
+            description: `You can select reservoirs by basin.
+                          A basin is a topographic region where all water drains to the same point.
+                          The polygons that you can select originate from the
+                          <a href="https://www.hydrosheds.org/products/hydrobasins" target="_blank" rel="noopener noreferrer">HydroBASINS</a> dataset,
+                          a global covering set of nested basins.`,
             layers: [
               {
                 id: 'BasinATLAS_v10_lev01',
@@ -241,6 +270,12 @@
             attribution: '<a href="https://www.geoboundaries.org" target="_blank" rel="noopener noreferrer">geoBoundaries</a>', // this id is used to identify the hover id in the map.
             promoteId: 'shapeID', // this id is used to identify the hover id in the map.
             experimentalFeature: false, // disable this feature when you want to display it default
+            description: `You can select the reservoirs by administrative region.
+                          These nested regions (e.g. country, province, municipality) originate from the
+                          <a href="https://www.geoboundaries.org/" target="_blank" rel="noopener noreferrer">geoBoundaries</a> dataset.
+                          The Comprehensive Global Administrative Zones
+                          (<a href="https://www.geoboundaries.org/downloadCGAZ.html" target="_blank" rel="noopener noreferrer">CGAZ</a>) variant is used.
+                          This dataset relies on the US Department of State definitions for contested areas.`,
             layers: [
               {
                 id: 'geoBoundariesCGAZ_ADM0',
@@ -369,6 +404,10 @@
           clickFn: this.onAnomalyClick,
         }),
         isTransitioningLayer: false,
+        layerTooltips: {
+          Basins: false,
+          'Administrative regions': false,
+        },
         anomaliesDateMenu: false,
       }
     },
@@ -422,6 +461,7 @@
           const firstLayer = this.reservoirLayer
           this.clearAll()
           this.$store.commit(`${firstLayer.type}-layers/ADD_LAYER`, firstLayer)
+          this.activeLayerName = firstLayer.name
         }
       },
     },
@@ -438,6 +478,7 @@
       if (!this.anomaliesDate) {
         this.anomaliesDate = this.anomaliesLayer.lastLayerDate
       }
+      document.addEventListener('click', this.hideTooltip)
 
       if (initiallyReservoirLayer && initiallySelectedLayer) {
         if (initiallySelectedLayer.type === 'zoomable') {
@@ -445,6 +486,10 @@
         }
         this.$store.commit(`${initiallySelectedLayer.type}-layers/ADD_LAYER`, initiallySelectedLayer)
       }
+    },
+
+    beforeDestroy () {
+      document.removeEventListener('click', this.hideTooltip)
     },
 
     methods: {
@@ -537,6 +582,28 @@
           // modechange event, so setting it here manually too
           this.$store.commit('drawn-geometry/SET_IS_DRAWING', true)
         }
+      },
+
+      toggleTooltips (event, layer) {
+        for (const layerName in this.layerTooltips) {
+          if (layerName !== layer) {
+            this.layerTooltips[layerName] = false
+          }
+        }
+        this.layerTooltips[layer] = !this.layerTooltips[layer]
+        event.stopPropagation()
+      },
+
+      hideTooltip (event) {
+        // Don't hide tooltip if we click on a tooltip
+        if (this.$refs.tooltip && event.target.tagName === 'P') {
+          return
+        }
+
+        // Hide all tooltips
+        Object.keys(this.layerTooltips).forEach((name) => {
+          this.layerTooltips[name] = false
+        })
       },
     },
   }
