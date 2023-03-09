@@ -1,29 +1,77 @@
 <template>
-  <div class="map-layers-panel">
-    <v-radio-group
-      v-model="activeLayerName"
-      :disabled="!mapReady || isDrawing || isTransitioningLayer"
-    >
-      <v-radio
-        v-for="layer in filteredLayers"
-        :key="layer.name"
-        :label="layer.name"
-        :value="layer.name"
-        @change="activateLayer(layer)"
-      />
-    </v-radio-group>
+  <div class="map-layers-panels">
+    <div class="map-layers-panel">
+      <h3>Select</h3>
+      <v-radio-group
+        v-model="activeLayerName"
+        :disabled="disablePanelControls"
+      >
+        <v-radio
+          v-for="layer in filteredLayers"
+          :key="layer.name"
+          :label="layer.name"
+          :value="layer.name"
+          @change="activateLayer(layer)"
+        />
+      </v-radio-group>
 
-    <v-btn
-      v-if="showExperimentalFeatures"
-      small
-      :disabled="!mapReady || isDrawing"
-      @click="onDrawButtonClick"
-    >
-      {{ drawButtonText }}
-      <v-icon v-if="!isDrawing && !drawnFeatures.length" right>
-        mdi-vector-polyline-edit
-      </v-icon>
-    </v-btn>
+      <v-btn
+        v-if="showExperimentalFeatures"
+        small
+        :disabled="!mapReady || isDrawing"
+        @click="onDrawButtonClick"
+      >
+        {{ drawButtonText }}
+        <v-icon v-if="!isDrawing && !drawnFeatures.length" right>
+          mdi-vector-polyline-edit
+        </v-icon>
+      </v-btn>
+    </div>
+
+    <div class="map-layers-panel">
+      <h3>Visualize</h3>
+      <v-radio-group
+        v-model="activeLayerName"
+        :disabled="disablePanelControls"
+      >
+        <v-radio
+          :key="anomaliesLayer.name"
+          :label="anomaliesLayer.name"
+          :value="anomaliesLayer.name"
+          @change="activateLayer(anomaliesLayer)"
+        />
+      </v-radio-group>
+      <v-menu
+        v-model="anomaliesDateMenu"
+        :close-on-content-click="false"
+        transition="scale-transition"
+        offset-y
+        max-width="290px"
+        min-width="auto"
+        :disabled="activeLayerName !== anomaliesLayer.name || disablePanelControls"
+      >
+        <template #activator="{ on, attrs }">
+          <v-text-field
+            v-model="anomaliesDate"
+            prepend-icon="mdi-calendar"
+            readonly
+            v-bind="attrs"
+            class="map-layers-panel__anomalies-date-input"
+            :disabled="activeLayerName !== anomaliesLayer.name || disablePanelControls"
+            v-on="on"
+          />
+        </template>
+        <v-date-picker
+          v-model="anomaliesDate"
+          type="month"
+          no-title
+          scrollable
+          :min="anomaliesLayer.firstLayerDate"
+          :max="anomaliesLayer.lastLayerDate"
+          @change="anomaliesDateMenu = false"
+        />
+      </v-menu>
+    </div>
   </div>
 </template>
 
@@ -247,10 +295,81 @@
                 },
               },
             ],
-            clickFn: this.onRegionLayerClick,
+            clickFn: this.onRegionClick,
           }),
         ],
+        anomaliesLayer: Object.freeze({
+          name: 'Anomalies',
+          type: 'anomalies',
+          firstLayerDate: '1995-01',
+          lastLayerDate: this.$config.lastAnomalyLayerDate,
+          styles: [
+            {
+              type: 'circle',
+              paint: {
+                'circle-radius': [
+                  'interpolate',
+                  ['linear'],
+                  ['zoom'],
+                  0,
+                  [
+                    'interpolate',
+                    [
+                      'cubic-bezier',
+                      0.1,
+                      0.8,
+                      0.9,
+                      1,
+                    ],
+                    ['get', 'area'],
+                    0,
+                    1,
+                    5030901200,
+                    10,
+                  ],
+                  22,
+                  [
+                    'interpolate',
+                    [
+                      'cubic-bezier',
+                      0.1,
+                      0.8,
+                      0.9,
+                      1,
+                    ],
+                    ['get', 'area'],
+                    0,
+                    5,
+                    5030901200,
+                    50,
+                  ],
+                ],
+                'circle-color': [
+                  'interpolate',
+                  ['linear'],
+                  ['get', 'anomaly'],
+                  -2,
+                  'hsl(0, 80%, 80%)',
+                  -1,
+                  'hsla(0, 40%, 40%, 0.8)',
+                  0,
+                  'hsla(100, 10%, 10%, 0.2)',
+                  1,
+                  'hsla(215, 40%, 40%, 0.8)',
+                  2,
+                  'hsl(215, 80%, 80%)',
+                ],
+                'circle-opacity': 0,
+                'circle-opacity-transition': {
+                  duration: LAYER_FADE_DURATION_MS,
+                },
+              },
+            },
+          ],
+          clickFn: this.onAnomalyClick,
+        }),
         isTransitioningLayer: false,
+        anomaliesDateMenu: false,
       }
     },
 
@@ -283,6 +402,17 @@
         if (this.drawnFeatures.length) { return 'View selected reservoir details' }
         return 'Select custom reservoir'
       },
+      anomaliesDate: {
+        get () {
+          return this.$store.getters['anomalies-layers/anomaliesDate']
+        },
+        set (date) {
+          this.$store.commit('anomalies-layers/SET_ANOMALIES_DATE', date)
+        },
+      },
+      disablePanelControls () {
+        return !this.mapReady || this.isDrawing || this.isTransitioningLayer
+      },
     },
 
     watch: {
@@ -305,15 +435,23 @@
       const initiallySelectedLayer = this.layers
         .find(({ name }) => name === this.activeLayerName)
 
+      if (!this.anomaliesDate) {
+        this.anomaliesDate = this.anomaliesLayer.lastLayerDate
+      }
+
       if (initiallyReservoirLayer && initiallySelectedLayer) {
-        this.$store.commit(`${initiallyReservoirLayer.type}-layers/ADD_LAYER`, initiallyReservoirLayer)
+        if (initiallySelectedLayer.type === 'zoomable') {
+          this.$store.commit(`${initiallyReservoirLayer.type}-layers/ADD_LAYER`, initiallyReservoirLayer)
+        }
         this.$store.commit(`${initiallySelectedLayer.type}-layers/ADD_LAYER`, initiallySelectedLayer)
       }
     },
 
     methods: {
       clearAll () {
+        this.$store.commit('reservoir-layers/REMOVE_ALL_LAYERS')
         this.$store.commit('zoomable-layers/REMOVE_ALL_LAYERS')
+        this.$store.commit('anomalies-layers/REMOVE_ALL_LAYERS')
       },
 
       clearMbDraw () {
@@ -329,6 +467,9 @@
         this.isTransitioningLayer = true
         this.clearAll()
         this.clearMbDraw()
+        if (layer.type === 'zoomable') {
+          this.$store.commit(`${this.reservoirLayer.type}-layers/ADD_LAYER`, this.reservoirLayer)
+        }
         this.$store.commit(`${layer.type}-layers/ADD_LAYER`, layer)
         setTimeout(() => {
           this.isTransitioningLayer = false
@@ -360,7 +501,7 @@
         this.$router.push({ path: `/basin/${source}--${zoom}--${lng}--${lat}--${UID}` })
       },
 
-      onRegionLayerClick (evt) {
+      onRegionClick (evt) {
         const region = evt.features?.[0]
         const UID = region?.properties.shapeID
         if (!UID) { return }
@@ -372,6 +513,14 @@
         const { lng, lat } = evt.target.getCenter()
 
         this.$router.push({ path: `/boundary/${source}--${zoom}--${lng}--${lat}--${UID}` })
+      },
+
+      onAnomalyClick (evt) {
+        const anomaly = evt.features?.[0]
+        if (!anomaly) {
+          return
+        }
+        this.$router.push({ path: `/reservoir/${anomaly.properties.point}` })
       },
 
       onDrawButtonClick () {

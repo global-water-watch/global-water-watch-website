@@ -26,6 +26,12 @@
       :options="layer"
     />
 
+    <map-layer-anomalies
+      v-for="layer in anomaliesLayers"
+      :key="layer.name"
+      :options="layer"
+    />
+
     <mapbox-draw-control v-if="showExperimentalFeatures" />
   </v-mapbox>
 </template>
@@ -58,6 +64,9 @@
       },
       zoomableLayers () {
         return this.$store.getters['zoomable-layers/layers']
+      },
+      anomaliesLayers () {
+        return this.$store.getters['anomalies-layers/layers']
       },
     },
 

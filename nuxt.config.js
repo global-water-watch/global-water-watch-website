@@ -10,6 +10,7 @@ export default {
     gtmCode: process.env.GTM_CODE,
     mapBoxToken: process.env.MAPBOX_TOKEN,
     mapBoxStyle: process.env.MAPBOX_STYLE,
+    lastAnomalyLayerDate: process.env.LAST_ANOMALY_LAYER_DATE,
   },
 
   srcDir: 'src/',
