@@ -10,6 +10,7 @@ export default {
     gtmCode: process.env.GTM_CODE,
     mapBoxToken: process.env.MAPBOX_TOKEN,
     mapBoxStyle: process.env.MAPBOX_STYLE,
+    lastAnomalyLayerDate: process.env.LAST_ANOMALY_LAYER_DATE,
   },
 
   srcDir: 'src/',
@@ -62,6 +63,7 @@ export default {
     { src: '~plugins/vue2mapbox-gl.client.js' },
     { src: '~plugins/create-repository.js' },
     { src: '~plugins/experimental-features.js', mode: 'client' },
+    { src: '~/plugins/jszip', mode: 'client' },
   ],
 
   env: {

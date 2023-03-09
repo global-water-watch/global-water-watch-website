@@ -1,12 +1,29 @@
-.map-layers-panel {
+.map-layers-panels {
   position: absolute;
-  top: 20px;
-  left: 20px;
+  top: $space-default;
+  left: $space-default;
+  z-index: 2;
+}
+
+.map-layers-panel {
   padding: 5px 15px 12px;
   border-radius: 4px;
   background-color: $gradient-top;
   box-shadow: 0 0 10px 2px rgb(0 0 0 / 10%);
-  z-index: 2;
+
+  h3 {
+    margin-top: $space-medium;
+  }
+}
+
+.map-layers-panel + .map-layers-panel {
+  margin-top: $space-medium;
+}
+
+.map-layers-panel__anomalies-date-input.v-text-field {
+  margin-left: $space-large;
+  margin-top: -$space-medium;
+  padding-top: 0;
 }
 
 .map-layers-panel__tooltip.v-tooltip__content.menuable__content__active {
