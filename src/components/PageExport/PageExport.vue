@@ -114,9 +114,7 @@
           const geometry = JSON.stringify(this.reservoirs[0])
 
           this.downloadFile(
-            this.reservoirs[0]?.properties?.name
-              ? `${this.reservoirs[0].properties.name} (#${this.reservoirs[0].id}).geojson`
-              : `#${this.reservoirs[0].id}.geojson`,
+            `${this.reservoirName(this.reservoirs[0])}.geojson`,
             new Blob([geometry], { type: 'application/geo+json;charset=utf-8' }),
           )
         } else {
@@ -151,10 +149,17 @@
       },
       downloadFile (filename, blob) {
         const anchor = document.createElement('a')
-        anchor.href = (window.URL || window.webkitURL).createObjectURL(blob)
+        anchor.href = window.URL.createObjectURL(blob)
         anchor.target = '_blank'
         anchor.download = filename
         anchor.click()
+      },
+      // For nameless reservoir: #id
+      // For named reservoirs: name (#id)
+      reservoirName (reservoir) {
+        return reservoir?.properties?.name
+          ? `${reservoir.properties.name} (#${this.reservoirs[0].id})`
+          : `#${reservoir.id}`
       },
     },
   }
