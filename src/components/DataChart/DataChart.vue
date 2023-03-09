@@ -188,6 +188,9 @@
       if (this.isLoading) { return }
       this.setupChart()
     },
+    beforeUnmount () {
+      window.removeEventListener('resize', this.resizeChart)
+    },
     methods: {
       subscribeChartEvents (chart) {
         chart.on('updateAxisPointer', (evt) => {
@@ -200,6 +203,9 @@
           this.$emit('selectedTimeChanged', value)
         })
       },
+      resizeChart () {
+        this.chart?.resize()
+      },
       setupChart () {
         const { $chart } = this.$refs
         const chart = init($chart, 'gww')
@@ -207,6 +213,8 @@
 
         chart.setOption(this.option)
         this.subscribeChartEvents(chart)
+
+        window.addEventListener('resize', this.resizeChart)
       },
     },
   }
