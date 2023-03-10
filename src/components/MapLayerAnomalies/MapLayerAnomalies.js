@@ -95,10 +95,12 @@ export default {
 
         // 2. Only after finishing the opacity transition do we fully remove the layer
         setTimeout(() => {
-          map.removeLayer(layerUniqueId)
+          if (map.getLayer(layerUniqueId)) {
+            map.removeLayer(layerUniqueId)
+          }
 
           // Only remove source when no other layers depend on it
-          if (!map.getStyle().layers.some(({ source }) => source === layerId)) {
+          if (map.getSource(layerId) && !map.getStyle().layers.some(({ source }) => source === layerId)) {
             map.removeSource(layerId)
           }
         }, LAYER_FADE_DURATION_MS)
