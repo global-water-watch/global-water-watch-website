@@ -86,7 +86,7 @@
       },
 
       satelliteVideo () {
-        return RESERVOIR_VIDEOS.find(video => video.id === this.reservoir.id)
+        return RESERVOIR_VIDEOS.features.find(video => video.id === this.reservoir.id)
       },
 
       isLoading () {
