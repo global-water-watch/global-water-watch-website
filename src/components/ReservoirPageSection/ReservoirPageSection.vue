@@ -23,7 +23,7 @@
           :is-loading="isLoading"
         />
         <MessageBox
-          v-else-if="reservoirs.length === 1"
+          v-else-if="reservoirs.type === 'Feature'"
           message="Select a data point in the graph to generate a satellite image"
           type="info"
           icon="mdi-information-outline"
@@ -32,7 +32,7 @@
       </div>
 
       <data-chart
-        v-if="(reservoirs.length && timeSeries) || isLoading || isLoadingChart"
+        v-if="(reservoirs && timeSeries) || isLoading || isLoadingChart"
         :title="chartTitle"
         :x-axis="xAxis"
         :y-axis="yAxis"
@@ -46,7 +46,7 @@
       />
 
       <ComparisonMap
-        v-if="showComparisonMap && (reservoirs.length || isLoading)"
+        v-if="showComparisonMap && (reservoirs || isLoading)"
         :reservoirs="reservoirs"
         :time-series="series"
         :is-loading="isLoading"
@@ -62,7 +62,7 @@
 
       <FeedbackForm
         v-if="showFeedbackForm && !isLoading"
-        :reservoir="reservoirs[0]"
+        :reservoir="reservoirs"
       />
     </div>
   </section>
@@ -72,8 +72,8 @@
   export default {
     props: {
       reservoirs: {
-        type: Array,
-        default: () => [],
+        type: Object,
+        default: () => {},
       },
       timeSeries: {
         type: [Object, null],
@@ -126,11 +126,11 @@
 
     computed: {
       chartTitle () {
-        if (this.reservoirs.length > 1) {
+        if (this.reservoirs.type === 'FeatureCollection') {
           return ''
         }
 
-        return this.reservoirs[0]?.properties?.name ? `Reservoir area of ${this.reservoirs[0].properties.name}` : ''
+        return this.reservoirs.properties?.name ? `Reservoir area of ${this.reservoirs.properties.name}` : ''
       },
 
       xAxis () {

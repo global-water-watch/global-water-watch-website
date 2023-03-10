@@ -62,8 +62,8 @@
         default: false,
       },
       reservoirs: {
-        type: Array,
-        default: () => [],
+        type: Object,
+        default: () => {},
       },
       timeSeries: {
         type: [Object, null],
@@ -110,24 +110,14 @@
         }
       },
       exportGeometry () {
-        if (this.reservoirs.length === 1) {
-          const geometry = JSON.stringify(this.reservoirs[0])
+        const filename = this.reservoirs.type === 'Feature'
+          ? `${this.reservoirName(this.reservoirs)}.geojson`
+          : 'Reservoirs.geojson'
 
-          this.downloadFile(
-            `${this.reservoirName(this.reservoirs[0])}.geojson`,
-            new Blob([geometry], { type: 'application/geo+json;charset=utf-8' }),
-          )
-        } else {
-          const geometry = JSON.stringify({
-            type: 'FeatureCollection',
-            features: this.reservoirs,
-          })
-
-          this.downloadFile(
-            'Reservoirs.geojson',
-            new Blob([geometry], { type: 'application/geo+json;charset=utf-8' }),
-          )
-        }
+        this.downloadFile(
+          filename,
+          new Blob([this.reservoirs], { type: 'application/geo+json;charset=utf-8' }),
+        )
       },
       timeSeriesCsv (serie) {
         let csv = `${this.timeSeries.xAxis[0].type},${this.timeSeries.yAxis[0].name}\n`
@@ -158,7 +148,7 @@
       // For named reservoirs: name (#id)
       reservoirName (reservoir) {
         return reservoir?.properties?.name
-          ? `${reservoir.properties.name} (#${this.reservoirs[0].id})`
+          ? `${reservoir.properties.name} (#${reservoir.id})`
           : `#${reservoir.id}`
       },
     },

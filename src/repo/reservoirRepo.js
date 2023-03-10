@@ -117,7 +117,7 @@ export default function (axios) {
         .then(timeSeries => formatTimeSeries(id, timeSeries)),
 
     getByGeometry: geometry =>
-      axios.post('reservoir/geometry', geometry).then(({ data }) => data),
+      axios.post('reservoir/geometry_fc', geometry).then(({ data }) => data),
 
     getTimeSeriesByGeometry: (geometry, variableName, period) =>
       axios.post(`reservoir/geometry/ts/${variableName}?agg_period=${period}`, geometry).then(formatMultipleTimeSeries),

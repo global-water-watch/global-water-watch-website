@@ -4,7 +4,7 @@
     class="reservoir-list__skeleton-loader"
     type="text, chip@4"
   />
-  <div v-else-if="reservoirs.length > 0" class="reservoir-list">
+  <div v-else-if="transformedReservoirs.length > 0" class="reservoir-list">
     <p class="p">
       Included reservoirs:
     </p>
@@ -21,7 +21,7 @@
       </li>
     </ul>
   </div>
-  <div v-else-if="reservoirs.length === 0" class="reservoir-list">
+  <div v-else-if="transformedReservoirs.length === 0" class="reservoir-list">
     <p class="p">
       No reservoirs included.
     </p>
@@ -34,7 +34,7 @@
   export default {
     props: {
       reservoirs: {
-        type: Array,
+        type: Object,
         required: true,
       },
       isLoading: {
@@ -49,7 +49,7 @@
 
     computed: {
       transformedReservoirs () {
-        return this.reservoirs.map(reservoir => ({
+        return this.reservoirs.features.map(reservoir => ({
           id: reservoir.id,
           name: reservoir.properties?.name ?? 'Nameless reservoir',
         })).sort((a, b) => a.name.localeCompare(b.name))

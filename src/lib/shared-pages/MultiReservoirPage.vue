@@ -44,7 +44,7 @@
     data: () => ({
       mapboxQueryData: null,
       areaType: null,
-      reservoirs: [],
+      reservoirs: {},
       reservoirsLoading: true,
       timeSeriesLoading: true,
       timeSeries: null,
@@ -58,7 +58,7 @@
       },
 
       curatedByGlobalDamWatch () {
-        return this.reservoirs.length > 0 && this.reservoirs.some(reservoir => reservoir.properties.grand_id)
+        return this.reservoirs?.features && this.reservoirs.features.some(reservoir => reservoir.properties.grand_id)
       },
     },
 

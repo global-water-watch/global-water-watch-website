@@ -7,7 +7,7 @@
   <div v-else class="comparison-map">
     <div id="comparison-map-container" class="comparison-map__map-container">
       <ComparisonDetailMap
-        v-if="reservoirs.length"
+        v-if="reservoirs"
         :reservoirs="reservoirs"
         :date="oldDate"
         class="comparison-map__detail-map"
@@ -16,7 +16,7 @@
       />
 
       <ComparisonDetailMap
-        v-if="reservoirs.length"
+        v-if="reservoirs"
         :reservoirs="reservoirs"
         :date="date"
         class="comparison-map__detail-map"
@@ -99,7 +99,7 @@
   export default {
     props: {
       reservoirs: {
-        type: Array,
+        type: Object,
         required: true,
       },
       timeSeries: {

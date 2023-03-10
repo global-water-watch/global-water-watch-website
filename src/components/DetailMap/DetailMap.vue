@@ -21,8 +21,8 @@
 </template>
 
 <script>
-  import { bbox, featureCollection } from '@turf/turf'
-  import { MAP_CENTER, MAP_ZOOM, MAP_CUSTOM_ATTRIBUTIONS, MAPBOX_STYLE_DARK, LAYER_FADE_DURATION_MS } from '@/lib/constants'
+  import { bbox } from '@turf/turf'
+  import { MAP_CENTER, MAP_ZOOM, MAP_CUSTOM_ATTRIBUTIONS, MAPBOX_STYLE_DARK } from '@/lib/constants'
   import { hoveredStyle, mouseEnterGeometry, mouseLeaveGeometry, mouseMoveGeometry } from '@/lib/map-hover-helpers'
 
   let map
@@ -30,7 +30,7 @@
   export default {
     props: {
       reservoirs: {
-        type: Array,
+        type: Object,
         required: true,
       },
       geometry: {
@@ -62,12 +62,12 @@
 
     computed: {
       transformedReservoirs () {
-        return this.reservoirs.map(reservoir => ({
+        return {
           type: 'geojson',
           data: {
-            ...reservoir,
+            ...this.reservoirs,
           },
-        }))
+        }
       },
       latestSelectedReservoirCoordinates () {
         return this.$store.getters['reservoir/latestSelectedReservoirCoordinates']
@@ -135,46 +135,45 @@
       },
 
       addTransformedReservoirsToMap (map) {
-        this.transformedReservoirs.forEach((reservoir) => {
-          const reservoirName = `reservoir-${reservoir.data.id}`
+        const reservoir = this.transformedReservoirs
+        const reservoirName = `reservoir-${reservoir.data.id}`
 
-          map.addSource(reservoirName, reservoir)
-          map.addLayer({
-            id: `${reservoirName}-fill`,
-            type: 'fill',
-            source: reservoirName,
-            layout: {},
-            paint: {
-              'fill-color': '#0AB6FF',
-              ...hoveredStyle(0.7),
-            },
-          })
-          map.addLayer({
-            id: `${reservoirName}-line`,
-            type: 'line',
-            source: reservoirName,
-            layout: {},
-            paint: {
-              'line-color': '#0AB6FF',
-              'line-width': 1,
-            },
-          })
+        map.addSource(reservoirName, reservoir)
+        map.addLayer({
+          id: `${reservoirName}-fill`,
+          type: 'fill',
+          source: reservoirName,
+          layout: {},
+          paint: {
+            'fill-color': '#0AB6FF',
+            ...hoveredStyle(0.7),
+          },
+        })
+        map.addLayer({
+          id: `${reservoirName}-line`,
+          type: 'line',
+          source: reservoirName,
+          layout: {},
+          paint: {
+            'line-color': '#0AB6FF',
+            'line-width': 1,
+          },
+        })
 
-          map.on('click', `${reservoirName}-fill`, this.onReservoirClick)
-          map.on('mouseenter', `${reservoirName}-fill`, () => {
-            mouseEnterGeometry({ map })
-          })
-          map.on('mousemove', `${reservoirName}-fill`, (evt) => {
-            mouseMoveGeometry({ map, evt, source: reservoirName, currentHoveredFeatureId: this.hoveredFeatureId })
-            const newHoveredFeatureId = evt.features?.[0]?.id
-            if (newHoveredFeatureId && newHoveredFeatureId !== this.hoveredFeatureId) {
-              this.hoveredFeatureId = newHoveredFeatureId
-            }
-          })
-          map.on('mouseleave', `${reservoirName}-fill`, () => {
-            mouseLeaveGeometry({ map, source: reservoirName, currentHoveredFeatureId: this.hoveredFeatureId })
-            this.hoveredFeatureId = null
-          })
+        map.on('click', `${reservoirName}-fill`, this.onReservoirClick)
+        map.on('mouseenter', `${reservoirName}-fill`, () => {
+          mouseEnterGeometry({ map })
+        })
+        map.on('mousemove', `${reservoirName}-fill`, (evt) => {
+          mouseMoveGeometry({ map, evt, source: reservoirName, currentHoveredFeatureId: this.hoveredFeatureId })
+          const newHoveredFeatureId = evt.features?.[0]?.id
+          if (newHoveredFeatureId && newHoveredFeatureId !== this.hoveredFeatureId) {
+            this.hoveredFeatureId = newHoveredFeatureId
+          }
+        })
+        map.on('mouseleave', `${reservoirName}-fill`, () => {
+          mouseLeaveGeometry({ map, source: reservoirName, currentHoveredFeatureId: this.hoveredFeatureId })
+          this.hoveredFeatureId = null
         })
       },
 
@@ -271,12 +270,7 @@
       },
 
       setBoundingBox (map) {
-        const allFeatures = featureCollection(
-          this.transformedReservoirs.length
-            ? this.transformedReservoirs.map(reservoir => reservoir.data)
-            : [{ type: 'Feature', geometry: this.geometry }],
-        )
-        const boundingBox = bbox(allFeatures)
+        const boundingBox = bbox(this.reservoirs)
         map.fitBounds(boundingBox, { padding: 40 })
       },
 
