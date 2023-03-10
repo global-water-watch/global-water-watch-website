@@ -121,9 +121,11 @@ export default {
       const { clickFn, id: layerSource } = this.options
 
       this.renderLayers.forEach((layer) => {
-        map.removeLayer(layer.id)
+        if (map.getLayer(layer.id)) {
+          map.removeLayer(layer.id)
+        }
         // Only remove source when no other layers depend on it
-        if (!map.getStyle().layers.some(({ source }) => source === layerSource)) {
+        if (map.getSource(layerSource) && !map.getStyle().layers.some(({ source }) => source === layerSource)) {
           map.removeSource(layerSource)
         }
         if (clickFn) {
