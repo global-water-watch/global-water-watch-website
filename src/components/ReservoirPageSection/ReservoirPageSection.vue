@@ -53,7 +53,7 @@
       />
 
       <PageExport
-        v-if="reservoirs.length"
+        v-if="reservoirs"
         :is-loading="isLoading"
         :area-type="areaType"
         :reservoirs="reservoirs"

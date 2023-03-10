@@ -110,13 +110,15 @@
         }
       },
       exportGeometry () {
-        const filename = this.reservoirs.type === 'Feature'
+        const isSingleFeature = this.reservoirs.type === 'Feature'
+
+        const filename = isSingleFeature
           ? `${this.reservoirName(this.reservoirs)}.geojson`
           : 'Reservoirs.geojson'
 
         this.downloadFile(
           filename,
-          new Blob([this.reservoirs], { type: 'application/geo+json;charset=utf-8' }),
+          new Blob([JSON.stringify(this.reservoirs)], { type: 'application/geo+json;charset=utf-8' }),
         )
       },
       timeSeriesCsv (serie) {
