@@ -22,7 +22,7 @@
 
 <script>
   import { bbox, featureCollection } from '@turf/turf'
-  import { MAP_CENTER, MAP_ZOOM, MAP_CUSTOM_ATTRIBUTIONS, MAPBOX_STYLE_DARK, LAYER_FADE_DURATION_MS } from '@/lib/constants'
+  import { MAP_CENTER, MAP_ZOOM, MAP_CUSTOM_ATTRIBUTIONS, MAPBOX_STYLE_DARK } from '@/lib/constants'
   import { hoveredStyle, mouseEnterGeometry, mouseLeaveGeometry, mouseMoveGeometry } from '@/lib/map-hover-helpers'
 
   let map
