@@ -130,6 +130,7 @@
         ],
         anomaliesLayer: Object.freeze({
           ...anomalies,
+          lastLayerDate: this.$config.lastAnomalyLayerDate,
           clickFn: this.onAnomalyClick,
         }),
         isTransitioningLayer: false,
