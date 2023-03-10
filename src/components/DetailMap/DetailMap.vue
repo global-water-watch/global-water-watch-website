@@ -22,7 +22,8 @@
 
 <script>
   import { bbox, featureCollection } from '@turf/turf'
-  import { MAP_CENTER, MAP_ZOOM, MAP_CUSTOM_ATTRIBUTIONS, MAPBOX_STYLE_DARK } from '@/lib/constants'
+  import { MAP_CENTER, MAP_ZOOM, MAP_CUSTOM_ATTRIBUTIONS, MAPBOX_STYLE_DARK, LAYER_FADE_DURATION_MS } from '@/lib/constants'
+  import { hoveredStyle, mouseEnterGeometry, mouseLeaveGeometry, mouseMoveGeometry } from '@/lib/map-hover-helpers'
 
   let map
 
@@ -55,6 +56,7 @@
           style: MAPBOX_STYLE_DARK,
           customAttribution: MAP_CUSTOM_ATTRIBUTIONS,
         },
+        hoveredFeatureId: null,
       }
     },
 
@@ -135,7 +137,7 @@
             layout: {},
             paint: {
               'fill-color': '#0AB6FF',
-              'fill-opacity': 0.7,
+              ...hoveredStyle(0.7),
             },
           })
           map.addLayer({
@@ -149,8 +151,20 @@
             },
           })
 
-          map.on('click', `${reservoirName}-fill`, (evt) => {
-            this.onReservoirClick(evt)
+          map.on('click', `${reservoirName}-fill`, this.onReservoirClick)
+          map.on('mouseenter', `${reservoirName}-fill`, () => {
+            mouseEnterGeometry({ map })
+          })
+          map.on('mousemove', `${reservoirName}-fill`, (evt) => {
+            mouseMoveGeometry({ map, evt, source: reservoirName, currentHoveredFeatureId: this.hoveredFeatureId })
+            const newHoveredFeatureId = evt.features?.[0]?.id
+            if (newHoveredFeatureId && newHoveredFeatureId !== this.hoveredFeatureId) {
+              this.hoveredFeatureId = newHoveredFeatureId
+            }
+          })
+          map.on('mouseleave', `${reservoirName}-fill`, () => {
+            mouseLeaveGeometry({ map, source: reservoirName, currentHoveredFeatureId: this.hoveredFeatureId })
+            this.hoveredFeatureId = null
           })
         })
       },
@@ -170,7 +184,7 @@
           layout: {},
           paint: {
             'fill-color': '#8fdfef',
-            'fill-opacity': 0.4,
+            ...hoveredStyle(0.4),
           },
         })
 
@@ -186,12 +200,22 @@
           },
         })
 
-        map.on('click', 'reservoirsv10-fill', (evt) => {
-          this.onReservoirClick(evt)
-        })
+        map.on('click', 'reservoirsv10-fill', this.onReservoirClick)
+        map.on('click', 'reservoirsv10-line', this.onReservoirClick)
 
-        map.on('click', 'reservoirsv10-line', (evt) => {
-          this.onReservoirClick(evt)
+        map.on('mouseenter', 'reservoirsv10-fill', () => {
+          mouseEnterGeometry({ map })
+        })
+        map.on('mousemove', 'reservoirsv10-fill', (evt) => {
+          mouseMoveGeometry({ map, evt, source: 'reservoirsv10', sourceLayer: 'reservoirsv10', currentHoveredFeatureId: this.hoveredFeatureId })
+          const newHoveredFeatureId = evt.features?.[0]?.id
+          if (newHoveredFeatureId && newHoveredFeatureId !== this.hoveredFeatureId) {
+            this.hoveredFeatureId = newHoveredFeatureId
+          }
+        })
+        map.on('mouseleave', 'reservoirsv10-fill', () => {
+          mouseLeaveGeometry({ map, source: 'reservoirsv10', sourceLayer: 'reservoirsv10', currentHoveredFeatureId: this.hoveredFeatureId })
+          this.hoveredFeatureId = null
         })
 
         if (this.reservoirs.length === 1) {

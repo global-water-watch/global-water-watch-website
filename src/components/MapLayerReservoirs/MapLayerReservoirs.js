@@ -1,4 +1,5 @@
 import { MAP_CENTER, MAP_ZOOM } from '@/lib/constants'
+import { mouseEnterGeometry, mouseMoveGeometry, mouseLeaveGeometry } from '@/lib/map-hover-helpers'
 
 export default {
   name: 'v-mapbox-reservoirs-layer',
@@ -81,6 +82,7 @@ export default {
 
           if (layer.type === 'fill') {
             map.on('mouseenter', layer.id, this.mouseEnterFn)
+            map.on('mousemove', layer.id, this.mouseMoveFn)
             map.on('mouseleave', layer.id, this.mouseLeaveFn)
           }
         }
@@ -89,12 +91,28 @@ export default {
 
     mouseEnterFn () {
       const map = this.getMap()
-      map.getCanvas().style.cursor = 'pointer'
+      mouseEnterGeometry({ map })
+    },
+
+    mouseMoveFn (evt) {
+      const map = this.getMap()
+      const { id } = this.options
+
+      mouseMoveGeometry({ map, evt, source: id, sourceLayer: id, currentHoveredFeatureId: this.hoveredFeatureId })
+
+      const newHoveredFeatureId = evt.features?.[0]?.id
+      if (newHoveredFeatureId && newHoveredFeatureId !== this.hoveredFeatureId) {
+        this.hoveredFeatureId = newHoveredFeatureId
+      }
     },
 
     mouseLeaveFn () {
       const map = this.getMap()
-      map.getCanvas().style.cursor = ''
+      const { id } = this.options
+
+      mouseLeaveGeometry({ map, source: id, sourceLayer: id, currentHoveredFeatureId: this.hoveredFeatureId })
+
+      this.hoveredFeatureId = null
     },
 
     removeLayer () {
@@ -113,6 +131,7 @@ export default {
 
           if (layer.type === 'fill') {
             map.off('mouseenter', layer.id, this.mouseEnterFn)
+            map.on('mousemove', layer.id, this.mouseMoveFn)
             map.off('mouseleave', layer.id, this.mouseLeaveFn)
           }
         }

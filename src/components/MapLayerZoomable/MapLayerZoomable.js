@@ -1,5 +1,6 @@
 import { LAYER_FADE_DURATION_MS } from '@/lib/constants'
 import { difference } from '@/lib/array-helpers'
+import { mouseEnterGeometry, mouseMoveGeometry, mouseLeaveGeometry } from '@/lib/map-hover-helpers'
 
 export default {
   name: 'v-mapbox-zoomable-layer',
@@ -81,49 +82,19 @@ export default {
 
         if (style.type === 'fill') {
           this.mouseEnterFnMap[layerUniqueId] = () => {
-            map.getCanvas().style.cursor = 'pointer'
+            mouseEnterGeometry({ map })
           }
 
           this.mouseMoveFnMap[layerUniqueId] = (evt) => {
+            mouseMoveGeometry({ map, evt, source: layerId, sourceLayer: layerId, currentHoveredFeatureId: this.hoveredFeatureId })
             const newHoveredFeatureId = evt.features?.[0]?.id
-            if (!newHoveredFeatureId || newHoveredFeatureId === this.hoveredFeatureId) {
-              return
+            if (newHoveredFeatureId && newHoveredFeatureId !== this.hoveredFeatureId) {
+              this.hoveredFeatureId = newHoveredFeatureId
             }
-            // Reset previous hover state
-            if (this.hoveredFeatureId !== null) {
-              map.setFeatureState(
-                {
-                  source: layerId,
-                  sourceLayer: layerId,
-                  id: this.hoveredFeatureId,
-                },
-                { hover: false },
-              )
-            }
-            // Set new hover state
-            this.hoveredFeatureId = newHoveredFeatureId
-            map.setFeatureState(
-              {
-                source: layerId,
-                sourceLayer: layerId,
-                id: this.hoveredFeatureId,
-              },
-              { hover: true },
-            )
           }
 
           this.mouseLeaveFnMap[layerUniqueId] = () => {
-            map.getCanvas().style.cursor = ''
-            if (this.hoveredFeatureId !== null) {
-              map.setFeatureState(
-                {
-                  source: layerId,
-                  sourceLayer: layerId,
-                  id: this.hoveredFeatureId,
-                },
-                { hover: false },
-              )
-            }
+            mouseLeaveGeometry({ map, source: layerId, sourceLayer: layerId, currentHoveredFeatureId: this.hoveredFeatureId })
             this.hoveredFeatureId = null
           }
 
