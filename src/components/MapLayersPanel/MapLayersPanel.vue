@@ -133,7 +133,9 @@
           clickFn: this.onAnomalyClick,
         }),
         isTransitioningLayer: false,
+        multiReservoirSelection: [],
         layerTooltips: {
+          Reservoirs: false,
           Basins: false,
           'Administrative regions': false,
         },
@@ -223,6 +225,7 @@
 
     methods: {
       clearAll () {
+        this.multiReservoirSelection = []
         this.$store.commit('reservoir-layers/REMOVE_ALL_LAYERS')
         this.$store.commit('zoomable-layers/REMOVE_ALL_LAYERS')
         this.$store.commit('anomalies-layers/REMOVE_ALL_LAYERS')
@@ -253,12 +256,40 @@
       onReservoirClick (evt) {
         // If we click on a reservoir while drawing, do nothing
         if (this.isDrawing) { return }
+
         const reservoir = evt.features?.[0]
         if (!reservoir) {
           return
         }
-        const { fid } = reservoir.properties
-        this.$router.push({ path: `/reservoir/${fid}` })
+
+        if (evt.originalEvent.ctrlKey || evt.originalEvent.metaKey) {
+          this.onMultiReservoirClick(evt)
+        } else if (this.multiReservoirSelection.length > 0 && this.multiReservoirSelection.includes(reservoir.id)) {
+          const geometry = { ids: this.multiReservoirSelection }
+          const query = qs.stringify(geometry, { arrayFormat: 'comma' })
+          this.$router.push({ path: `/multi-reservoir/?${query}` })
+        } else {
+          this.$router.push({ path: `/reservoir/${reservoir.id}` })
+        }
+      },
+
+      onMultiReservoirClick (evt) {
+        const reservoir = evt.features?.[0]
+
+        if (this.multiReservoirSelection.includes(reservoir.id)) {
+          this.multiReservoirSelection = this.multiReservoirSelection.filter(id => id !== reservoir.id)
+        } else {
+          this.multiReservoirSelection.push(reservoir.id)
+        }
+
+        evt.target.setFeatureState(
+          {
+            source: 'reservoirsv10',
+            sourceLayer: 'reservoirsv10',
+            id: reservoir.id,
+          },
+          { selected: this.multiReservoirSelection.includes(reservoir.id) },
+        )
       },
 
       onBasinClick (evt) {

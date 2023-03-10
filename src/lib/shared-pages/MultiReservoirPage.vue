@@ -49,7 +49,7 @@
       timeSeriesLoading: true,
       timeSeries: null,
       pageContent: {},
-      geometry: {},
+      geometry: null,
     }),
 
     computed: {
@@ -94,20 +94,33 @@
         }
       },
 
-      doQueryBasedData () {
+      async doQueryBasedData () {
         const qstring = this.$route.fullPath.split('?')?.[1]
-        const { type, coordinates } = qs.parse(qstring)
-        if (!type || !coordinates) {
-          console.warn('Invalid coordinates, can\'t fetch data')
-          return
+        const { type, coordinates, ids } = qs.parse(qstring, { comma: true })
+        if (ids) {
+          await this.onReservoirIds(ids)
+        } else {
+          if (!type || !coordinates) {
+            console.warn('Invalid coordinates, can\'t fetch data')
+            return
+          }
+          this.onGeometry({ type, coordinates })
         }
-        this.onGeometry({ type, coordinates })
       },
 
       onGeometry (geometry) {
         this.geometry = geometry
         this.getReservoirsOnGeometry(geometry)
         this.getTimeSeriesOnGeometry(geometry)
+      },
+
+      async onReservoirIds (ids) {
+        const reservoirs = await this.$repo.reservoir.getByIds(ids)
+        this.reservoirs = reservoirs?.features
+        this.reservoirsLoading = false
+
+        this.timeSeries = await this.$repo.reservoir.getTimeSeriesByIds(ids, 'surface_water_area', 'monthly')
+        this.timeSeriesLoading = false
       },
 
       getTimeSeriesOnGeometry (geometry) {

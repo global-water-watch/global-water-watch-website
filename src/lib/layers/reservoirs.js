@@ -1,4 +1,4 @@
-import { hoveredStyle } from '@/lib/map-hover-helpers'
+import { LAYER_FADE_DURATION_MS } from '@/lib/constants'
 
 export default {
   name: 'Reservoirs',
@@ -15,7 +15,17 @@ export default {
       type: 'fill',
       paint: {
         'fill-color': '#8fdfef',
-        ...hoveredStyle(0.4, 0.75),
+        'fill-opacity': [
+          'case',
+          ['boolean', ['feature-state', 'selected'], false],
+          1,
+          ['boolean', ['feature-state', 'hover'], false],
+          0.75,
+          0.4,
+        ],
+        'fill-opacity-transition': {
+          duration: LAYER_FADE_DURATION_MS,
+        },
       },
     },
     {
