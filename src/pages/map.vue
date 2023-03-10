@@ -12,6 +12,7 @@
     destroyed () {
       this.$store.commit('zoomable-layers/REMOVE_ALL_LAYERS')
       this.$store.commit('reservoir-layers/REMOVE_ALL_LAYERS')
+      this.$store.commit('reservoir/RESET_LATEST_SELECTED_RESERVOIR_COORDINATES')
     },
   }
 </script>
