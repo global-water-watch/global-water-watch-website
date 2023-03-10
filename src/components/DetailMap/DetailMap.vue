@@ -226,9 +226,9 @@
           this.hoveredFeatureId = null
         })
 
-        if (this.reservoirs.length === 1) {
-          map.setFilter('reservoirsv10-fill', ['!=', 'fid', this.reservoirs[0]?.id])
-          map.setFilter('reservoirsv10-line', ['!=', 'fid', this.reservoirs[0]?.id])
+        if (this.reservoirs.id) {
+          map.setFilter('reservoirsv10-fill', ['!=', 'fid', this.reservoirs.id])
+          map.setFilter('reservoirsv10-line', ['!=', 'fid', this.reservoirs.id])
         } else {
           map.setFilter('reservoirsv10-fill', ['in', 'fid', ''])
           map.setFilter('reservoirsv10-line', ['in', 'fid', ''])
