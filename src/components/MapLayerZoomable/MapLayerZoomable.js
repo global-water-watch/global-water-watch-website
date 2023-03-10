@@ -128,6 +128,8 @@ export default {
 
         // 2. Only after finishing the opacity transition do we fully remove the layer
         setTimeout(() => {
+          if (!map || !map.isStyleLoaded()) { return }
+
           if (map.getLayer(layerUniqueId)) {
             map.removeLayer(layerUniqueId)
           }
