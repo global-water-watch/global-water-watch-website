@@ -102,305 +102,34 @@
 <script>
   import qs from 'qs'
   import { LAYER_FADE_DURATION_MS } from '@/lib/constants'
+  import reservoirs from '@/lib/layers/reservoirs'
+  import basins from '@/lib/layers/basins'
+  import administrativeRegions from '@/lib/layers/administrative-regions'
+  import anomalies from '@/lib/layers/anomalies'
 
   export default {
     data () {
       return {
         reservoirLayer: Object.freeze({
-          name: 'Reservoirs',
-          type: 'reservoir',
-          id: 'reservoirsv10',
-          checked: true,
-          source: {
-            type: 'vector',
-            url: 'mapbox://global-water-watch.reservoirs-v10',
-          },
-          styles: [
-            {
-              type: 'fill',
-              paint: {
-                'fill-color': '#8fdfef',
-                'fill-opacity': 0.4,
-              },
-            },
-            {
-              type: 'line',
-              paint: {
-                'line-color': '#8fdfef',
-                'line-width': 0.8,
-              },
-            },
-          ],
+          ...reservoirs,
           clickFn: this.onReservoirClick,
         }),
         layers: [
           Object.freeze({
-            name: 'Reservoirs',
-            type: 'reservoir',
-            id: 'reservoirsv10',
-            checked: true,
-            source: {
-              type: 'vector',
-              url: 'mapbox://global-water-watch.reservoirs-v10',
-            },
-            styles: [
-              {
-                type: 'fill',
-                paint: {
-                  'fill-color': '#8fdfef',
-                  'fill-opacity': 0.4,
-                },
-              },
-              {
-                type: 'line',
-                paint: {
-                  'line-color': '#8fdfef',
-                  'line-width': 0.8,
-                },
-              },
-            ],
+            ...reservoirs,
             clickFn: this.onReservoirClick,
           }),
           Object.freeze({
-            name: 'Basins',
-            type: 'zoomable',
-            promoteId: 'HYBAS_ID', // this id is used to identify the hover id in the map.
-            experimentalFeature: false, // disable this feature when you want to display it default
-            description: `You can select reservoirs by basin.
-                          A basin is a topographic region where all water drains to the same point.
-                          The polygons that you can select originate from the
-                          <a href="https://www.hydrosheds.org/products/hydrobasins" target="_blank" rel="noopener noreferrer">HydroBASINS</a> dataset,
-                          a global covering set of nested basins.`,
-            layers: [
-              {
-                id: 'BasinATLAS_v10_lev01',
-                zoomLevels: [0, 1, 2],
-                source: {
-                  type: 'vector',
-                  url: 'mapbox://global-water-watch.BasinATLAS_v10_lev01',
-                },
-              },
-              {
-                id: 'BasinATLAS_v10_lev02',
-                zoomLevels: [3],
-                source: {
-                  type: 'vector',
-                  url: 'mapbox://global-water-watch.BasinATLAS_v10_lev02',
-                },
-              },
-              {
-                id: 'BasinATLAS_v10_lev03',
-                zoomLevels: [4],
-                source: {
-                  type: 'vector',
-                  url: 'mapbox://global-water-watch.BasinATLAS_v10_lev03',
-                },
-              },
-              {
-                id: 'BasinATLAS_v10_lev04',
-                zoomLevels: [5],
-                source: {
-                  type: 'vector',
-                  url: 'mapbox://global-water-watch.BasinATLAS_v10_lev04',
-                },
-              },
-              {
-                id: 'BasinATLAS_v10_lev05',
-                zoomLevels: [6],
-                source: {
-                  type: 'vector',
-                  url: 'mapbox://global-water-watch.BasinATLAS_v10_lev05',
-                },
-              },
-              {
-                id: 'BasinATLAS_v10_lev06',
-                zoomLevels: [
-                  7,
-                  // Extra zoom levels so it always stays active
-                  8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
-                ],
-                source: {
-                  type: 'vector',
-                  url: 'mapbox://global-water-watch.BasinATLAS_v10_lev06',
-                },
-              },
-              // Basins above zoom level 6 are currently too expensive to use
-              // {
-              //   id: 'BasinATLAS_v10_lev10',
-              //   zoomLevels: [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
-              //   source: {
-              //     type: 'vector',
-              //     url: 'mapbox://global-water-watch.BasinATLAS_v10_lev10',
-              //   },
-              // },
-            ],
-            styles: [
-              {
-                type: 'fill',
-                paint: {
-                  'fill-color': '#8fdfef',
-                  'fill-opacity': [
-                    'case',
-                    ['boolean', ['feature-state', 'hover'], false],
-                    0.75,
-                    0,
-                  ],
-                  'fill-opacity-transition': {
-                    duration: LAYER_FADE_DURATION_MS,
-                  },
-                },
-              },
-              {
-                type: 'line',
-                paint: {
-                  'line-color': '#8fdfef',
-                  'line-width': 0.8,
-                  'line-opacity': 0,
-                  'line-opacity-transition': {
-                    duration: LAYER_FADE_DURATION_MS,
-                  },
-                },
-              },
-            ],
+            ...basins,
             clickFn: this.onBasinClick,
           }),
           Object.freeze({
-            name: 'Administrative regions',
-            type: 'zoomable',
-            attribution: '<a href="https://www.geoboundaries.org" target="_blank" rel="noopener noreferrer">geoBoundaries</a>', // this id is used to identify the hover id in the map.
-            promoteId: 'shapeID', // this id is used to identify the hover id in the map.
-            experimentalFeature: false, // disable this feature when you want to display it default
-            description: `You can select the reservoirs by administrative region.
-                          These nested regions (e.g. country, province, municipality) originate from the
-                          <a href="https://www.geoboundaries.org/" target="_blank" rel="noopener noreferrer">geoBoundaries</a> dataset.
-                          The Comprehensive Global Administrative Zones
-                          (<a href="https://www.geoboundaries.org/downloadCGAZ.html" target="_blank" rel="noopener noreferrer">CGAZ</a>) variant is used.
-                          This dataset relies on the US Department of State definitions for contested areas.`,
-            layers: [
-              {
-                id: 'geoBoundariesCGAZ_ADM0',
-                zoomLevels: [0, 1, 2, 3],
-                source: {
-                  type: 'vector',
-                  url: 'mapbox://global-water-watch.geoBoundariesCGAZ_ADM0',
-                },
-              },
-              {
-                id: 'geoBoundariesCGAZ_ADM1',
-                zoomLevels: [4, 5, 6, 7],
-                source: {
-                  type: 'vector',
-                  url: 'mapbox://global-water-watch.geoBoundariesCGAZ_ADM1',
-                },
-              },
-              {
-                id: 'geoBoundariesCGAZ_ADM2',
-                zoomLevels: [8, 9, 10, 11, 12],
-                source: {
-                  type: 'vector',
-                  url: 'mapbox://global-water-watch.geoBoundariesCGAZ_ADM2',
-                },
-              },
-            ],
-            styles: [
-              {
-                type: 'fill',
-                paint: {
-                  'fill-color': '#d78200',
-                  'fill-opacity': [
-                    'case',
-                    ['boolean', ['feature-state', 'hover'], false],
-                    0.75,
-                    0,
-                  ],
-                  'fill-opacity-transition': {
-                    duration: LAYER_FADE_DURATION_MS,
-                  },
-                },
-              },
-              {
-                type: 'line',
-                paint: {
-                  'line-color': '#d78200',
-                  'line-width': 0.8,
-                  'line-opacity': 0,
-                  'line-opacity-transition': {
-                    duration: LAYER_FADE_DURATION_MS,
-                  },
-                },
-              },
-            ],
+            ...administrativeRegions,
             clickFn: this.onRegionClick,
           }),
         ],
         anomaliesLayer: Object.freeze({
-          name: 'Anomalies',
-          type: 'anomalies',
-          firstLayerDate: '1995-01',
-          lastLayerDate: this.$config.lastAnomalyLayerDate,
-          styles: [
-            {
-              type: 'circle',
-              paint: {
-                'circle-radius': [
-                  'interpolate',
-                  ['linear'],
-                  ['zoom'],
-                  0,
-                  [
-                    'interpolate',
-                    [
-                      'cubic-bezier',
-                      0.1,
-                      0.8,
-                      0.9,
-                      1,
-                    ],
-                    ['get', 'area'],
-                    0,
-                    1,
-                    5030901200,
-                    10,
-                  ],
-                  22,
-                  [
-                    'interpolate',
-                    [
-                      'cubic-bezier',
-                      0.1,
-                      0.8,
-                      0.9,
-                      1,
-                    ],
-                    ['get', 'area'],
-                    0,
-                    5,
-                    5030901200,
-                    50,
-                  ],
-                ],
-                'circle-color': [
-                  'interpolate',
-                  ['linear'],
-                  ['get', 'anomaly'],
-                  -2,
-                  'hsl(0, 80%, 80%)',
-                  -1,
-                  'hsla(0, 40%, 40%, 0.8)',
-                  0,
-                  'hsla(100, 10%, 10%, 0.2)',
-                  1,
-                  'hsla(215, 40%, 40%, 0.8)',
-                  2,
-                  'hsl(215, 80%, 80%)',
-                ],
-                'circle-opacity': 0,
-                'circle-opacity-transition': {
-                  duration: LAYER_FADE_DURATION_MS,
-                },
-              },
-            },
-          ],
+          ...anomalies,
           clickFn: this.onAnomalyClick,
         }),
         isTransitioningLayer: false,
