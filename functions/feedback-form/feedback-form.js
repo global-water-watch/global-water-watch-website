@@ -2,18 +2,18 @@
 // Grab our credentials from a .env file or environment variables
 const {
   SUPABASE_API_URL,
-  SUPABASE_API_KEY
-} = process.env;
+  SUPABASE_API_KEY,
+} = process.env
 
 // Connect to our database
-const { createClient } = require('@supabase/supabase-js');
-const supabase = createClient(SUPABASE_API_URL, SUPABASE_API_KEY);
+const { createClient } = require('@supabase/supabase-js')
+const supabase = createClient(SUPABASE_API_URL, SUPABASE_API_KEY)
 
 const handler = async (event) => {
   try {
     // Parse the form data from the request body
-    const body = JSON.parse(event.body);
-    const { reservoirId, reservoirNameSuggestion, notes } = body;
+    const body = JSON.parse(event.body)
+    const { reservoirId, reservoirNameSuggestion, notes } = body
 
     const { data, error } = await supabase
       .from('Feedback form')
@@ -21,29 +21,28 @@ const handler = async (event) => {
         {
           reservoir_id: reservoirId,
           reservoir_suggested_name: reservoirNameSuggestion,
-          notes
-        }
+          notes,
+        },
       )
-      .select('*');
-
+      .select('*')
 
     if (data) {
       return {
         statusCode: 200,
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
       }
     }
 
     if (error) {
       return {
         statusCode: 500,
-        body: JSON.stringify(error)
+        body: JSON.stringify(error),
       }
     }
   } catch (error) {
     return {
       statusCode: 500,
-      body: error.toString()
+      body: error.toString(),
     }
   }
 }
