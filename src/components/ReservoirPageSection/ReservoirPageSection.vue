@@ -32,7 +32,7 @@
       </div>
 
       <data-chart
-        v-if="(reservoirs && timeSeries) || isLoading || isLoadingChart"
+        v-if="(hasReservoirs && timeSeries) || isLoading || isLoadingChart"
         :title="chartTitle"
         :x-axis="xAxis"
         :y-axis="yAxis"
@@ -46,14 +46,14 @@
       />
 
       <ComparisonMap
-        v-if="showComparisonMap && (reservoirs || isLoading)"
+        v-if="showComparisonMap && (hasReservoirs || isLoading)"
         :reservoirs="reservoirs"
         :time-series="series"
         :is-loading="isLoading"
       />
 
       <PageExport
-        v-if="reservoirs"
+        v-if="hasReservoirs"
         :is-loading="isLoading"
         :area-type="areaType"
         :reservoirs="reservoirs"
@@ -143,6 +143,10 @@
 
       series () {
         return this.timeSeries?.series
+      },
+
+      hasReservoirs () {
+        return (this.reservoirs.type === 'FeatureCollection' && this.reservoirs.features.length > 0) || this.reservoirs.type === 'Feature'
       },
     },
 

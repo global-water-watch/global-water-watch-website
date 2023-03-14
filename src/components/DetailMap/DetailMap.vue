@@ -270,7 +270,9 @@
       },
 
       setBoundingBox (map) {
-        const boundingBox = bbox(this.reservoirs)
+        const isEmptyFeatureCollection = this.reservoirs.type === 'FeatureCollection' && this.reservoirs.features.length === 0
+        const boundingBox = bbox(isEmptyFeatureCollection ? this.geometry : this.reservoirs)
+
         map.fitBounds(boundingBox, { padding: 40 })
       },
 
