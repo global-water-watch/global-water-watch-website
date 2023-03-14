@@ -18,7 +18,7 @@
       </PageHeroesDetailHero>
 
       <ReservoirPageSection
-        :reservoirs="[reservoir]"
+        :reservoirs="reservoir"
         :time-series="timeSeries"
         :satellite-image-url="satelliteImageUrl"
         :generating-satellite-image-url="generatingSatelliteImageUrl"
