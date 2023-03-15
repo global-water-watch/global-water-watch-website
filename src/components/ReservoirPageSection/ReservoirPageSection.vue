@@ -2,8 +2,8 @@
   <section class="reservoir-page-section layout-section layout-section--lined">
     <div class="layout-container">
       <DetailMap
-        v-if="reservoirs.length || isLoading"
         :reservoirs="reservoirs"
+        :geometry="geometry"
         :satellite-image-url="satelliteImageUrl"
         :is-loading="isLoading"
       />
@@ -23,7 +23,7 @@
           :is-loading="isLoading"
         />
         <MessageBox
-          v-else-if="reservoirs.length === 1"
+          v-else-if="reservoirs.type === 'Feature'"
           message="Select a data point in the graph to generate a satellite image"
           type="info"
           icon="mdi-information-outline"
@@ -32,37 +32,37 @@
       </div>
 
       <data-chart
-        v-if="timeSeries || isLoading || isLoadingChart"
+        v-if="(hasReservoirs && timeSeries) || isLoading || isLoadingChart"
         :title="chartTitle"
-        :show-export-button="showExportButton"
         :x-axis="xAxis"
         :y-axis="yAxis"
         :series="series"
         :show-tooltip="true"
         :show-legend="true"
         :use-zoom="true"
-        :use-toolbox="false"
+        :use-toolbox="true"
         :is-loading="isLoading || isLoadingChart"
         @selectedTimeChanged="onSelectedTimeChanged"
       />
 
       <ComparisonMap
-        v-if="showComparisonMap && (reservoirs.length || isLoading)"
+        v-if="showComparisonMap && (hasReservoirs || isLoading)"
         :reservoirs="reservoirs"
         :time-series="series"
         :is-loading="isLoading"
       />
 
-      <!-- Temporary hide share page for custom selection since this url isn't nice to share -->
-      <PageShare
-        v-if="areaType !== 'custom-selection'"
-        title="Share this page"
+      <PageExport
+        v-if="hasReservoirs"
         :is-loading="isLoading"
+        :area-type="areaType"
+        :reservoirs="reservoirs"
+        :time-series="timeSeries"
       />
 
       <FeedbackForm
         v-if="showFeedbackForm && !isLoading"
-        :reservoir="reservoirs[0]"
+        :reservoir="reservoirs"
       />
     </div>
   </section>
@@ -72,8 +72,8 @@
   export default {
     props: {
       reservoirs: {
-        type: Array,
-        default: () => [],
+        type: Object,
+        default: () => {},
       },
       timeSeries: {
         type: [Object, null],
@@ -98,6 +98,10 @@
         type: String,
         default: '',
       },
+      geometry: {
+        type: Object,
+        default: () => {},
+      },
       satelliteImageUrl: {
         type: String,
         default: '',
@@ -107,10 +111,6 @@
         default: false,
       },
       showFeedbackForm: {
-        type: Boolean,
-        default: false,
-      },
-      showExportButton: {
         type: Boolean,
         default: false,
       },
@@ -126,11 +126,11 @@
 
     computed: {
       chartTitle () {
-        if (this.reservoirs.length > 1) {
+        if (this.reservoirs.type === 'FeatureCollection') {
           return ''
         }
 
-        return this.reservoirs[0]?.properties?.name ? `Reservoir area of ${this.reservoirs[0].properties.name}` : ''
+        return this.reservoirs.properties?.name ? `Reservoir area of ${this.reservoirs.properties.name}` : ''
       },
 
       xAxis () {
@@ -143,6 +143,10 @@
 
       series () {
         return this.timeSeries?.series
+      },
+
+      hasReservoirs () {
+        return (this.reservoirs.type === 'FeatureCollection' && this.reservoirs.features.length > 0) || this.reservoirs.type === 'Feature'
       },
     },
 

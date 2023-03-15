@@ -16,13 +16,13 @@
 </template>
 
 <script>
-  import { bbox, featureCollection } from '@turf/turf'
+  import { bbox } from '@turf/turf'
   import { MAP_CENTER, MAP_ZOOM, MAP_CUSTOM_ATTRIBUTIONS, MAPBOX_STYLE_DARK } from '@/lib/constants'
 
   export default {
     props: {
       reservoirs: {
-        type: Array,
+        type: Object,
         required: true,
       },
       date: {
@@ -47,12 +47,12 @@
 
     computed: {
       transformedReservoirs () {
-        return this.reservoirs.map(reservoir => ({
+        return {
           type: 'geojson',
           data: {
-            ...reservoir,
+            ...this.reservoirs,
           },
-        }))
+        }
       },
     },
 
@@ -72,7 +72,7 @@
       async addSatelliteImageToMap () {
         this.isLoadingSatelliteImage = true
         const geometry = {
-          ...this.reservoirs[0],
+          ...this.reservoirs,
           properties: {
             t: Math.floor(this.date.getTime() / 1000),
           },
@@ -112,36 +112,34 @@
       },
 
       addReservoirsToMap () {
-        this.transformedReservoirs.forEach((reservoir) => {
-          const reservoirName = `reservoir-${reservoir.data.id}`
+        const reservoir = this.transformedReservoirs
+        const reservoirName = `reservoir-${reservoir.data.id}`
 
-          this.map.addSource(reservoirName, reservoir)
-          this.map.addLayer({
-            id: `${reservoirName}-fill`,
-            type: 'fill',
-            source: reservoirName,
-            layout: {},
-            paint: {
-              'fill-color': '#0AB6FF',
-              'fill-opacity': 0.7,
-            },
-          })
-
-          this.map.addLayer({
-            id: `${reservoirName}-line`,
-            type: 'line',
-            source: reservoirName,
-            layout: {},
-            paint: {
-              'line-color': '#0AB6FF',
-              'line-width': 1,
-            },
-          })
-
-          const allFeatures = featureCollection(this.transformedReservoirs.map(reservoir => reservoir.data))
-          const boundingBox = bbox(allFeatures)
-          this.map.fitBounds(boundingBox, { padding: 40 })
+        this.map.addSource(reservoirName, reservoir)
+        this.map.addLayer({
+          id: `${reservoirName}-fill`,
+          type: 'fill',
+          source: reservoirName,
+          layout: {},
+          paint: {
+            'fill-color': '#0AB6FF',
+            'fill-opacity': 0.7,
+          },
         })
+
+        this.map.addLayer({
+          id: `${reservoirName}-line`,
+          type: 'line',
+          source: reservoirName,
+          layout: {},
+          paint: {
+            'line-color': '#0AB6FF',
+            'line-width': 1,
+          },
+        })
+
+        const boundingBox = bbox(this.reservoirs)
+        this.map.fitBounds(boundingBox, { padding: 40 })
       },
 
       onMapCreated (map) {

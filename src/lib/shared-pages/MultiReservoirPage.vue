@@ -28,6 +28,7 @@
         :reservoirs="reservoirs"
         :time-series="timeSeries"
         :area-type="areaType"
+        :geometry="geometry"
         :is-loading="reservoirsLoading"
         :is-loading-chart="timeSeriesLoading"
       />
@@ -43,11 +44,12 @@
     data: () => ({
       mapboxQueryData: null,
       areaType: null,
-      reservoirs: [],
+      reservoirs: {},
       reservoirsLoading: true,
       timeSeriesLoading: true,
       timeSeries: null,
       pageContent: {},
+      geometry: null,
     }),
 
     computed: {
@@ -56,7 +58,7 @@
       },
 
       curatedByGlobalDamWatch () {
-        return this.reservoirs.length > 0 && this.reservoirs.some(reservoir => reservoir.properties.grand_id)
+        return this.reservoirs?.features && this.reservoirs.features.some(reservoir => reservoir.properties.grand_id)
       },
     },
 
@@ -92,19 +94,33 @@
         }
       },
 
-      doQueryBasedData () {
+      async doQueryBasedData () {
         const qstring = this.$route.fullPath.split('?')?.[1]
-        const { type, coordinates } = qs.parse(qstring)
-        if (!type || !coordinates) {
-          console.warn('Invalid coordinates, can\'t fetch data')
-          return
+        const { type, coordinates, ids } = qs.parse(qstring, { comma: true })
+        if (ids) {
+          await this.onReservoirIds(ids)
+        } else {
+          if (!type || !coordinates) {
+            console.warn('Invalid coordinates, can\'t fetch data')
+            return
+          }
+          this.onGeometry({ type, coordinates })
         }
-        this.onGeometry({ type, coordinates })
       },
 
       onGeometry (geometry) {
+        this.geometry = geometry
         this.getReservoirsOnGeometry(geometry)
         this.getTimeSeriesOnGeometry(geometry)
+      },
+
+      async onReservoirIds (ids) {
+        const reservoirs = await this.$repo.reservoir.getByIds(ids)
+        this.reservoirs = reservoirs?.features
+        this.reservoirsLoading = false
+
+        this.timeSeries = await this.$repo.reservoir.getTimeSeriesByIds(ids, 'surface_water_area', 'monthly')
+        this.timeSeriesLoading = false
       },
 
       getTimeSeriesOnGeometry (geometry) {

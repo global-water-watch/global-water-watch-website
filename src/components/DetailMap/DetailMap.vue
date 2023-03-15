@@ -13,7 +13,7 @@
     :map-style="mapConfig.style"
     :custom-attribution="mapConfig.customAttribution"
     @mb-created="onMapCreated"
-    @mb-load="addReservoirsToMap"
+    @mb-load="onMapLoaded"
   >
     <!-- Controls -->
     <v-mapbox-navigation-control position="bottom-right" />
@@ -21,16 +21,21 @@
 </template>
 
 <script>
-  import { bbox, featureCollection } from '@turf/turf'
+  import { bbox } from '@turf/turf'
   import { MAP_CENTER, MAP_ZOOM, MAP_CUSTOM_ATTRIBUTIONS, MAPBOX_STYLE_DARK } from '@/lib/constants'
+  import { hoveredStyle, mouseEnterGeometry, mouseLeaveGeometry, mouseMoveGeometry } from '@/lib/map-hover-helpers'
 
   let map
 
   export default {
     props: {
       reservoirs: {
-        type: Array,
+        type: Object,
         required: true,
+      },
+      geometry: {
+        type: Object,
+        default: () => {},
       },
       satelliteImageUrl: {
         type: String,
@@ -51,17 +56,21 @@
           style: MAPBOX_STYLE_DARK,
           customAttribution: MAP_CUSTOM_ATTRIBUTIONS,
         },
+        hoveredFeatureId: null,
       }
     },
 
     computed: {
       transformedReservoirs () {
-        return this.reservoirs.map(reservoir => ({
+        return {
           type: 'geojson',
           data: {
-            ...reservoir,
+            ...this.reservoirs,
           },
-        }))
+        }
+      },
+      latestSelectedReservoirCoordinates () {
+        return this.$store.getters['reservoir/latestSelectedReservoirCoordinates']
       },
     },
 
@@ -103,39 +112,72 @@
     },
 
     methods: {
-      addReservoirsToMap (event) {
+      onMapCreated (map) {
+        map.removeControl(map._logoControl)
+        map.addControl(map._logoControl, 'top-right')
+
+        this.mapConfig = {
+          ...this.mapConfig,
+          zoom: this.latestSelectedReservoirCoordinates.zoom,
+          center: this.latestSelectedReservoirCoordinates.center,
+        }
+      },
+
+      onMapLoaded (event) {
         map = event.target
 
-        this.transformedReservoirs.forEach((reservoir) => {
-          const reservoirName = `reservoir-${reservoir.data.id}`
+        this.addTransformedReservoirsToMap(map)
+        this.addOtherReservoirsToMap(map)
+        if (this.geometry) {
+          this.addGeometryToMap(map)
+        }
+        this.setBoundingBox(map)
+      },
 
-          map.addSource(reservoirName, reservoir)
-          map.addLayer({
-            id: `${reservoirName}-fill`,
-            type: 'fill',
-            source: reservoirName,
-            layout: {},
-            paint: {
-              'fill-color': '#0AB6FF',
-              'fill-opacity': 0.7,
-            },
-          })
-          map.addLayer({
-            id: `${reservoirName}-line`,
-            type: 'line',
-            source: reservoirName,
-            layout: {},
-            paint: {
-              'line-color': '#0AB6FF',
-              'line-width': 1,
-            },
-          })
+      addTransformedReservoirsToMap (map) {
+        const reservoir = this.transformedReservoirs
+        const reservoirName = `reservoir-${reservoir.data.id}`
 
-          const allFeatures = featureCollection(this.transformedReservoirs.map(reservoir => reservoir.data))
-          const boundingBox = bbox(allFeatures)
-          map.fitBounds(boundingBox, { padding: 40 })
+        map.addSource(reservoirName, reservoir)
+        map.addLayer({
+          id: `${reservoirName}-fill`,
+          type: 'fill',
+          source: reservoirName,
+          layout: {},
+          paint: {
+            'fill-color': '#0AB6FF',
+            ...hoveredStyle(0.7),
+          },
+        })
+        map.addLayer({
+          id: `${reservoirName}-line`,
+          type: 'line',
+          source: reservoirName,
+          layout: {},
+          paint: {
+            'line-color': '#0AB6FF',
+            'line-width': 1,
+          },
         })
 
+        map.on('click', `${reservoirName}-fill`, this.onReservoirClick)
+        map.on('mouseenter', `${reservoirName}-fill`, () => {
+          mouseEnterGeometry({ map })
+        })
+        map.on('mousemove', `${reservoirName}-fill`, (evt) => {
+          mouseMoveGeometry({ map, evt, source: reservoirName, currentHoveredFeatureId: this.hoveredFeatureId })
+          const newHoveredFeatureId = evt.features?.[0]?.id
+          if (newHoveredFeatureId && newHoveredFeatureId !== this.hoveredFeatureId) {
+            this.hoveredFeatureId = newHoveredFeatureId
+          }
+        })
+        map.on('mouseleave', `${reservoirName}-fill`, () => {
+          mouseLeaveGeometry({ map, source: reservoirName, currentHoveredFeatureId: this.hoveredFeatureId })
+          this.hoveredFeatureId = null
+        })
+      },
+
+      addOtherReservoirsToMap (map) {
         map.addSource('reservoirsv10', {
           type: 'vector',
           url: 'mapbox://global-water-watch.reservoirs-v10',
@@ -150,7 +192,7 @@
           layout: {},
           paint: {
             'fill-color': '#8fdfef',
-            'fill-opacity': 0.4,
+            ...hoveredStyle(0.4),
           },
         })
 
@@ -166,26 +208,81 @@
           },
         })
 
-        map.on('click', 'reservoirsv10-fill', (evt) => {
-          this.onReservoirClick(evt)
+        map.on('click', 'reservoirsv10-fill', this.onReservoirClick)
+        map.on('click', 'reservoirsv10-line', this.onReservoirClick)
+
+        map.on('mouseenter', 'reservoirsv10-fill', () => {
+          mouseEnterGeometry({ map })
+        })
+        map.on('mousemove', 'reservoirsv10-fill', (evt) => {
+          mouseMoveGeometry({ map, evt, source: 'reservoirsv10', sourceLayer: 'reservoirsv10', currentHoveredFeatureId: this.hoveredFeatureId })
+          const newHoveredFeatureId = evt.features?.[0]?.id
+          if (newHoveredFeatureId && newHoveredFeatureId !== this.hoveredFeatureId) {
+            this.hoveredFeatureId = newHoveredFeatureId
+          }
+        })
+        map.on('mouseleave', 'reservoirsv10-fill', () => {
+          mouseLeaveGeometry({ map, source: 'reservoirsv10', sourceLayer: 'reservoirsv10', currentHoveredFeatureId: this.hoveredFeatureId })
+          this.hoveredFeatureId = null
         })
 
-        map.on('click', 'reservoirsv10-line', (evt) => {
-          this.onReservoirClick(evt)
-        })
-
-        if (this.reservoirs.length === 1) {
-          map.setFilter('reservoirsv10-fill', ['!=', 'fid', this.reservoirs[0]?.id])
-          map.setFilter('reservoirsv10-line', ['!=', 'fid', this.reservoirs[0]?.id])
+        if (this.reservoirs.id) {
+          map.setFilter('reservoirsv10-fill', ['!=', 'fid', this.reservoirs.id])
+          map.setFilter('reservoirsv10-line', ['!=', 'fid', this.reservoirs.id])
         } else {
           map.setFilter('reservoirsv10-fill', ['in', 'fid', ''])
           map.setFilter('reservoirsv10-line', ['in', 'fid', ''])
         }
       },
 
-      onMapCreated (map) {
-        map.removeControl(map._logoControl)
-        map.addControl(map._logoControl, 'top-right')
+      addGeometryToMap (map) {
+        map.addSource('selected-geometry', {
+          type: 'geojson',
+          data: {
+            type: 'Feature',
+            geometry: this.geometry,
+          },
+        })
+
+        map.addLayer({
+          id: 'selected-geometry-fill',
+          type: 'fill',
+          source: 'selected-geometry',
+          layout: {},
+          paint: {
+            'fill-color': '#fbb03b',
+            'fill-opacity': 0.1,
+          },
+        })
+
+        map.addLayer({
+          id: 'selected-geometry-outline',
+          type: 'line',
+          source: 'selected-geometry',
+          layout: {},
+          paint: {
+            'line-color': '#fbb03b',
+            'line-width': 2,
+            'line-opacity': 0.5,
+            'line-dasharray': [2, 1],
+          },
+        })
+      },
+
+      setBoundingBox (map) {
+        const isEmptyFeatureCollection = this.reservoirs.type === 'FeatureCollection' && this.reservoirs.features.length === 0
+        const boundingBox = bbox(isEmptyFeatureCollection ? this.geometry : this.reservoirs)
+
+        map.fitBounds(boundingBox, { padding: 40 })
+      },
+
+      setLatestSelectedReservoirCoordinates (map) {
+        // get zoom and center of the current map when zooming ended
+        this.zoom = map.getZoom()
+        this.center = map.getCenter().toArray()
+
+        // set the current zoom and center to the store
+        this.$store.commit('reservoir/SET_LATEST_SELECTED_RESERVOIR_COORDINATES', { zoom: this.zoom, center: this.center })
       },
 
       onReservoirClick (evt) {
@@ -193,8 +290,9 @@
         if (!reservoir) {
           return
         }
-        const { fid } = reservoir.properties
+        const fid = reservoir.properties?.fid || reservoir.id
 
+        this.setLatestSelectedReservoirCoordinates(map)
         this.$router.push({ path: `/reservoir/${fid}` })
       },
     },

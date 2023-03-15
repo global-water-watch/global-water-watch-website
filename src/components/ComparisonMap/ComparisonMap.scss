@@ -22,6 +22,21 @@
   display: flex;
   justify-content: space-between;
   margin-top: $space-medium;
+
+  .v-input {
+    padding: 0;
+    margin: 0;
+  }
+
+  .comparison-map__date-picker {
+    width: 90px;
+  }
+
+  .comparison-map__date-picker--right {
+    input {
+      text-align: right;
+    }
+  }
 }
 
 .comparison-map__loading {

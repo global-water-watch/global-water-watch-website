@@ -9,6 +9,17 @@
 
 .v-application {
   font-weight: $font-weight-normal;
+
+  .v-date-picker-table, .v-date-picker-header {
+    .accent {
+      background-color: $color-blue-light !important;
+      border-color: $color-blue-light !important;
+    }
+    .accent--text {
+      color: $color-blue-light !important;
+      caret-color: $color-blue-light !important;
+    }
+  }
 }
 
 .v-application .v-application--wrap ol,
@@ -16,3 +27,5 @@
   padding-left: 0;
   list-style: none;
 }
+
+
