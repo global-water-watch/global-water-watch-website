@@ -135,3 +135,19 @@ Finally you can view unpublished content by enabling preview mode. Navigate to `
 `start` | starts local server to test production build
 
 ---
+
+## Release to production
+
+Follow these steps in order to release a new version to production:
+
+1. Make a new pull request to merge `development` into `main`
+2. Use the preview to check that everything works correctly in the new version
+3. Merge the pull request
+4. Draft a new release
+    1. Set `main` as the target
+    2. Create a new tag by increasing the version number
+    3. Set the release title to "Release ${version}"
+    4. Automatically generate release notes
+    5. Publish the release
+5. Congrats! Check Netlify for updates on the deploy process
+
