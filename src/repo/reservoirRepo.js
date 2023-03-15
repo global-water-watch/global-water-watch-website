@@ -122,7 +122,7 @@ export default function (axios) {
     getTimeSeriesByGeometry: (geometry, variableName, period) =>
       axios.post(`reservoir/geometry/ts/${variableName}?agg_period=${period}`, geometry).then(formatMultipleTimeSeries),
 
-    getByIds: ids => axios.$get(`reservoir?${qs.stringify({ ids, limit: ids.length }, { indices: false })}`),
+    getByIds: ids => axios.$get(`reservoir/?${qs.stringify({ ids, limit: ids.length }, { indices: false })}`),
 
     getTimeSeriesByIds: (ids, variableName, period) => {
       return axios

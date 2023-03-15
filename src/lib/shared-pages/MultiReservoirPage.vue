@@ -115,8 +115,7 @@
       },
 
       async onReservoirIds (ids) {
-        const reservoirs = await this.$repo.reservoir.getByIds(ids)
-        this.reservoirs = reservoirs?.features
+        this.reservoirs = await this.$repo.reservoir.getByIds(ids)
         this.reservoirsLoading = false
 
         this.timeSeries = await this.$repo.reservoir.getTimeSeriesByIds(ids, 'surface_water_area', 'monthly')
