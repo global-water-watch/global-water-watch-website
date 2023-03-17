@@ -1,0 +1,25 @@
+name: Keep github workflow active by creating an empty commit
+
+on:
+  schedule:
+    - cron: '0 0 * * 0' # Runs every Sunday at midnight
+#    - cron: '0 0 */50 * *' #runs every 50 days once to prevent inactivity
+
+jobs:
+  keep-alive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Create keep-alive branch
+        run: |
+          git checkout -B keep-alive
+          git push -u origin keep-alive
+      - name: Create empty commit on keep-alive branch
+        run: |
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "GitHub Action"
+          git commit --allow-empty -m "Keep alive commit" --no-verify && git push --no-verify origin HEAD:keep-alive
+      - name: Delete keep-alive branch
+        run: |
+          git push --no-verify --delete origin keep-alive

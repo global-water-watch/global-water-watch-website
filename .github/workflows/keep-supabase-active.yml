@@ -10,6 +10,6 @@ jobs:
     steps:
       - name: Get the id of the first feedback
         run: |
-          curl -s -X GET 'https://ynqbmchednxibsjcqacm.supabase.co/rest/v1/Feedback form?select=id&limit=1' \
+          curl -s -X GET 'https://ynqbmchednxibsjcqacm.supabase.co/rest/v1/Feedback%20form?select=id&limit=1' \
             -H 'apiKey: ${{ secrets.SUPABASE_API_KEY }}' \
             -H 'Authorization: Bearer ${{ secrets.SUPABASE_API_KEY }}'
