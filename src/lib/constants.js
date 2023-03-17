@@ -28,7 +28,7 @@ export const RESERVOIR_VIDEOS = {
         ],
       },
       properties: {
-        url: 'https://storage.googleapis.com/global-water-watch-public/videos/71505ee-export-video13021982105088970534.mp4',
+        url: 'https://storage.googleapis.com/global-water-watch-public/videos/tvid_71505.webm',
         name: 'Metolong',
         country: 'Lesotho',
       },
@@ -49,7 +49,7 @@ export const RESERVOIR_VIDEOS = {
         ],
       },
       properties: {
-        url: 'https://storage.googleapis.com/global-water-watch-public/videos/86179ee-export-video2113479672262140438.mp4',
+        url: 'https://storage.googleapis.com/global-water-watch-public/videos/tvid_86179.webm',
         name: 'Mohale',
         country: 'Lesotho',
       },
@@ -70,7 +70,7 @@ export const RESERVOIR_VIDEOS = {
         ],
       },
       properties: {
-        url: 'https://storage.googleapis.com/global-water-watch-public/videos/87292ee-export-video13013284947241308182.mp4',
+        url: 'https://storage.googleapis.com/global-water-watch-public/videos/tvid_87292.webm',
         name: 'Mulungushi',
         country: 'Zambia',
       },
@@ -91,7 +91,7 @@ export const RESERVOIR_VIDEOS = {
         ],
       },
       properties: {
-        url: 'https://storage.googleapis.com/global-water-watch-public/videos/87663ee-export-video7510192130576746397.mp4',
+        url: 'https://storage.googleapis.com/global-water-watch-public/videos/tvid_87663.webm',
         name: 'Theewaterskloof',
         country: 'South Africa',
       },
@@ -112,7 +112,7 @@ export const RESERVOIR_VIDEOS = {
         ],
       },
       properties: {
-        url: 'https://storage.googleapis.com/global-water-watch-public/videos/87701ee-export-video1570622198545342030.mp4',
+        url: 'https://storage.googleapis.com/global-water-watch-public/videos/tvid_87701.webm',
         name: 'Katse',
         country: 'Lesotho',
       },
@@ -133,7 +133,7 @@ export const RESERVOIR_VIDEOS = {
         ],
       },
       properties: {
-        url: 'https://storage.googleapis.com/global-water-watch-public/videos/88611ee-export-video749995924995970951.mp4',
+        url: 'https://storage.googleapis.com/global-water-watch-public/videos/tvid_88611.webm',
         name: 'Senajo',
         country: 'Spain',
       },
@@ -154,7 +154,7 @@ export const RESERVOIR_VIDEOS = {
         ],
       },
       properties: {
-        url: 'https://storage.googleapis.com/global-water-watch-public/videos/88643ee-export-video12555314086632027313.mp4',
+        url: 'https://storage.googleapis.com/global-water-watch-public/videos/tvid_88643.webm',
         name: 'Mita Hills',
         country: 'Zambia',
       },
@@ -175,7 +175,7 @@ export const RESERVOIR_VIDEOS = {
         ],
       },
       properties: {
-        url: 'https://storage.googleapis.com/global-water-watch-public/videos/90084ee-export-video2116510700449536187.mp4',
+        url: 'https://storage.googleapis.com/global-water-watch-public/videos/tvid_90084.webm',
         name: '\u7CEF\u624E\u6E21\u6C34\u5E93',
         country: 'China',
       },
@@ -196,7 +196,7 @@ export const RESERVOIR_VIDEOS = {
         ],
       },
       properties: {
-        url: 'https://storage.googleapis.com/global-water-watch-public/videos/90321ee-export-video12430744464405908233.mp4',
+        url: 'https://storage.googleapis.com/global-water-watch-public/videos/tvid_90321.webm',
         name: 'Nam Ngum',
         country: 'Laos',
       },
@@ -217,7 +217,7 @@ export const RESERVOIR_VIDEOS = {
         ],
       },
       properties: {
-        url: 'https://storage.googleapis.com/global-water-watch-public/videos/92429ee-export-video14412944518267032457.mp4',
+        url: 'https://storage.googleapis.com/global-water-watch-public/videos/tvid_92429.webm',
         name: 'Volta',
         country: 'Ghana',
       },
