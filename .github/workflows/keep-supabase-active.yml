@@ -1,0 +1,15 @@
+name: Query supabase twice a week to keep active
+
+on:
+  schedule:
+    - cron: '0 0 * * 0,4' # Runs every Sunday and Thursday day at midnight
+
+jobs:
+  query:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get the id of the first feedback
+        run: |
+          curl -s -X GET 'https://ynqbmchednxibsjcqacm.supabase.co/rest/v1/Feedback form?select=id&limit=1' \
+            -H 'apiKey: ${{ secrets.SUPABASE_API_KEY }}' \
+            -H 'Authorization: Bearer ${{ secrets.SUPABASE_API_KEY }}'

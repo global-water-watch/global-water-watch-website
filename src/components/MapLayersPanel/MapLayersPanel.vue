@@ -1,256 +1,146 @@
 <template>
-  <div class="map-layers-panel">
-    <v-radio-group
-      v-model="activeLayerName"
-      :disabled="!mapReady || isDrawing || isTransitioningLayer"
-    >
-      <v-radio
-        v-for="layer in filteredLayers"
-        :key="layer.name"
-        :label="layer.name"
-        :value="layer.name"
-        @change="activateLayer(layer)"
-      />
-    </v-radio-group>
+  <div class="map-layers-panels">
+    <div class="map-layers-panel">
+      <h3>Select</h3>
+      <v-radio-group
+        v-model="activeLayerName"
+        :disabled="disablePanelControls"
+      >
+        <v-radio
+          v-for="layer in filteredLayers"
+          :key="layer.name"
+          :label="layer.name"
+          :value="layer.name"
+          @change="activateLayer(layer)"
+        >
+          <template #label>
+            {{ layer.name }}
+            <v-tooltip
+              v-if="layer.description"
+              ref="tooltip"
+              v-model="layerTooltips[layer.name]"
+              trigger="focus"
+              bottom
+              max-width="300px"
+              content-class="map-layers-panel__tooltip"
+            >
+              <template #activator="{ attrs }">
+                <v-btn icon v-bind="attrs" @click="$event => toggleTooltips($event, layer.name)">
+                  <v-icon size="medium">
+                    mdi-information-outline
+                  </v-icon>
+                </v-btn>
+              </template>
+              <!-- eslint-disable vue/no-v-html -->
+              <p v-html="layer.description" />
+              <!--eslint-enable-->
+            </v-tooltip>
+          </template>
+        </v-radio>
+      </v-radio-group>
 
-    <v-btn
-      v-if="showExperimentalFeatures"
-      small
-      :disabled="!mapReady || isDrawing"
-      @click="onDrawButtonClick"
-    >
-      {{ drawButtonText }}
-      <v-icon v-if="!isDrawing && !drawnFeatures.length" right>
-        mdi-vector-polyline-edit
-      </v-icon>
-    </v-btn>
+      <v-btn
+        v-if="showExperimentalFeatures"
+        small
+        :disabled="!mapReady || isDrawing"
+        @click="onDrawButtonClick"
+      >
+        {{ drawButtonText }}
+        <v-icon v-if="!isDrawing && !drawnFeatures.length" right>
+          mdi-vector-polyline-edit
+        </v-icon>
+      </v-btn>
+    </div>
+
+    <div class="map-layers-panel">
+      <h3>Visualize</h3>
+      <v-radio-group
+        v-model="activeLayerName"
+        :disabled="disablePanelControls"
+      >
+        <v-radio
+          :key="anomaliesLayer.name"
+          :label="anomaliesLayer.name"
+          :value="anomaliesLayer.name"
+          @change="activateLayer(anomaliesLayer)"
+        />
+      </v-radio-group>
+      <v-menu
+        v-model="anomaliesDateMenu"
+        :close-on-content-click="false"
+        transition="scale-transition"
+        offset-y
+        max-width="290px"
+        min-width="auto"
+        :disabled="activeLayerName !== anomaliesLayer.name || disablePanelControls"
+      >
+        <template #activator="{ on, attrs }">
+          <v-text-field
+            v-model="anomaliesDate"
+            prepend-icon="mdi-calendar"
+            readonly
+            v-bind="attrs"
+            class="map-layers-panel__anomalies-date-input"
+            :disabled="activeLayerName !== anomaliesLayer.name || disablePanelControls"
+            v-on="on"
+          />
+        </template>
+        <v-date-picker
+          v-model="anomaliesDate"
+          type="month"
+          no-title
+          scrollable
+          :min="anomaliesLayer.firstLayerDate"
+          :max="anomaliesLayer.lastLayerDate"
+          @change="anomaliesDateMenu = false"
+        />
+      </v-menu>
+    </div>
   </div>
 </template>
 
 <script>
   import qs from 'qs'
   import { LAYER_FADE_DURATION_MS } from '@/lib/constants'
+  import reservoirs from '@/lib/layers/reservoirs'
+  import basins from '@/lib/layers/basins'
+  import administrativeRegions from '@/lib/layers/administrative-regions'
+  import anomalies from '@/lib/layers/anomalies'
 
   export default {
     data () {
       return {
         reservoirLayer: Object.freeze({
-          name: 'Reservoirs',
-          type: 'reservoir',
-          id: 'reservoirsv10',
-          checked: true,
-          source: {
-            type: 'vector',
-            url: 'mapbox://global-water-watch.reservoirs-v10',
-          },
-          styles: [
-            {
-              type: 'fill',
-              paint: {
-                'fill-color': '#8fdfef',
-                'fill-opacity': 0.4,
-              },
-            },
-            {
-              type: 'line',
-              paint: {
-                'line-color': '#8fdfef',
-                'line-width': 0.8,
-              },
-            },
-          ],
+          ...reservoirs,
           clickFn: this.onReservoirClick,
         }),
         layers: [
           Object.freeze({
-            name: 'Reservoirs',
-            type: 'reservoir',
-            id: 'reservoirsv10',
-            checked: true,
-            source: {
-              type: 'vector',
-              url: 'mapbox://global-water-watch.reservoirs-v10',
-            },
-            styles: [
-              {
-                type: 'fill',
-                paint: {
-                  'fill-color': '#8fdfef',
-                  'fill-opacity': 0.4,
-                },
-              },
-              {
-                type: 'line',
-                paint: {
-                  'line-color': '#8fdfef',
-                  'line-width': 0.8,
-                },
-              },
-            ],
+            ...reservoirs,
             clickFn: this.onReservoirClick,
           }),
           Object.freeze({
-            name: 'Basins',
-            type: 'zoomable',
-            promoteId: 'HYBAS_ID', // this id is used to identify the hover id in the map.
-            experimentalFeature: false, // disable this feature when you want to display it default
-            layers: [
-              {
-                id: 'BasinATLAS_v10_lev01',
-                zoomLevels: [0, 1, 2],
-                source: {
-                  type: 'vector',
-                  url: 'mapbox://global-water-watch.BasinATLAS_v10_lev01',
-                },
-              },
-              {
-                id: 'BasinATLAS_v10_lev02',
-                zoomLevels: [3],
-                source: {
-                  type: 'vector',
-                  url: 'mapbox://global-water-watch.BasinATLAS_v10_lev02',
-                },
-              },
-              {
-                id: 'BasinATLAS_v10_lev03',
-                zoomLevels: [4],
-                source: {
-                  type: 'vector',
-                  url: 'mapbox://global-water-watch.BasinATLAS_v10_lev03',
-                },
-              },
-              {
-                id: 'BasinATLAS_v10_lev04',
-                zoomLevels: [5],
-                source: {
-                  type: 'vector',
-                  url: 'mapbox://global-water-watch.BasinATLAS_v10_lev04',
-                },
-              },
-              {
-                id: 'BasinATLAS_v10_lev05',
-                zoomLevels: [6],
-                source: {
-                  type: 'vector',
-                  url: 'mapbox://global-water-watch.BasinATLAS_v10_lev05',
-                },
-              },
-              {
-                id: 'BasinATLAS_v10_lev06',
-                zoomLevels: [
-                  7,
-                  // Extra zoom levels so it always stays active
-                  8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
-                ],
-                source: {
-                  type: 'vector',
-                  url: 'mapbox://global-water-watch.BasinATLAS_v10_lev06',
-                },
-              },
-              // Basins above zoom level 6 are currently too expensive to use
-              // {
-              //   id: 'BasinATLAS_v10_lev10',
-              //   zoomLevels: [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
-              //   source: {
-              //     type: 'vector',
-              //     url: 'mapbox://global-water-watch.BasinATLAS_v10_lev10',
-              //   },
-              // },
-            ],
-            styles: [
-              {
-                type: 'fill',
-                paint: {
-                  'fill-color': '#8fdfef',
-                  'fill-opacity': [
-                    'case',
-                    ['boolean', ['feature-state', 'hover'], false],
-                    0.75,
-                    0,
-                  ],
-                  'fill-opacity-transition': {
-                    duration: LAYER_FADE_DURATION_MS,
-                  },
-                },
-              },
-              {
-                type: 'line',
-                paint: {
-                  'line-color': '#8fdfef',
-                  'line-width': 0.8,
-                  'line-opacity': 0,
-                  'line-opacity-transition': {
-                    duration: LAYER_FADE_DURATION_MS,
-                  },
-                },
-              },
-            ],
+            ...basins,
             clickFn: this.onBasinClick,
           }),
           Object.freeze({
-            name: 'Administrative regions',
-            type: 'zoomable',
-            attribution: '<a href="https://www.geoboundaries.org" target="_blank" rel="noopener noreferrer">geoBoundaries</a>', // this id is used to identify the hover id in the map.
-            promoteId: 'shapeID', // this id is used to identify the hover id in the map.
-            experimentalFeature: false, // disable this feature when you want to display it default
-            layers: [
-              {
-                id: 'geoBoundariesCGAZ_ADM0',
-                zoomLevels: [0, 1, 2, 3],
-                source: {
-                  type: 'vector',
-                  url: 'mapbox://global-water-watch.geoBoundariesCGAZ_ADM0',
-                },
-              },
-              {
-                id: 'geoBoundariesCGAZ_ADM1',
-                zoomLevels: [4, 5, 6, 7],
-                source: {
-                  type: 'vector',
-                  url: 'mapbox://global-water-watch.geoBoundariesCGAZ_ADM1',
-                },
-              },
-              {
-                id: 'geoBoundariesCGAZ_ADM2',
-                zoomLevels: [8, 9, 10, 11, 12],
-                source: {
-                  type: 'vector',
-                  url: 'mapbox://global-water-watch.geoBoundariesCGAZ_ADM2',
-                },
-              },
-            ],
-            styles: [
-              {
-                type: 'fill',
-                paint: {
-                  'fill-color': '#d78200',
-                  'fill-opacity': [
-                    'case',
-                    ['boolean', ['feature-state', 'hover'], false],
-                    0.75,
-                    0,
-                  ],
-                  'fill-opacity-transition': {
-                    duration: LAYER_FADE_DURATION_MS,
-                  },
-                },
-              },
-              {
-                type: 'line',
-                paint: {
-                  'line-color': '#d78200',
-                  'line-width': 0.8,
-                  'line-opacity': 0,
-                  'line-opacity-transition': {
-                    duration: LAYER_FADE_DURATION_MS,
-                  },
-                },
-              },
-            ],
-            clickFn: this.onRegionLayerClick,
+            ...administrativeRegions,
+            clickFn: this.onRegionClick,
           }),
         ],
+        anomaliesLayer: Object.freeze({
+          ...anomalies,
+          lastLayerDate: this.$config.lastAnomalyLayerDate,
+          clickFn: this.onAnomalyClick,
+        }),
         isTransitioningLayer: false,
+        multiReservoirSelection: [],
+        layerTooltips: {
+          Reservoirs: false,
+          Basins: false,
+          'Administrative regions': false,
+        },
+        anomaliesDateMenu: false,
       }
     },
 
@@ -283,6 +173,17 @@
         if (this.drawnFeatures.length) { return 'View selected reservoir details' }
         return 'Select custom reservoir'
       },
+      anomaliesDate: {
+        get () {
+          return this.$store.getters['anomalies-layers/anomaliesDate']
+        },
+        set (date) {
+          this.$store.commit('anomalies-layers/SET_ANOMALIES_DATE', date)
+        },
+      },
+      disablePanelControls () {
+        return !this.mapReady || this.isDrawing || this.isTransitioningLayer
+      },
     },
 
     watch: {
@@ -292,6 +193,7 @@
           const firstLayer = this.reservoirLayer
           this.clearAll()
           this.$store.commit(`${firstLayer.type}-layers/ADD_LAYER`, firstLayer)
+          this.activeLayerName = firstLayer.name
         }
       },
     },
@@ -305,15 +207,29 @@
       const initiallySelectedLayer = this.layers
         .find(({ name }) => name === this.activeLayerName)
 
+      if (!this.anomaliesDate) {
+        this.anomaliesDate = this.anomaliesLayer.lastLayerDate
+      }
+      document.addEventListener('click', this.hideTooltip)
+
       if (initiallyReservoirLayer && initiallySelectedLayer) {
-        this.$store.commit(`${initiallyReservoirLayer.type}-layers/ADD_LAYER`, initiallyReservoirLayer)
+        if (initiallySelectedLayer.type === 'zoomable') {
+          this.$store.commit(`${initiallyReservoirLayer.type}-layers/ADD_LAYER`, initiallyReservoirLayer)
+        }
         this.$store.commit(`${initiallySelectedLayer.type}-layers/ADD_LAYER`, initiallySelectedLayer)
       }
     },
 
+    beforeDestroy () {
+      document.removeEventListener('click', this.hideTooltip)
+    },
+
     methods: {
       clearAll () {
+        this.multiReservoirSelection = []
+        this.$store.commit('reservoir-layers/REMOVE_ALL_LAYERS')
         this.$store.commit('zoomable-layers/REMOVE_ALL_LAYERS')
+        this.$store.commit('anomalies-layers/REMOVE_ALL_LAYERS')
       },
 
       clearMbDraw () {
@@ -329,6 +245,9 @@
         this.isTransitioningLayer = true
         this.clearAll()
         this.clearMbDraw()
+        if (layer.type === 'zoomable') {
+          this.$store.commit(`${this.reservoirLayer.type}-layers/ADD_LAYER`, this.reservoirLayer)
+        }
         this.$store.commit(`${layer.type}-layers/ADD_LAYER`, layer)
         setTimeout(() => {
           this.isTransitioningLayer = false
@@ -338,12 +257,40 @@
       onReservoirClick (evt) {
         // If we click on a reservoir while drawing, do nothing
         if (this.isDrawing) { return }
+
         const reservoir = evt.features?.[0]
         if (!reservoir) {
           return
         }
-        const { fid } = reservoir.properties
-        this.$router.push({ path: `/reservoir/${fid}` })
+
+        if (evt.originalEvent.ctrlKey || evt.originalEvent.metaKey) {
+          this.onMultiReservoirClick(evt)
+        } else if (this.multiReservoirSelection.length > 0 && this.multiReservoirSelection.includes(reservoir.id)) {
+          const geometry = { ids: this.multiReservoirSelection }
+          const query = qs.stringify(geometry, { arrayFormat: 'comma' })
+          this.$router.push({ path: `/multi-reservoir/?${query}` })
+        } else {
+          this.$router.push({ path: `/reservoir/${reservoir.id}` })
+        }
+      },
+
+      onMultiReservoirClick (evt) {
+        const reservoir = evt.features?.[0]
+
+        if (this.multiReservoirSelection.includes(reservoir.id)) {
+          this.multiReservoirSelection = this.multiReservoirSelection.filter(id => id !== reservoir.id)
+        } else {
+          this.multiReservoirSelection.push(reservoir.id)
+        }
+
+        evt.target.setFeatureState(
+          {
+            source: 'reservoirsv10',
+            sourceLayer: 'reservoirsv10',
+            id: reservoir.id,
+          },
+          { selected: this.multiReservoirSelection.includes(reservoir.id) },
+        )
       },
 
       onBasinClick (evt) {
@@ -360,7 +307,7 @@
         this.$router.push({ path: `/basin/${source}--${zoom}--${lng}--${lat}--${UID}` })
       },
 
-      onRegionLayerClick (evt) {
+      onRegionClick (evt) {
         const region = evt.features?.[0]
         const UID = region?.properties.shapeID
         if (!UID) { return }
@@ -372,6 +319,14 @@
         const { lng, lat } = evt.target.getCenter()
 
         this.$router.push({ path: `/boundary/${source}--${zoom}--${lng}--${lat}--${UID}` })
+      },
+
+      onAnomalyClick (evt) {
+        const anomaly = evt.features?.[0]
+        if (!anomaly) {
+          return
+        }
+        this.$router.push({ path: `/reservoir/${anomaly.properties.point}` })
       },
 
       onDrawButtonClick () {
@@ -388,6 +343,28 @@
           // modechange event, so setting it here manually too
           this.$store.commit('drawn-geometry/SET_IS_DRAWING', true)
         }
+      },
+
+      toggleTooltips (event, layer) {
+        for (const layerName in this.layerTooltips) {
+          if (layerName !== layer) {
+            this.layerTooltips[layerName] = false
+          }
+        }
+        this.layerTooltips[layer] = !this.layerTooltips[layer]
+        event.stopPropagation()
+      },
+
+      hideTooltip (event) {
+        // Don't hide tooltip if we click on a tooltip
+        if (this.$refs.tooltip && event.target.tagName === 'P') {
+          return
+        }
+
+        // Hide all tooltips
+        Object.keys(this.layerTooltips).forEach((name) => {
+          this.layerTooltips[name] = false
+        })
       },
     },
   }

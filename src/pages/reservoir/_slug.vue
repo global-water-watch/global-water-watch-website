@@ -18,14 +18,13 @@
       </PageHeroesDetailHero>
 
       <ReservoirPageSection
-        :reservoirs="[reservoir]"
+        :reservoirs="reservoir"
         :time-series="timeSeries"
         :satellite-image-url="satelliteImageUrl"
         :generating-satellite-image-url="generatingSatelliteImageUrl"
         :show-comparison-map="true"
         :satellite-video="satelliteVideo"
         :show-feedback-form="true"
-        :show-export-button="true"
         :is-loading="isLoading"
         @onSelectedTimeChanged="onSelectedTimeChanged"
       />

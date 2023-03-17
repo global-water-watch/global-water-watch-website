@@ -20,6 +20,11 @@ export const getPageContent = ({ areaType }) => {
         title: 'Custom selection',
         description: 'Reservoirs within and intersecting with a customly drawn geometry',
       }
+    case 'multi-reservoir':
+      return {
+        title: 'Reservoirs',
+        description: 'Individually selected reservoirs',
+      }
     default:
       return {
         title: `Unknown ${areaType}`,

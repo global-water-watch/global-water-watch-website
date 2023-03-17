@@ -1,5 +1,6 @@
 import { LAYER_FADE_DURATION_MS } from '@/lib/constants'
 import { difference } from '@/lib/array-helpers'
+import { mouseEnterGeometry, mouseMoveGeometry, mouseLeaveGeometry } from '@/lib/map-hover-helpers'
 
 export default {
   name: 'v-mapbox-zoomable-layer',
@@ -81,49 +82,19 @@ export default {
 
         if (style.type === 'fill') {
           this.mouseEnterFnMap[layerUniqueId] = () => {
-            map.getCanvas().style.cursor = 'pointer'
+            mouseEnterGeometry({ map })
           }
 
           this.mouseMoveFnMap[layerUniqueId] = (evt) => {
+            mouseMoveGeometry({ map, evt, source: layerId, sourceLayer: layerId, currentHoveredFeatureId: this.hoveredFeatureId })
             const newHoveredFeatureId = evt.features?.[0]?.id
-            if (!newHoveredFeatureId || newHoveredFeatureId === this.hoveredFeatureId) {
-              return
+            if (newHoveredFeatureId && newHoveredFeatureId !== this.hoveredFeatureId) {
+              this.hoveredFeatureId = newHoveredFeatureId
             }
-            // Reset previous hover state
-            if (this.hoveredFeatureId !== null) {
-              map.setFeatureState(
-                {
-                  source: layerId,
-                  sourceLayer: layerId,
-                  id: this.hoveredFeatureId,
-                },
-                { hover: false },
-              )
-            }
-            // Set new hover state
-            this.hoveredFeatureId = newHoveredFeatureId
-            map.setFeatureState(
-              {
-                source: layerId,
-                sourceLayer: layerId,
-                id: this.hoveredFeatureId,
-              },
-              { hover: true },
-            )
           }
 
           this.mouseLeaveFnMap[layerUniqueId] = () => {
-            map.getCanvas().style.cursor = ''
-            if (this.hoveredFeatureId !== null) {
-              map.setFeatureState(
-                {
-                  source: layerId,
-                  sourceLayer: layerId,
-                  id: this.hoveredFeatureId,
-                },
-                { hover: false },
-              )
-            }
+            mouseLeaveGeometry({ map, source: layerId, sourceLayer: layerId, currentHoveredFeatureId: this.hoveredFeatureId })
             this.hoveredFeatureId = null
           }
 
@@ -142,7 +113,7 @@ export default {
       const map = this.getMap()
       if (!map) { return }
 
-      const { styles } = this.options
+      const { styles, clickFn } = this.options
       styles.forEach((style) => {
         const layerUniqueId = `${layerId}-${style.type}`
 
@@ -157,10 +128,14 @@ export default {
 
         // 2. Only after finishing the opacity transition do we fully remove the layer
         setTimeout(() => {
-          map.removeLayer(layerUniqueId)
+          if (!map || !map.isStyleLoaded()) { return }
+
+          if (map.getLayer(layerUniqueId)) {
+            map.removeLayer(layerUniqueId)
+          }
 
           // Only remove source when no other layers depend on it
-          if (!map.getStyle().layers.some(({ source }) => source === layerId)) {
+          if (map.getSource(layerId) && !map.getStyle().layers.some(({ source }) => source === layerId)) {
             map.removeSource(layerId)
           }
         }, LAYER_FADE_DURATION_MS)
@@ -180,9 +155,8 @@ export default {
           delete this.mouseLeaveFnMap[layerUniqueId]
         }
 
-        const { clickFn } = this.options
         if (clickFn) {
-          map.off('click', layerId, clickFn)
+          map.off('click', layerUniqueId, clickFn)
         }
       })
     },
@@ -194,11 +168,16 @@ export default {
 
   mounted () {
     const map = this.getMap()
-    // We can immediately initialize if we have the map ready
-    if (map && map.isStyleLoaded()) {
-      this.initalize()
-      this.isInitialized = true
+    const tryInitialize = () => {
+      if (map && map.isStyleLoaded()) {
+        // We can immediately initialize if we have the map ready
+        this.initalize()
+        this.isInitialized = true
+      } else {
+        setTimeout(tryInitialize, 200)
+      }
     }
+    tryInitialize()
   },
 
   destroyed () {

@@ -24,7 +24,7 @@
           :is-loading="isLoading"
         />
         <MessageBox
-          v-else-if="reservoirs.length === 1"
+          v-else-if="reservoirs.type === 'Feature'"
           message="Select a data point in the graph to generate a satellite image"
           type="info"
           icon="mdi-information-outline"
@@ -33,9 +33,8 @@
       </div>
 
       <data-chart
-        v-if="(reservoirs.length && timeSeries) || isLoading || isLoadingChart"
+        v-if="(hasReservoirs && timeSeries) || isLoading || isLoadingChart"
         :title="chartTitle"
-        :show-export-button="showExportButton"
         :x-axis="xAxis"
         :y-axis="yAxis"
         :series="series"
@@ -48,24 +47,23 @@
       />
 
       <ComparisonMap
-        v-if="showComparisonMap && (reservoirs.length || isLoading)"
+        v-if="showComparisonMap && (hasReservoirs || isLoading)"
         :reservoirs="reservoirs"
         :time-series="series"
         :is-loading="isLoading"
       />
 
-      <!-- Temporary hide share page for custom selection since this url isn't nice to share -->
-      <PageShare
-        v-if="areaType !== 'custom-selection'"
+      <PageExport
+        v-if="hasReservoirs"
         :is-loading="isLoading"
-        :single-reservoir="reservoirs.length === 1"
-        @exportTimeSeries="exportTimeSeries"
-        @exportGeometry="exportGeometry"
+        :area-type="areaType"
+        :reservoirs="reservoirs"
+        :time-series="timeSeries"
       />
 
       <FeedbackForm
         v-if="showFeedbackForm && !isLoading"
-        :reservoir="reservoirs[0]"
+        :reservoir="reservoirs"
       />
     </div>
   </section>
@@ -75,8 +73,8 @@
   export default {
     props: {
       reservoirs: {
-        type: Array,
-        default: () => [],
+        type: Object,
+        default: () => {},
       },
       timeSeries: {
         type: [Object, null],
@@ -121,10 +119,6 @@
         type: Boolean,
         default: false,
       },
-      showExportButton: {
-        type: Boolean,
-        default: false,
-      },
       isLoading: {
         type: Boolean,
         default: false,
@@ -137,11 +131,11 @@
 
     computed: {
       chartTitle () {
-        if (this.reservoirs.length > 1) {
+        if (this.reservoirs.type === 'FeatureCollection') {
           return ''
         }
 
-        return this.reservoirs[0]?.properties?.name ? `Reservoir area of ${this.reservoirs[0].properties.name}` : ''
+        return this.reservoirs.properties?.name ? `Reservoir area of ${this.reservoirs.properties.name}` : ''
       },
 
       xAxis () {
@@ -155,33 +149,15 @@
       series () {
         return this.timeSeries?.series
       },
+
+      hasReservoirs () {
+        return (this.reservoirs.type === 'FeatureCollection' && this.reservoirs.features.length > 0) || this.reservoirs.type === 'Feature'
+      },
     },
 
     methods: {
       onSelectedTimeChanged (time) {
         this.$emit('onSelectedTimeChanged', time)
-      },
-      exportTimeSeries () {
-        let csv = `${this.xAxis[0].type},${this.yAxis[0].name}\n`
-        this.series[0].data.forEach((row) => {
-          csv += row.join(',')
-          csv += '\n'
-        })
-
-        const anchor = document.createElement('a')
-        anchor.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv)
-        anchor.target = '_blank'
-        anchor.download = `${this.chartTitle || 'reservoir'}.csv`
-        anchor.click()
-      },
-      exportGeometry () {
-        const geometry = JSON.stringify(this.reservoirs[0])
-
-        const anchor = document.createElement('a')
-        anchor.href = 'data:application/geo+json;charset=utf-8,' + encodeURIComponent(geometry)
-        anchor.target = '_blank'
-        anchor.download = `${this.reservoirs[0].properties.name || 'reservoir'}.geojson`
-        anchor.click()
       },
     },
   }
