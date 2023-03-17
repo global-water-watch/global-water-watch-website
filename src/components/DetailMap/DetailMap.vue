@@ -88,7 +88,7 @@
           style: MAPBOX_STYLE_DARK,
           customAttribution: MAP_CUSTOM_ATTRIBUTIONS,
         },
-        showSatelliteImage: true,
+        showSatelliteImage: false,
         showSatelliteVideo: true,
       }
     },
@@ -140,6 +140,11 @@
               visibility: 'visible',
             },
           }, layerId)
+        }
+
+        // if this is the first satellite image to be loaded, show it by default
+        if (oldURL === '') {
+          this.showSatelliteImage = true
         }
       },
       showSatelliteImage (newVal) {
