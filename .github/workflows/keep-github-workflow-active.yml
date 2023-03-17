@@ -1,12 +1,9 @@
 name: Keep github workflow active by creating an empty commit
 
-#on:
-#  schedule:
-#    - cron: '0 0 */50 * *'
-
 on:
   schedule:
-    - cron: '*/5 * * * *'
+    - cron: '0 0 * * 0' # Runs every Sunday at midnight
+#    - cron: '0 0 */50 * *' #runs every 50 days once to prevent inactivity
 
 jobs:
   keep-alive:
