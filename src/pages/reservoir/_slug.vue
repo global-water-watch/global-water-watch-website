@@ -26,7 +26,7 @@
           >
             <strong>Large reservoir</strong>
             <p>
-              This website shows small (10–100 ha) and medium size reservoirs (> 100 ha). We do not show 479 of the largest reservoirs.
+              This website shows small (10–100 ha) and medium size reservoirs (> 100 ha). We do not show 65 of the largest reservoirs.
               Our algorithms can estimate the surface areas of a reservoir from partial observations.
               The larger reservoirs are well measured using in-situ measurements and partial observations of surface area are less indicative of the state of the full reservoir.
             </p>
