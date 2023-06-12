@@ -23,14 +23,7 @@ const unitConversion = (unit) => {
   }
 }
 
-const formatTimeSeries = (id, timeSeries) => {
-  if (timeSeries.length === 0) { return null }
-  const valueName = `${timeSeries[0]?.name?.split('_').map(capitalize).join(' ')} (#${id})`
-
-  const valueUnit = unitConversion(timeSeries[0].unit)
-
-  const data = timeSeries.map(valueConversion)
-
+const timeSeriesAxis = (yAxisName, yAxisUnit) => {
   return {
     xAxis: [
       {
@@ -47,10 +40,23 @@ const formatTimeSeries = (id, timeSeries) => {
     ],
     yAxis: [
       {
-        name: `${valueName} (${valueUnit})`,
+        name: `${yAxisName} (${yAxisUnit})`,
         type: 'value',
       },
     ],
+  }
+}
+
+const formatTimeSeries = (id, timeSeries) => {
+  if (timeSeries.length === 0) { return null }
+  const valueName = `${timeSeries[0]?.name?.split('_').map(capitalize).join(' ')} (#${id})`
+
+  const valueUnit = unitConversion(timeSeries[0].unit)
+
+  const data = timeSeries.map(valueConversion)
+
+  return {
+    ...timeSeriesAxis(valueName, valueUnit),
     series: [
       {
         name: valueName,
@@ -94,23 +100,7 @@ const formatMultipleTimeSeries = (response) => {
   }
 
   return {
-    xAxis: [{
-      type: 'time',
-      axisPointer: {
-        label: {
-          show: true,
-        },
-        handle: {
-          show: true,
-        },
-      },
-    }],
-    yAxis: [
-      {
-        name: `${valueName} (${valueUnit})`,
-        type: 'value',
-      },
-    ],
+    ...timeSeriesAxis(valueName, valueUnit),
     series,
   }
 }
