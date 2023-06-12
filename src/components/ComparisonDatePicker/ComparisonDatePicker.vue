@@ -13,6 +13,7 @@
       <template #activator="{ on, attrs }">
         <v-text-field
           v-model="formattedDate"
+          label="Select date"
           readonly
           v-bind="attrs"
           v-on="on"
