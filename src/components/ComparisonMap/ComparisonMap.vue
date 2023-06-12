@@ -13,7 +13,7 @@
           The composite is constructed using images from the selected date, going back 30 days to gather enough images . The more recent images are displayed on top.
         </p>
 
-        <h3>Interaction</h3>
+        <h3>How it works?</h3>
         <p class="small">
           Click on the date at the bottom left to change the "before" date, and the date on the bottom right to change the "after" date.
           You can use the slider on the plot to compare the situation at the "before" date, shown on the left of the slider, and the "after" situation of the reservoir on the right of the slider.
@@ -66,6 +66,8 @@
 </template>
 
 <script>
+  import { formatDate, isoFormatDate } from '@/lib/primitive-helpers'
+
   let oldMap, currentMap
 
   export default {
@@ -95,6 +97,14 @@
     computed: {
       timeSeriesDates () {
         return this.timeSeries[0].data.map(item => new Date(item[0]))
+      },
+
+      formattedDate () {
+        return formatDate(isoFormatDate(this.date))
+      },
+
+      formattedOldDate () {
+        return formatDate(isoFormatDate(this.oldDate))
       },
     },
 
