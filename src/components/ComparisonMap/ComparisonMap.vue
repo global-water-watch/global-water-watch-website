@@ -13,7 +13,7 @@
           The composite is constructed using images from the selected date, going back 30 days to gather enough images . The more recent images are displayed on top.
         </p>
 
-        <h3>How it works?</h3>
+        <h3>Interact with the map</h3>
         <p class="small">
           Click on the date at the bottom left to change the "before" date, and the date on the bottom right to change the "after" date.
           You can use the slider on the plot to compare the situation at the "before" date, shown on the left of the slider, and the "after" situation of the reservoir on the right of the slider.
