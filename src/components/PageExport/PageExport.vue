@@ -8,9 +8,9 @@
       />
       <Fragment v-else>
         <v-row class="mb-3">
-          <h3>
+          <h2>
             Export options
-          </h3>
+          </h2>
         </v-row>
         <!-- Temporary hide share page for custom selection since this url isn't nice to share -->
         <v-row v-if="areaType !== 'custom-selection'">
