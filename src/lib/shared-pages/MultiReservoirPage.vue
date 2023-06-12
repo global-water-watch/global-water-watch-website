@@ -26,7 +26,7 @@
 
       <ReservoirPageSection
         :reservoirs="reservoirs"
-        :time-series="timeSeries"
+        :surface-area="timeSeries"
         :area-type="areaType"
         :geometry="geometry"
         :is-loading="reservoirsLoading"
