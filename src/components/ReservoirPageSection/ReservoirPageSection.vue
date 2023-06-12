@@ -52,6 +52,13 @@
         :is-loading="isLoading"
       />
 
+      <MessageBox
+        message="Testing deploy"
+        type="error"
+        icon="mdi-alert"
+        :is-loading="isLoading"
+      />
+
       <PageExport
         v-if="hasReservoirs"
         :is-loading="isLoading"
