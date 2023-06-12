@@ -59,6 +59,7 @@
         :available-dates="timeSeriesDates"
         :date="date"
         class="comparison-map__date-picker comparison-map__date-picker--right"
+        :left-aligned="true"
         @dateChanged="onDateChanged"
       />
     </div>

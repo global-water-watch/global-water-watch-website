@@ -8,7 +8,8 @@
       offset-y
       max-width="290px"
       min-width="auto"
-      right
+      :right="!leftAligned"
+      :left="leftAligned"
     >
       <template #activator="{ on, attrs }">
         <v-text-field
@@ -43,6 +44,11 @@
       date: {
         type: Date,
         default: () => new Date(),
+      },
+
+      leftAligned: {
+        type: Boolean,
+        default: false,
       },
     },
 
