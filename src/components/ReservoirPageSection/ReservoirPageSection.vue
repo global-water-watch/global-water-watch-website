@@ -72,6 +72,7 @@
         :reservoirs="reservoirs"
         :time-series="surfaceArea.series"
         :is-loading="isLoading"
+        class="reservoir-page-section__comparison-map"
       />
 
       <PageExport
