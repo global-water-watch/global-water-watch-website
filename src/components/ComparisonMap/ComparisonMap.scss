@@ -56,3 +56,19 @@
     height: 465px;
   }
 }
+
+.mapboxgl-compare::after {
+  content: var(--date);
+  position: absolute;
+  left: -25px;
+  top: 40px;
+  transform: rotate(90deg);
+}
+
+.mapboxgl-compare::before {
+  content: var(--oldDate);
+  position: absolute;
+  left: -60px;
+  top: 40px;
+  transform: rotate(270deg);
+}

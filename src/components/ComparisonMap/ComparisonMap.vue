@@ -5,7 +5,23 @@
     type="image"
   />
   <div v-else class="comparison-map">
-    <div id="comparison-map-container" class="comparison-map__map-container">
+    <div class="layout-section">
+      <div class="layout-container">
+        <h2>Comparison map</h2>
+        <p>
+          Here we represent the state of the reservoir at the selected "before" and "after" times. We do this by creating a composite image of different satellite missions (Landsat 4, 5, 7, 8, 9 and Sentinel-2).
+          The composite is constructed using images from the selected date, going back 30 days to gather enough images . The more recent images are displayed on top.
+        </p>
+
+        <h3>Interact with the map</h3>
+        <p class="small">
+          Click on the date at the bottom left to change the "before" date, and the date on the bottom right to change the "after" date.
+          You can use the slider on the plot to compare the situation at the "before" date, shown on the left of the slider, and the "after" situation of the reservoir on the right of the slider.
+        </p>
+      </div>
+    </div>
+
+    <div id="comparison-map-container" class="comparison-map__map-container" :style="{'--date': `'${formattedDate}'`, '--oldDate': `'${formattedOldDate}'`}">
       <ComparisonDetailMap
         v-if="reservoirs"
         :reservoirs="reservoirs"
@@ -25,7 +41,7 @@
       />
     </div>
 
-    <div id="comparison-map" class="comparison-map__dates ma-3">
+    <div id="comparison-map" class="comparison-map__dates ma-3 mt-6">
       <ComparisonDatePicker
         :available-dates="timeSeriesDates"
         :date="oldDate"
@@ -43,6 +59,7 @@
         :available-dates="timeSeriesDates"
         :date="date"
         class="comparison-map__date-picker comparison-map__date-picker--right"
+        :left-aligned="true"
         @dateChanged="onDateChanged"
       />
     </div>
@@ -50,6 +67,8 @@
 </template>
 
 <script>
+  import { formatDate, isoFormatDate } from '@/lib/primitive-helpers'
+
   let oldMap, currentMap
 
   export default {
@@ -79,6 +98,14 @@
     computed: {
       timeSeriesDates () {
         return this.timeSeries[0].data.map(item => new Date(item[0]))
+      },
+
+      formattedDate () {
+        return formatDate(isoFormatDate(this.date))
+      },
+
+      formattedOldDate () {
+        return formatDate(isoFormatDate(this.oldDate))
       },
     },
 

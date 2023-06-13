@@ -8,11 +8,13 @@
       offset-y
       max-width="290px"
       min-width="auto"
-      right
+      :right="!leftAligned"
+      :left="leftAligned"
     >
       <template #activator="{ on, attrs }">
         <v-text-field
           v-model="formattedDate"
+          label="Select date"
           readonly
           v-bind="attrs"
           v-on="on"
@@ -30,6 +32,8 @@
 </template>
 
 <script>
+  import { formatDate, isoFormatDate } from '@/lib/primitive-helpers'
+
   export default {
     props: {
       availableDates: {
@@ -41,21 +45,28 @@
         type: Date,
         default: () => new Date(),
       },
+
+      leftAligned: {
+        type: Boolean,
+        default: false,
+      },
     },
 
     data () {
       return {
-        isoDate: this.isoFormatDate(new Date()),
+        isoDate: isoFormatDate(new Date()),
         datePickerMenu: false,
       }
     },
 
     computed: {
       isoAvailableDates () {
-        return this.availableDates.map(date => this.isoFormatDate(date))
+        return this.availableDates.map(date => isoFormatDate(date))
       },
+      // Date displayed to the user in the text field
+      // Format: DD/MM/YYYY
       formattedDate () {
-        return this.formatDate(this.isoDate)
+        return formatDate(this.isoDate)
       },
     },
 
@@ -66,25 +77,14 @@
     },
 
     mounted () {
-      this.isoDate = this.isoFormatDate(this.date)
+      // v-date-picker accepts ISO 8601 date strings (YYYY-MM-DD)
+      // https://v2.vuetifyjs.com/en/components/date-pickers/#caveats
+      this.isoDate = isoFormatDate(this.date)
     },
 
     methods: {
       allowedDates (date) {
         return this.isoAvailableDates.includes(date)
-      },
-      // Date displayed to the user in the text field
-      // Format: DD/MM/YYYY
-      formatDate (date) {
-        if (!date) { return null }
-
-        const [year, month, day] = date.split('-')
-        return `${day}/${month}/${year}`
-      },
-      // v-date-picker accepts ISO 8601 date strings (YYYY-MM-DD)
-      // https://v2.vuetifyjs.com/en/components/date-pickers/#caveats
-      isoFormatDate (date) {
-        return date.toISOString().substring(0, 10)
       },
     },
   }
