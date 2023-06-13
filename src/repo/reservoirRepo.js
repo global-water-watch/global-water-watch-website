@@ -4,11 +4,11 @@ import { capitalize } from '@/lib/primitive-helpers'
 const units = {
   m2: {
     conversionUnit: 'km2',
-    conversionFactor: 1000000,
+    conversionFactor: 1e+6,
   },
   m3: {
     conversionUnit: 'km3',
-    conversionFactor: 1000000000,
+    conversionFactor: 1e+9,
   },
 }
 
