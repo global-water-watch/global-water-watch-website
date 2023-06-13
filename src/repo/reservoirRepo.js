@@ -1,26 +1,27 @@
 import qs from 'qs'
 import { capitalize } from '@/lib/primitive-helpers'
 
+const units = {
+  m2: {
+    conversionUnit: 'km2',
+    conversionFactor: 1000000,
+  },
+  m3: {
+    conversionUnit: 'km3',
+    conversionFactor: 1000000000,
+  },
+}
+
 const valueConversion = ({ t, value, unit }) => {
-  if (unit === 'm2') {
-    // Convert to km2
-    return [t, (value / 1000000).toFixed(2)]
-  } else if (unit === 'm3') {
-    // Convert to km3
-    return [t, (value / 1000000000).toFixed(2)]
+  if (units[unit]) {
+    return [t, (value / units[unit].conversionFactor).toFixed(2)]
   } else {
     return [t, value]
   }
 }
 
 const unitConversion = (unit) => {
-  if (unit === 'm2') {
-    return 'km2'
-  } else if (unit === 'm3') {
-    return 'km3'
-  } else {
-    return unit
-  }
+  return units[unit] ? units[unit].conversionUnit : unit
 }
 
 const timeSeriesAxis = (yAxisName, yAxisUnit) => {
