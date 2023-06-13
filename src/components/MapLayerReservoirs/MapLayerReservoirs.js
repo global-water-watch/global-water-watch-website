@@ -79,6 +79,8 @@ export default {
         map.addLayer(layer)
         if (clickFn) {
           map.on('click', layer.id, clickFn)
+          // Workaround for https://github.com/mapbox/mapbox-gl-draw/issues/1019
+          map.on('touchend', layer.id, clickFn)
 
           if (layer.type === 'fill') {
             map.on('mouseenter', layer.id, this.mouseEnterFn)
