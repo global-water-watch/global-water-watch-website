@@ -73,6 +73,9 @@ export default {
 
         if (clickFn) {
           map.on('click', layerUniqueId, clickFn)
+          // Workaround for https://github.com/mapbox/mapbox-gl-draw/issues/1019
+          map.on('touchend', layerUniqueId, clickFn)
+
           map.on('mouseenter', layerUniqueId, this.mouseEnterFn)
           map.on('mouseleave', layerUniqueId, this.mouseLeaveFn)
         }
