@@ -42,6 +42,8 @@ const timeSeriesAxis = (yAxisName, yAxisUnit) => {
       {
         name: `${yAxisName} (${yAxisUnit})`,
         type: 'value',
+        nameLocation: 'middle',
+        nameGap: 50,
       },
     ],
   }
@@ -49,7 +51,7 @@ const timeSeriesAxis = (yAxisName, yAxisUnit) => {
 
 const formatTimeSeries = (id, timeSeries) => {
   if (timeSeries.length === 0) { return null }
-  const valueName = `${timeSeries[0]?.name?.split('_').map(capitalize).join(' ')} (#${id})`
+  const valueName = timeSeries[0]?.name?.split('_').map(capitalize).join(' ')
 
   const valueUnit = unitConversion(timeSeries[0].unit)
 
@@ -59,7 +61,7 @@ const formatTimeSeries = (id, timeSeries) => {
     ...timeSeriesAxis(valueName, valueUnit),
     series: [
       {
-        name: valueName,
+        name: `${valueName} (#${id})`,
         type: 'line',
         data,
       },

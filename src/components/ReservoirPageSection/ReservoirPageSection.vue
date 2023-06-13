@@ -34,9 +34,9 @@
       <data-chart
         v-if="(hasReservoirs && surfaceArea) || isLoading || isLoadingChart"
         :title="surfaceAreaChartTitle"
-        :x-axis="surfaceArea?.xAxis"
-        :y-axis="surfaceArea?.yAxis"
-        :series="surfaceArea?.series"
+        :x-axis="surfaceArea.xAxis"
+        :y-axis="surfaceArea.yAxis"
+        :series="surfaceArea.series"
         :show-tooltip="true"
         :show-legend="true"
         :use-zoom="true"
@@ -46,11 +46,11 @@
       />
 
       <data-chart
-        v-if="(hasReservoirs && surfaceVolume) || isLoading || isLoadingChart"
+        v-if="surfaceVolume"
         :title="surfaceVolumeChartTitle"
-        :x-axis="surfaceVolume?.xAxis"
-        :y-axis="surfaceVolume?.yAxis"
-        :series="surfaceVolume?.series"
+        :x-axis="surfaceVolume.xAxis"
+        :y-axis="surfaceVolume.yAxis"
+        :series="surfaceVolume.series"
         :show-tooltip="true"
         :show-legend="true"
         :use-zoom="true"
