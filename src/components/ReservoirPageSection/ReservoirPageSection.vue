@@ -60,7 +60,7 @@
         class="reservoir-page-section__volume-chart"
       />
       <MessageBox
-        v-else-if="!surfaceVolume"
+        v-else-if="!surfaceVolume && !isLoading"
         message="No volume estimation available"
         type="info"
         icon="mdi-information-outline"
