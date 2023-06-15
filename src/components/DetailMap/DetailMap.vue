@@ -161,6 +161,9 @@
         })
 
         map.on('click', `${reservoirName}-fill`, this.onReservoirClick)
+        // Workaround for https://github.com/mapbox/mapbox-gl-draw/issues/1019
+        map.on('touchend', `${reservoirName}-fill`, this.onReservoirClick)
+
         map.on('mouseenter', `${reservoirName}-fill`, () => {
           mouseEnterGeometry({ map })
         })
@@ -210,6 +213,9 @@
 
         map.on('click', 'reservoirsv10-fill', this.onReservoirClick)
         map.on('click', 'reservoirsv10-line', this.onReservoirClick)
+        // Workaround for https://github.com/mapbox/mapbox-gl-draw/issues/1019
+        map.on('touchend', 'reservoirsv10-fill', this.onReservoirClick)
+        map.on('touchend', 'reservoirsv10-line', this.onReservoirClick)
 
         map.on('mouseenter', 'reservoirsv10-fill', () => {
           mouseEnterGeometry({ map })

@@ -5,7 +5,23 @@
     type="image"
   />
   <div v-else class="comparison-map">
-    <div id="comparison-map-container" class="comparison-map__map-container">
+    <div class="layout-section">
+      <div class="layout-container">
+        <h2>Comparison map</h2>
+        <p>
+          Here we represent the state of the reservoir at the selected "before" and "after" times. We do this by creating a composite image of different satellite missions (Landsat 4, 5, 7, 8, 9 and Sentinel-2).
+          The composite is constructed using images from the selected date, going back 30 days to gather enough images . The more recent images are displayed on top.
+        </p>
+
+        <h3>Interact with the map</h3>
+        <p class="small">
+          Click on the date at the bottom left to change the "before" date, and the date on the bottom right to change the "after" date.
+          You can use the slider on the plot to compare the situation at the "before" date, shown on the left of the slider, and the "after" situation of the reservoir on the right of the slider.
+        </p>
+      </div>
+    </div>
+
+    <div id="comparison-map-container" class="comparison-map__map-container" :style="{'--date': `'${formattedDate}'`, '--oldDate': `'${formattedOldDate}'`}">
       <ComparisonDetailMap
         v-if="reservoirs"
         :reservoirs="reservoirs"
@@ -25,35 +41,13 @@
       />
     </div>
 
-    <div id="comparison-map" class="comparison-map__dates ma-3">
-      <div class="comparison-map__date-picker">
-        <v-menu
-          v-model="oldDatePickerMenu"
-          :close-on-content-click="false"
-          transition="scale-transition"
-          origin="overlap"
-          offset-y
-          max-width="290px"
-          min-width="auto"
-          right
-        >
-          <template #activator="{ on, attrs }">
-            <v-text-field
-              v-model="formattedOldDate"
-              readonly
-              v-bind="attrs"
-              v-on="on"
-            />
-          </template>
-          <v-date-picker
-            v-model="isoOldDate"
-            :allowed-dates="allowedDates"
-            no-title
-            scrollable
-            @change="oldDatePickerMenu = false"
-          />
-        </v-menu>
-      </div>
+    <div id="comparison-map" class="comparison-map__dates ma-3 mt-6">
+      <ComparisonDatePicker
+        :available-dates="timeSeriesDates"
+        :date="oldDate"
+        class="comparison-map__date-picker"
+        @dateChanged="onOldDateChanged"
+      />
       <div v-if="isLoadingSatelliteImages" class="comparison-map__loading">
         <div>
           Loading satellite images
@@ -61,39 +55,20 @@
         </div>
         This feature is not optimized for larger reservoirs.
       </div>
-      <div class="comparison-map__date-picker comparison-map__date-picker--right">
-        <v-menu
-          v-model="datePickerMenu"
-          :close-on-content-click="false"
-          transition="scale-transition"
-          origin="overlap"
-          offset-y
-          max-width="290px"
-          min-width="auto"
-          left
-        >
-          <template #activator="{ on, attrs }">
-            <v-text-field
-              v-model="formattedDate"
-              readonly
-              v-bind="attrs"
-              v-on="on"
-            />
-          </template>
-          <v-date-picker
-            v-model="isoDate"
-            :allowed-dates="allowedDates"
-            no-title
-            scrollable
-            @change="datePickerMenu = false"
-          />
-        </v-menu>
-      </div>
+      <ComparisonDatePicker
+        :available-dates="timeSeriesDates"
+        :date="date"
+        class="comparison-map__date-picker comparison-map__date-picker--right"
+        :left-aligned="true"
+        @dateChanged="onDateChanged"
+      />
     </div>
   </div>
 </template>
 
 <script>
+  import { formatDate, isoFormatDate } from '@/lib/primitive-helpers'
+
   let oldMap, currentMap
 
   export default {
@@ -114,11 +89,9 @@
 
     data () {
       return {
-        isoDate: this.isoFormatDate(new Date()),
-        isoOldDate: this.isoFormatDate(new Date()),
         isLoadingSatelliteImages: false,
-        datePickerMenu: false,
-        oldDatePickerMenu: false,
+        date: new Date(),
+        oldDate: new Date(),
       }
     },
 
@@ -126,20 +99,13 @@
       timeSeriesDates () {
         return this.timeSeries[0].data.map(item => new Date(item[0]))
       },
-      isoTimeSeriesDates () {
-        return this.timeSeriesDates.map(date => this.isoFormatDate(date))
-      },
-      date () {
-        return new Date(this.isoDate)
-      },
-      oldDate () {
-        return new Date(this.isoOldDate)
-      },
+
       formattedDate () {
-        return this.formatDate(this.isoDate)
+        return formatDate(isoFormatDate(this.date))
       },
+
       formattedOldDate () {
-        return this.formatDate(this.isoOldDate)
+        return formatDate(isoFormatDate(this.oldDate))
       },
     },
 
@@ -159,11 +125,10 @@
       initializeDates () {
         // On mounted, `date` is the last date in the time series
         // `oldDate` is the closest date in the time series one year before `date`
-        const date = this.timeSeriesDates[this.timeSeriesDates.length - 1]
-        this.isoDate = this.isoFormatDate(date)
-        const oldDate = new Date(date.getTime())
-        oldDate.setFullYear(date.getFullYear() - 1)
-        this.isoOldDate = this.isoFormatDate(this.timeSeriesDates[this.getNearestDateIndex(oldDate)])
+        this.date = this.timeSeriesDates[this.timeSeriesDates.length - 1]
+        const oldDate = new Date(this.date.getTime())
+        oldDate.setFullYear(this.date.getFullYear() - 1)
+        this.oldDate = this.timeSeriesDates[this.getNearestDateIndex(oldDate)]
       },
       onSetCurrentMap (map) {
         currentMap = map
@@ -180,6 +145,12 @@
       onLoadingSatelliteImage (isLoading) {
         this.isLoadingSatelliteImages = isLoading
       },
+      onOldDateChanged (date) {
+        this.oldDate = date
+      },
+      onDateChanged (date) {
+        this.date = date
+      },
       getNearestDateIndex (target) {
         let bestDate = this.timeSeriesDates.length
 
@@ -195,20 +166,6 @@
         })
 
         return bestDate
-      },
-      allowedDates (date) {
-        return this.isoTimeSeriesDates.includes(date)
-      },
-      formatDate (date) {
-        if (!date) { return null }
-
-        const [year, month, day] = date.split('-')
-        return `${day}/${month}/${year}`
-      },
-      // v-date-picker accepts ISO 8601 date strings (YYYY-MM-DD)
-      // https://v2.vuetifyjs.com/en/components/date-pickers/#caveats
-      isoFormatDate (date) {
-        return date.toISOString().substring(0, 10)
       },
     },
   }

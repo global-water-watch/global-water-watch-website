@@ -1,18 +1,30 @@
 import qs from 'qs'
 import { capitalize } from '@/lib/primitive-helpers'
 
-const formatTimeSeries = (id, timeSeries) => {
-  const valueName = `${timeSeries[0]?.name?.split('_').map(capitalize).join(' ')} (#${id})`
+const units = {
+  m2: {
+    conversionUnit: 'km2',
+    conversionFactor: 1e+6,
+  },
+  m3: {
+    conversionUnit: 'km3',
+    conversionFactor: 1e+9,
+  },
+}
 
-  // TODO: make sure this km2 comes from the backend again as an unit
-  // const valueUnit = timeSeries[0]?.unit
-  const valueUnit = 'km2'
-
-  const data = timeSeries.map(({ t, value: valueInM2 }) => {
-    const value = (valueInM2 / 1000000).toFixed(2)
+const valueConversion = ({ t, value, unit }) => {
+  if (units[unit]) {
+    return [t, (value / units[unit].conversionFactor).toFixed(2)]
+  } else {
     return [t, value]
-  })
+  }
+}
 
+const unitConversion = (unit) => {
+  return units[unit] ? units[unit].conversionUnit : unit
+}
+
+const timeSeriesAxis = (yAxisName, yAxisUnit) => {
   return {
     xAxis: [
       {
@@ -29,13 +41,28 @@ const formatTimeSeries = (id, timeSeries) => {
     ],
     yAxis: [
       {
-        name: `${valueName} (${valueUnit})`,
+        name: `${yAxisName} (${yAxisUnit})`,
         type: 'value',
+        nameLocation: 'middle',
+        nameGap: 50,
       },
     ],
+  }
+}
+
+const formatTimeSeries = (id, timeSeries) => {
+  if (timeSeries.length === 0) { return null }
+  const valueName = timeSeries[0]?.name?.split('_').map(capitalize).join(' ')
+
+  const valueUnit = unitConversion(timeSeries[0].unit)
+
+  const data = timeSeries.map(valueConversion)
+
+  return {
+    ...timeSeriesAxis(valueName, valueUnit),
     series: [
       {
-        name: valueName,
+        name: `${valueName} (#${id})`,
         type: 'line',
         data,
       },
@@ -54,19 +81,14 @@ const formatMultipleTimeSeries = (response) => {
     .map(capitalize)
     .join(' ')
 
-  // TODO: make sure this km2 comes from the backend again as an unit
-  // const valueUnit = timeSeries[0]?.unit
-  const valueUnit = 'km2'
+  const valueUnit = unitConversion(data?.variable_unit)
 
   if (data?.data?.length > 0) {
     series.push({
       name: 'Sum',
       type: 'line',
       areaStyle: {},
-      data: data?.data?.map(({ t, value: valueInM2 }) => {
-        const value = (valueInM2 / 1000000).toFixed(2)
-        return [t, value]
-      }),
+      data: data?.data?.map(valueConversion),
     })
   }
 
@@ -75,32 +97,13 @@ const formatMultipleTimeSeries = (response) => {
       series.push({
         name: `${valueName} (#${key})`,
         type: 'line',
-        data: data.source_data[key].map(({ t, value: valueInM2 }) => {
-          const value = (valueInM2 / 1000000).toFixed(2)
-          return [t, value]
-        }),
+        data: data.source_data[key].map(valueConversion),
       })
     })
   }
 
   return {
-    xAxis: [{
-      type: 'time',
-      axisPointer: {
-        label: {
-          show: true,
-        },
-        handle: {
-          show: true,
-        },
-      },
-    }],
-    yAxis: [
-      {
-        name: `${valueName} (${valueUnit})`,
-        type: 'value',
-      },
-    ],
+    ...timeSeriesAxis(valueName, valueUnit),
     series,
   }
 }
@@ -110,10 +113,9 @@ export default function (axios) {
     // Get reservoir by id (fid)
     getById: id => axios.$get(`reservoir/${id}`),
 
-    // Get only the service water area (raw data)
-    getTimeSeriesById: id =>
+    getTimeSeriesById: (id, variableName) =>
       axios
-        .$get(`reservoir/${id}/ts/surface_water_area`)
+        .$get(`reservoir/${id}/ts/${variableName}`)
         .then(timeSeries => formatTimeSeries(id, timeSeries)),
 
     getByGeometry: geometry =>

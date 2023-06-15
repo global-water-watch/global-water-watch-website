@@ -20,6 +20,9 @@
             "color": "rgba(255,255,255,0.5)"
         }
     },
+    "grid": {
+        "containLabel": true
+    },
     "line": {
         "itemStyle": {
             "borderWidth": "2"

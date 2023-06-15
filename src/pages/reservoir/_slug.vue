@@ -14,12 +14,30 @@
           <p v-if="reservoir.properties.grand_id" class="p">
             This reservoir was curated by <a href="https://www.globaldamwatch.org/grand/" target="_blank" rel="noopener">Global Dam Watch</a> (based on the GRAND database).
           </p>
+          <v-alert
+            v-if="isLargeReservoir"
+            outlined
+            type="warning"
+            dense
+            text
+            prominent
+            color="orange lighten-1"
+            class="reservoir__large-reservoir-alert"
+          >
+            <strong>Large reservoir</strong>
+            <p>
+              This website shows small (10–100 ha) and medium size reservoirs (> 100 ha). We do not show 65 of the largest reservoirs.
+              Our algorithms can estimate the surface areas of a reservoir from partial observations.
+              The larger reservoirs are well measured using in-situ measurements and partial observations of surface area are less indicative of the state of the full reservoir.
+            </p>
+          </v-alert>
         </Fragment>
       </PageHeroesDetailHero>
 
       <ReservoirPageSection
         :reservoirs="reservoir"
-        :time-series="timeSeries"
+        :surface-area="surfaceArea"
+        :surface-volume="surfaceVolume"
         :satellite-image-url="satelliteImageUrl"
         :generating-satellite-image-url="generatingSatelliteImageUrl"
         :show-comparison-map="true"
@@ -33,13 +51,19 @@
 
 <script>
   import debounce from 'lodash.debounce'
+  import { LARGE_RESERVOIR_IDS } from '~/lib/constants'
 
   const DEBOUNCE_TIME = 1000
 
   export default {
     data: () => ({
       reservoir: {},
-      timeSeries: {
+      surfaceArea: {
+        xAxis: [],
+        yAxis: [],
+        series: [],
+      },
+      surfaceVolume: {
         xAxis: [],
         yAxis: [],
         series: [],
@@ -62,9 +86,10 @@
       if (!slug) { return }
 
       try {
-        [this.reservoir, this.timeSeries] = await Promise.all([
+        [this.reservoir, this.surfaceArea, this.surfaceVolume] = await Promise.all([
           this.$repo.reservoir.getById(slug),
-          this.$repo.reservoir.getTimeSeriesById(slug),
+          this.$repo.reservoir.getTimeSeriesById(slug, 'surface_water_area'),
+          this.$repo.reservoir.getTimeSeriesById(slug, 'surface_water_volume'),
         ])
       } catch (e) {
         console.error(e)
@@ -84,6 +109,10 @@
 
       isLoading () {
         return this.$fetchState.pending || !this.reservoir
+      },
+
+      isLargeReservoir () {
+        return LARGE_RESERVOIR_IDS.includes(this.reservoir.id)
       },
     },
 

@@ -8,9 +8,9 @@
       />
       <Fragment v-else>
         <v-row class="mb-3">
-          <h3>
+          <h2>
             Export options
-          </h3>
+          </h2>
         </v-row>
         <!-- Temporary hide share page for custom selection since this url isn't nice to share -->
         <v-row v-if="areaType !== 'custom-selection'">
@@ -65,7 +65,11 @@
         type: Object,
         default: () => {},
       },
-      timeSeries: {
+      surfaceArea: {
+        type: [Object, null],
+        default: null,
+      },
+      surfaceVolume: {
         type: [Object, null],
         default: null,
       },
@@ -78,6 +82,12 @@
     data: () => ({
       shareUrl: undefined,
     }),
+
+    computed: {
+      isFeature () {
+        return this.reservoirs.type === 'Feature'
+      },
+    },
 
     mounted () {
       this.shareUrl = window.location.href
@@ -92,27 +102,32 @@
         }
       },
       async exportTimeSeries () {
-        if (this.timeSeries.series.length === 1) {
-          const { name, content } = this.timeSeriesCsv(this.timeSeries.series[0])
+        const files = this.timeSeriesFiles()
 
-          this.downloadFile(
-            `${name}.csv`,
-            new Blob([content], { type: 'text/csv;charset=utf-8' }),
-          )
-        } else {
-          const zip = this.timeSeriesZip()
+        if (files.length > 1) {
+          const zip = new JSZip()
+          files.forEach(({ name, content }) => {
+            zip.file(name, content)
+          })
+
+          const filename = this.isFeature
+            ? `${this.reservoirName(this.reservoirs)}.zip`
+            : 'Reservoirs - Surface Water Area.zip'
 
           const content = await zip.generateAsync({ type: 'blob' })
           this.downloadFile(
-            'Reservoirs - Surface Water Area.zip',
+            filename,
             content,
+          )
+        } else {
+          this.downloadFile(
+            files[0].name,
+            new Blob([files[0].content], { type: 'text/csv;charset=utf-8' }),
           )
         }
       },
       exportGeometry () {
-        const isSingleFeature = this.reservoirs.type === 'Feature'
-
-        const filename = isSingleFeature
+        const filename = this.isFeature
           ? `${this.reservoirName(this.reservoirs)}.geojson`
           : 'Reservoirs.geojson'
 
@@ -121,23 +136,38 @@
           new Blob([JSON.stringify(this.reservoirs)], { type: 'application/geo+json;charset=utf-8' }),
         )
       },
-      timeSeriesCsv (serie) {
-        let csv = `${this.timeSeries.xAxis[0].type},${this.timeSeries.yAxis[0].name}\n`
+      timeSeriesFiles () {
+        const files = []
+
+        if (this.isFeature) {
+          files.push(this.timeSeriesCsv(
+            this.surfaceArea.series[0],
+            this.surfaceArea.xAxis[0].type,
+            this.surfaceArea.yAxis[0].name,
+          ))
+
+          if (this.surfaceVolume) {
+            files.push(this.timeSeriesCsv(
+              this.surfaceVolume.series[0],
+              this.surfaceVolume.xAxis[0].type,
+              this.surfaceVolume.yAxis[0].name,
+            ))
+          }
+        } else {
+          files.push(...this.surfaceArea.series.map((serie) => {
+            return this.timeSeriesCsv(serie, this.surfaceArea.xAxis[0].type, this.surfaceArea.yAxis[0].name)
+          }))
+        }
+
+        return files
+      },
+      timeSeriesCsv (serie, xAxisType, yAxisName) {
+        let csv = `${xAxisType},${yAxisName}\n`
         serie.data.forEach((row) => {
           csv += row.join(',')
           csv += '\n'
         })
-        return { name: serie.name, content: csv }
-      },
-      timeSeriesZip () {
-        const zip = new JSZip()
-        const files = this.timeSeries.series.map((serie) => {
-          return this.timeSeriesCsv(serie)
-        })
-        files.forEach(({ name, content }) => {
-          zip.file(`${name}.csv`, content)
-        })
-        return zip
+        return { name: `${serie.name}.csv`, content: csv }
       },
       downloadFile (filename, blob) {
         const anchor = document.createElement('a')
