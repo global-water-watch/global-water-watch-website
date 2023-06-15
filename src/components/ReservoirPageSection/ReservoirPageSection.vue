@@ -32,11 +32,11 @@
       </div>
 
       <data-chart
-        v-if="(hasReservoirs && timeSeries) || isLoading || isLoadingChart"
-        :title="chartTitle"
-        :x-axis="xAxis"
-        :y-axis="yAxis"
-        :series="series"
+        v-if="(hasReservoirs && surfaceArea) || isLoading || isLoadingChart"
+        :title="surfaceAreaChartTitle"
+        :x-axis="surfaceArea.xAxis"
+        :y-axis="surfaceArea.yAxis"
+        :series="surfaceArea.series"
         :show-tooltip="true"
         :show-legend="true"
         :use-zoom="true"
@@ -45,10 +45,32 @@
         @selectedTimeChanged="onSelectedTimeChanged"
       />
 
+      <data-chart
+        v-if="surfaceVolume"
+        :title="surfaceVolumeChartTitle"
+        :x-axis="surfaceVolume.xAxis"
+        :y-axis="surfaceVolume.yAxis"
+        :series="surfaceVolume.series"
+        :show-tooltip="true"
+        :show-legend="true"
+        :use-zoom="true"
+        :use-toolbox="true"
+        :is-loading="isLoading || isLoadingChart"
+        color="#fac858"
+        class="reservoir-page-section__volume-chart"
+      />
+      <MessageBox
+        v-else-if="!surfaceVolume"
+        message="No volume estimation available"
+        type="info"
+        icon="mdi-information-outline"
+        class="reservoir-page-section__volume-chart"
+      />
+
       <ComparisonMap
         v-if="showComparisonMap && (hasReservoirs || isLoading)"
         :reservoirs="reservoirs"
-        :time-series="series"
+        :time-series="surfaceArea.series"
         :is-loading="isLoading"
       />
 
@@ -57,7 +79,8 @@
         :is-loading="isLoading"
         :area-type="areaType"
         :reservoirs="reservoirs"
-        :time-series="timeSeries"
+        :surface-area="surfaceArea"
+        :surface-volume="surfaceVolume"
       />
 
       <FeedbackForm
@@ -75,7 +98,11 @@
         type: Object,
         default: () => {},
       },
-      timeSeries: {
+      surfaceArea: {
+        type: [Object, null],
+        default: null,
+      },
+      surfaceVolume: {
         type: [Object, null],
         default: null,
       },
@@ -125,7 +152,7 @@
     },
 
     computed: {
-      chartTitle () {
+      surfaceAreaChartTitle () {
         if (this.reservoirs.type === 'FeatureCollection') {
           return ''
         }
@@ -133,16 +160,12 @@
         return this.reservoirs.properties?.name ? `Reservoir area of ${this.reservoirs.properties.name}` : ''
       },
 
-      xAxis () {
-        return this.timeSeries?.xAxis
-      },
+      surfaceVolumeChartTitle () {
+        if (this.reservoirs.type === 'FeatureCollection') {
+          return ''
+        }
 
-      yAxis () {
-        return this.timeSeries?.yAxis
-      },
-
-      series () {
-        return this.timeSeries?.series
+        return this.reservoirs.properties?.name ? `Reservoir volume of ${this.reservoirs.properties.name}` : ''
       },
 
       hasReservoirs () {

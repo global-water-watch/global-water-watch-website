@@ -36,7 +36,8 @@
 
       <ReservoirPageSection
         :reservoirs="reservoir"
-        :time-series="timeSeries"
+        :surface-area="surfaceArea"
+        :surface-volume="surfaceVolume"
         :satellite-image-url="satelliteImageUrl"
         :generating-satellite-image-url="generatingSatelliteImageUrl"
         :show-comparison-map="true"
@@ -57,7 +58,12 @@
   export default {
     data: () => ({
       reservoir: {},
-      timeSeries: {
+      surfaceArea: {
+        xAxis: [],
+        yAxis: [],
+        series: [],
+      },
+      surfaceVolume: {
         xAxis: [],
         yAxis: [],
         series: [],
@@ -80,9 +86,10 @@
       if (!slug) { return }
 
       try {
-        [this.reservoir, this.timeSeries] = await Promise.all([
+        [this.reservoir, this.surfaceArea, this.surfaceVolume] = await Promise.all([
           this.$repo.reservoir.getById(slug),
-          this.$repo.reservoir.getTimeSeriesById(slug),
+          this.$repo.reservoir.getTimeSeriesById(slug, 'surface_water_area'),
+          this.$repo.reservoir.getTimeSeriesById(slug, 'surface_water_volume'),
         ])
       } catch (e) {
         console.error(e)

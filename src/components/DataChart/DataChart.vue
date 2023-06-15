@@ -63,6 +63,10 @@
         type: Array,
         default: () => [],
       },
+      color: {
+        type: String,
+        default: null,
+      },
       showTooltip: {
         type: Boolean,
         default: false,
@@ -87,11 +91,12 @@
 
     computed: {
       option () {
-        const { title, showTooltip, showLegend, useZoom, useToolbox, xAxis, yAxis, series } = this
+        const { title, showTooltip, showLegend, useZoom, useToolbox, xAxis, yAxis, series, color } = this
 
         const styledSeries = series.map(serie => ({
           ...serie,
-          lineStyle: { width: 2, opacity: 0.8 },
+          lineStyle: { color, width: 2, opacity: 0.8 },
+          itemStyle: { color },
           // emphasis: { focus: 'series' },
 
           // markArea: {
