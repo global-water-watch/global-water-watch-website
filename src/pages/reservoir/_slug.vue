@@ -152,4 +152,4 @@
   }
 </script>
 
-<style src="./index.scss" lang="scss" />
+<style src="./_slug.scss" lang="scss" />

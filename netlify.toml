@@ -56,5 +56,5 @@
   force = true
 
 [[edge_functions]]
-  path = "/reservoir/:slug/comparison-map"
+  path = "/comparison-map"
   function = "allow-embedding-map"

@@ -147,7 +147,7 @@
       },
 
       iframeCode () {
-        return `<iframe src="${window.location.href}/comparison-map?date=${this.isoDate}&oldDate=${this.isoOldDate}" width='800' height='500'></iframe>`
+        return `<iframe src="${window.location.origin}/comparison-map?reservoir=${this.reservoirs.id}&date=${this.isoDate}&oldDate=${this.isoOldDate}" width='800' height='500'></iframe>`
       },
     },
 

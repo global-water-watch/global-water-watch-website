@@ -25,17 +25,16 @@
     }),
 
     async fetch () {
-      const { slug } = this.$route.params
-      const { date, oldDate } = this.$route.query
-      if (!slug || !date || !oldDate) { return }
+      const { reservoir, date, oldDate } = this.$route.query
+      if (!reservoir || !date || !oldDate) { return }
 
       this.date = new Date(date)
       this.oldDate = new Date(oldDate)
 
       try {
         [this.reservoir, this.timeSeries] = await Promise.all([
-          this.$repo.reservoir.getById(slug),
-          this.$repo.reservoir.getTimeSeriesById(slug),
+          this.$repo.reservoir.getById(reservoir),
+          this.$repo.reservoir.getTimeSeriesById(reservoir),
         ])
       } catch (e) {
         console.error(e)
