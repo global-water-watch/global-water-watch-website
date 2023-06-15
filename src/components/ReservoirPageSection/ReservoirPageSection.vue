@@ -34,9 +34,9 @@
       <data-chart
         v-if="(hasReservoirs && surfaceArea) || isLoading || isLoadingChart"
         :title="surfaceAreaChartTitle"
-        :x-axis="surfaceArea.xAxis"
-        :y-axis="surfaceArea.yAxis"
-        :series="surfaceArea.series"
+        :x-axis="surfaceAreaXAxis"
+        :y-axis="surfaceAreaYAxis"
+        :series="surfaceAreaSeries"
         :show-tooltip="true"
         :show-legend="true"
         :use-zoom="true"
@@ -170,6 +170,18 @@
 
       hasReservoirs () {
         return (this.reservoirs.type === 'FeatureCollection' && this.reservoirs.features.length > 0) || this.reservoirs.type === 'Feature'
+      },
+
+      surfaceAreaXAxis () {
+        return this.surfaceArea?.xAxis
+      },
+
+      surfaceAreaYAxis () {
+        return this.surfaceArea?.yAxis
+      },
+
+      surfaceAreaSeries () {
+        return this.surfaceArea?.series
       },
     },
 
