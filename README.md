@@ -30,8 +30,8 @@ The site is created as lightweight isomorphic website connected to a headless CM
 
 - [Nuxt](https://nuxtjs.org) - a meta framework based on Vue - is used to structure the project. This framework is selected as it's very suitable for both the highly interactive parts as well as mostly static pages. Since the framework is based on Vue many integrations and libraries are available to speed up development.
 - [DatoCMS](https://www.datocms.com/) - the site content is managed in a [headless DatoCMS instance](https://global-water-watch-website.admin.datocms.com/) (on Deltares account). DatoCMS is selected for its modular and structured content options, advanced image service, multi-language support and GraphQL API. [`vue-datocms`](https://github.com/datocms/vue-datocms) provides handy Vue components and utilties for DatoCMS data.
-- [Vuetify](https://vuetifyjs.com/en/) - is a UI component library in Material Design style. It enables us to quickly build a UI without much custom design work. It is configured to use the [Deltares theme](https://github.com/openearth/delta-vue-components/tree/master/packages/vuetify-theme).
-- [Deltares Vue Components](https://github.com/openearth/delta-vue-components/tree/master/packages/vue-components) - is a collection of Deltares specific components like `LegalDialog` and `MapboxMap`.
+- [Vuetify](https://vuetifyjs.com/en/) - is a UI component library in Material Design style. It enables us to quickly build a UI without much custom design work.
+- [vue2mapbox-gl](https://github.com/openearth/vue2mapbox-gl) - Vue components for mapbox-gl.
 - [Netlify](https://www.netlify.com/) - is used as hosting platform. It is selected for its worldwide CDN, built-in CI/CD and convenient preview environment for each PR. [Netlify Dev](https://www.netlify.com/products/dev/) is used to bring the local development experience as close to production as possible.
 - [Yarn](yarnpkg.com/) - is used as package manager instead of npm as it boosts faster builds.
 
@@ -129,7 +129,7 @@ Finally you can view unpublished content by enabling preview mode. Navigate to `
 `yarn ...` | task
 --- | ---
 `dev` | starts development server on [`localhost:4999`](http://localhost:4999) (is "GWWW" in "T9")
-`dev:netlify` | starts development server in Netlify setup on [`localhost:4999`](http://localhost:4999), more realistic, less DX.
+`dev:netlify` | starts development server in Netlify setup on [`localhost:4999`](http://localhost:4999), more realistic, less DX, helpful for testing (edge) functions
 `analyze` | analyzes and visualizes output bundles
 `build` | creates optimised production build
 `start` | starts local server to test production build
