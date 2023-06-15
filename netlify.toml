@@ -1,7 +1,6 @@
 [build]
   command = "yarn build"
   publish = "dist/"
-  functions = "functions"
   [build.processing]
     # Disable processing to speed up build time
     # @see https://www.voorhoede.nl/en/blog/10x-faster-nuxt-builds-on-netlify/#disable-post-processing-on-netlify
