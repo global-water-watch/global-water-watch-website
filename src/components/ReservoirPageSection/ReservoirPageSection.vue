@@ -157,7 +157,7 @@
           return ''
         }
 
-        return this.reservoirs.properties?.name ? `Reservoir area of ${this.reservoirs.properties.name}` : ''
+        return this.reservoirs.properties?.preferred_name ? `Reservoir area of ${this.reservoirs.properties.preferred_name}` : ''
       },
 
       surfaceVolumeChartTitle () {
@@ -165,7 +165,7 @@
           return ''
         }
 
-        return this.reservoirs.properties?.name ? `Reservoir volume of ${this.reservoirs.properties.name}` : ''
+        return this.reservoirs.properties?.preferred_name ? `Reservoir volume of ${this.reservoirs.properties.preferred_name}` : ''
       },
 
       hasReservoirs () {

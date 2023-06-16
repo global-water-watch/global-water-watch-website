@@ -177,10 +177,10 @@
         anchor.click()
       },
       // For nameless reservoir: #id
-      // For named reservoirs: name (#id)
+      // For named reservoirs: preferred name (#id)
       reservoirName (reservoir) {
-        return reservoir?.properties?.name
-          ? `${reservoir.properties.name} (#${reservoir.id})`
+        return reservoir?.properties?.preferred_name
+          ? `${reservoir.properties.preferred_name} (#${reservoir.id})`
           : `#${reservoir.id}`
       },
     },
