@@ -29,6 +29,10 @@
         type: Date,
         default: null,
       },
+      bufferSize: {
+        type: Number,
+        default: 0,
+      },
     },
 
     data () {
@@ -63,6 +67,12 @@
         }
       },
 
+      bufferSize () {
+        if (this.map) {
+          this.addSatelliteImageToMap()
+        }
+      },
+
       isLoadingSatelliteImage (newVal) {
         this.$emit('loading', newVal)
       },
@@ -78,7 +88,7 @@
           },
         }
 
-        const data = await this.$repo.image.getSatelliteImage(geometry)
+        const data = await this.$repo.image.getSatelliteImage(geometry, this.bufferSize)
 
         const layers = this.map.getStyle().layers
         const layerId = layers.find(layer => layer.id.includes('reservoir') && layer.id.includes('line')).id

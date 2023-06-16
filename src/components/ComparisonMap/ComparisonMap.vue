@@ -17,6 +17,8 @@
         <p class="small">
           Click on the date at the bottom left to change the "before" date, and the date on the bottom right to change the "after" date.
           You can use the slider on the plot to compare the situation at the "before" date, shown on the left of the slider, and the "after" situation of the reservoir on the right of the slider.
+          Increase the buffer size to expand the area of the composite image, by default we use a buffer size of 300m.
+          The larger the buffer size, the longer it will take to load.
         </p>
 
         <h3>Embed the map</h3>
@@ -44,6 +46,7 @@
         v-if="reservoirs"
         :reservoirs="reservoirs"
         :date="oldDate"
+        :buffer-size="satelliteImageBufferSize"
         class="comparison-map__detail-map"
         @setMap="onSetOldMap"
         @loading="onLoadingSatelliteImage"
@@ -53,13 +56,14 @@
         v-if="reservoirs"
         :reservoirs="reservoirs"
         :date="date"
+        :buffer-size="satelliteImageBufferSize"
         class="comparison-map__detail-map"
         @setMap="onSetCurrentMap"
         @loading="onLoadingSatelliteImage"
       />
     </div>
 
-    <div v-if="!isEmbedded" id="comparison-map" class="comparison-map__dates ma-3 mt-6">
+    <div v-if="!isEmbedded" class="comparison-map__dates ma-3 mt-6">
       <ComparisonDatePicker
         :available-dates="timeSeriesDates"
         :date="oldDate"
@@ -81,6 +85,24 @@
         @dateChanged="onDateChanged"
       />
     </div>
+
+    <v-slider
+      v-model="satelliteImageExtraBuffer"
+      hint="Slide to select the buffer size"
+      :persistent-hint="true"
+      :max="1e+5"
+      :min="0"
+      :step="1000"
+      :thumb-size="42"
+      class="comparison-map__buffer-slider ma-3"
+    >
+      <template #thumb-label="{ value }">
+        {{ value/1000 }}km
+      </template>
+      <template #label>
+        <span class="bold">Buffer size</span>
+      </template>
+    </v-slider>
   </div>
 </template>
 
@@ -122,6 +144,7 @@
         isLoadingSatelliteImages: false,
         date: new Date(),
         oldDate: new Date(),
+        satelliteImageExtraBuffer: 0,
       }
     },
 
@@ -148,6 +171,12 @@
 
       iframeCode () {
         return `<iframe src="${window.location.origin}/comparison-map?reservoir=${this.reservoirs.id}&date=${this.isoDate}&oldDate=${this.isoOldDate}" width='800' height='500'></iframe>`
+      },
+
+      satelliteImageBufferSize () {
+        // The default buffer is 300m, the extra buffer is added to that
+        // For clarity, we want to display the total buffer size
+        return this.satelliteImageExtraBuffer < 300 ? this.satelliteImageExtraBuffer : this.satelliteImageExtraBuffer - 300
       },
     },
 
