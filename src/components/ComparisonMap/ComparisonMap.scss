@@ -34,9 +34,17 @@
   }
 }
 
-.comparison-map__buffer-slider {
-  @media screen and (min-width: $breakpoint-medium) {
-    width: 45%;
+.comparison-map__settings.v-expansion-panels {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 2;
+  border-radius: 4px;
+  box-shadow: 0 0 10px 2px rgb(0 0 0 / 10%);
+  width: 400px;
+
+  &.theme--dark .v-expansion-panel {
+    background-color: $gradient-top;
   }
 }
 

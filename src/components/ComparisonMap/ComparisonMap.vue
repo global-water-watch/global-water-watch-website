@@ -5,7 +5,7 @@
     type="image"
   />
   <div v-else-if="!isLoading" class="comparison-map">
-    <div v-if="!isEmbedded" class="layout-section">
+    <div v-if="!isEmbedded" class="layout-section mb-10">
       <div class="layout-container">
         <h2>Comparison map</h2>
         <p>
@@ -61,6 +61,32 @@
         @setMap="onSetCurrentMap"
         @loading="onLoadingSatelliteImage"
       />
+
+      <v-expansion-panels v-if="!isEmbedded" class="comparison-map__settings">
+        <v-expansion-panel>
+          <v-expansion-panel-header>
+            <h3>Extra settings</h3>
+          </v-expansion-panel-header>
+          <v-expansion-panel-content>
+            <v-slider
+              v-model="sliderValue"
+              hint="Slide to select the buffer size"
+              :persistent-hint="true"
+              :max="1e+5"
+              :min="0"
+              :step="1000"
+              @end="onSatelliteImageExtraBufferChanged"
+            >
+              <template #label>
+                <span class="bold">Buffer size</span>
+              </template>
+              <template #append>
+                {{ sliderValue/1000 }}km
+              </template>
+            </v-slider>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+      </v-expansion-panels>
     </div>
 
     <div v-if="!isEmbedded" class="comparison-map__dates ma-3 mt-6">
@@ -85,24 +111,6 @@
         @dateChanged="onDateChanged"
       />
     </div>
-
-    <v-slider
-      v-model="satelliteImageExtraBuffer"
-      hint="Slide to select the buffer size"
-      :persistent-hint="true"
-      :max="1e+5"
-      :min="0"
-      :step="1000"
-      :thumb-size="42"
-      class="comparison-map__buffer-slider ma-3"
-    >
-      <template #thumb-label="{ value }">
-        {{ value/1000 }}km
-      </template>
-      <template #label>
-        <span class="bold">Buffer size</span>
-      </template>
-    </v-slider>
   </div>
 </template>
 
@@ -145,6 +153,7 @@
         date: new Date(),
         oldDate: new Date(),
         satelliteImageExtraBuffer: 0,
+        sliderValue: 0,
       }
     },
 
@@ -226,6 +235,9 @@
       },
       onDateChanged (date) {
         this.date = date
+      },
+      onSatelliteImageExtraBufferChanged (value) {
+        this.satelliteImageExtraBuffer = value
       },
       getNearestDateIndex (target) {
         let bestDate = this.timeSeriesDates.length
