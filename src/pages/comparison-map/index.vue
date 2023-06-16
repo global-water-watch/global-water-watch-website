@@ -6,6 +6,7 @@
     :is-embedded="true"
     :embedded-date="date"
     :embedded-old-date="oldDate"
+    :embedded-extra-buffer="extraBuffer"
     class="comparison-map--embedded"
   />
 </template>
@@ -22,14 +23,19 @@
       },
       date: new Date(),
       oldDate: new Date(),
+      extraBuffer: 0,
     }),
 
     async fetch () {
-      const { reservoir, date, oldDate } = this.$route.query
+      const { reservoir, date, oldDate, extraBuffer } = this.$route.query
       if (!reservoir || !date || !oldDate) { return }
 
       this.date = new Date(date)
       this.oldDate = new Date(oldDate)
+
+      if (extraBuffer) {
+        this.extraBuffer = Number(extraBuffer)
+      }
 
       try {
         [this.reservoir, this.timeSeries] = await Promise.all([

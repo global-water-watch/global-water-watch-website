@@ -17,13 +17,15 @@
         <p class="small">
           Click on the date at the bottom left to change the "before" date, and the date on the bottom right to change the "after" date.
           You can use the slider on the plot to compare the situation at the "before" date, shown on the left of the slider, and the "after" situation of the reservoir on the right of the slider.
-          Increase the buffer size to expand the area of the composite image, by default we use a buffer size of 300m.
-          The larger the buffer size, the longer it will take to load.
         </p>
-
+        <p class="small">
+          On the advance settings panel, on the left top corner of the map, you can change the buffer size of the satellite images.
+          This will allow you to see more or less of the surrounding area of the reservoir. The default value is 300m.
+          The bigger the buffer size, the longer it will take to load the satellite images.
+        </p>
         <h3>Embed the map</h3>
         <p class="small">
-          You can embed the comparison map on your website by copying the code below. The dates will be fixed to the ones currently selected.
+          You can embed the comparison map on your website by copying the code below. The dates will be fixed to the ones currently selected, same for any advance settings.
         </p>
         <v-row class="ma-0 mb-3">
           <v-btn
@@ -46,7 +48,7 @@
         v-if="reservoirs"
         :reservoirs="reservoirs"
         :date="oldDate"
-        :buffer-size="satelliteImageBufferSize"
+        :extra-buffer="satelliteImageExtraBuffer"
         class="comparison-map__detail-map"
         @setMap="onSetOldMap"
         @loading="onLoadingSatelliteImage"
@@ -56,7 +58,7 @@
         v-if="reservoirs"
         :reservoirs="reservoirs"
         :date="date"
-        :buffer-size="satelliteImageBufferSize"
+        :extra-buffer="satelliteImageExtraBuffer"
         class="comparison-map__detail-map"
         @setMap="onSetCurrentMap"
         @loading="onLoadingSatelliteImage"
@@ -65,7 +67,7 @@
       <v-expansion-panels v-if="!isEmbedded" class="comparison-map__settings">
         <v-expansion-panel>
           <v-expansion-panel-header>
-            <h3>Extra settings</h3>
+            <h3>Advance settings</h3>
           </v-expansion-panel-header>
           <v-expansion-panel-content>
             <v-slider
@@ -75,7 +77,7 @@
               :max="1e+5"
               :min="0"
               :step="1000"
-              @end="onSatelliteImageExtraBufferChanged"
+              @end="onsatelliteImageExtraBufferChanged"
             >
               <template #label>
                 <span class="bold">Buffer size</span>
@@ -145,6 +147,10 @@
         type: Date,
         default: () => new Date(),
       },
+      embeddedExtraBuffer: {
+        type: Number,
+        default: 0,
+      },
     },
 
     data () {
@@ -179,13 +185,7 @@
       },
 
       iframeCode () {
-        return `<iframe src="${window.location.origin}/comparison-map?reservoir=${this.reservoirs.id}&date=${this.isoDate}&oldDate=${this.isoOldDate}" width='800' height='500'></iframe>`
-      },
-
-      satelliteImageBufferSize () {
-        // The default buffer is 300m, the extra buffer is added to that
-        // For clarity, we want to display the total buffer size
-        return this.satelliteImageExtraBuffer < 300 ? this.satelliteImageExtraBuffer : this.satelliteImageExtraBuffer - 300
+        return `<iframe src="${window.location.origin}/comparison-map?reservoir=${this.reservoirs.id}&date=${this.isoDate}&oldDate=${this.isoOldDate}&extraBuffer=${this.satelliteImageExtraBuffer}" width='800' height='500'></iframe>`
       },
     },
 
@@ -222,6 +222,10 @@
         oldMap = map
       },
       async initializeMap () {
+        if (this.isEmbedded) {
+          this.satelliteImageExtraBuffer = this.embeddedExtraBuffer
+        }
+
         // Importing mapbox-gl-compare here to avoid https://github.com/mapbox/mapbox-gl-compare/issues/1
         const MapboxCompare = (await import('mapbox-gl-compare')).default
         // eslint-disable-next-line no-new
@@ -236,8 +240,10 @@
       onDateChanged (date) {
         this.date = date
       },
-      onSatelliteImageExtraBufferChanged (value) {
-        this.satelliteImageExtraBuffer = value
+      onsatelliteImageExtraBufferChanged (value) {
+        // The default buffer is 300m, the extra buffer is added to that
+        // For clarity, we want to display the total buffer size
+        this.satelliteImageExtraBuffer = value < 300 ? value : value - 300
       },
       getNearestDateIndex (target) {
         let bestDate = this.timeSeriesDates.length
