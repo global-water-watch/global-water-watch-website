@@ -34,7 +34,7 @@
                 v-model="form.reservoirNameSuggestion"
                 class="feedback-form__input-field"
                 name="reservoirNameSuggestion"
-                :placeholder="reservoir.properties.name || 'Reservoir name'"
+                :placeholder="reservoir.properties.preferred_name || 'Reservoir name'"
                 autocomplete="off"
               >
             </div>

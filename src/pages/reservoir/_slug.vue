@@ -100,7 +100,7 @@
 
     computed: {
       title () {
-        return this.reservoir?.properties?.name ?? 'Nameless reservoir'
+        return this.reservoir?.properties?.preferred_name ?? 'Nameless reservoir'
       },
 
       reservoirId () {

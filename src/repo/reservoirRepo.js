@@ -108,10 +108,27 @@ const formatMultipleTimeSeries = (response) => {
   }
 }
 
+const formatReservoir = (reservoir) => {
+  if (!reservoir) { return null }
+
+  // Preferred name is the OSM name if it exists, otherwise the name
+  reservoir.properties.preferred_name = reservoir.properties.osm_name || reservoir.properties.name
+
+  return reservoir
+}
+
+const formatReservoirs = (featureCollection) => {
+  if (!featureCollection) { return null }
+
+  featureCollection.features = featureCollection.features.map(formatReservoir)
+
+  return featureCollection
+}
+
 export default function (axios) {
   return {
     // Get reservoir by id (fid)
-    getById: id => axios.$get(`reservoir/${id}`),
+    getById: id => axios.$get(`reservoir/${id}`).then(reservoir => formatReservoir(reservoir)),
 
     getTimeSeriesById: (id, variableName) =>
       axios
@@ -119,12 +136,17 @@ export default function (axios) {
         .then(timeSeries => formatTimeSeries(id, timeSeries)),
 
     getByGeometry: geometry =>
-      axios.post('reservoir/geometry', geometry).then(({ data }) => data),
+      axios
+        .post('reservoir/geometry', geometry)
+        .then(({ data }) => formatReservoirs(data)),
 
     getTimeSeriesByGeometry: (geometry, variableName, period) =>
       axios.post(`reservoir/geometry/ts/${variableName}?agg_period=${period}`, geometry).then(formatMultipleTimeSeries),
 
-    getByIds: ids => axios.$get(`reservoir/?${qs.stringify({ ids, limit: ids.length }, { indices: false })}`),
+    getByIds: ids =>
+      axios
+        .$get(`reservoir/?${qs.stringify({ ids, limit: ids.length }, { indices: false })}`)
+        .then(reservoirs => formatReservoirs(reservoirs)),
 
     getTimeSeriesByIds: (ids, variableName, period) => {
       return axios
