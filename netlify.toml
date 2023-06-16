@@ -1,7 +1,6 @@
 [build]
   command = "yarn build"
   publish = "dist/"
-  functions = "functions"
   [build.processing]
     # Disable processing to speed up build time
     # @see https://www.voorhoede.nl/en/blog/10x-faster-nuxt-builds-on-netlify/#disable-post-processing-on-netlify
@@ -51,7 +50,11 @@
   force = true
 
 [[redirects]]
-from = "https://www.globalwaterwatch.io/*"
-to = "https://www.globalwaterwatch.earth/:splat"
-status = 301
-force = true
+  from = "https://www.globalwaterwatch.io/*"
+  to = "https://www.globalwaterwatch.earth/:splat"
+  status = 301
+  force = true
+
+[[edge_functions]]
+  path = "/comparison-map"
+  function = "allow-embedding-map"
