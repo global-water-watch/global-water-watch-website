@@ -77,7 +77,7 @@
               :max="1e+5"
               :min="0"
               :step="1000"
-              @end="onsatelliteImageExtraBufferChanged"
+              @end="onSatelliteImageExtraBufferChanged"
             >
               <template #label>
                 <span class="bold">Buffer size</span>
@@ -240,7 +240,8 @@
       onDateChanged (date) {
         this.date = date
       },
-      onsatelliteImageExtraBufferChanged (value) {
+      // By setting the value here we avoid making calls when the user is sliding the slider
+      onSatelliteImageExtraBufferChanged (value) {
         // The default buffer is 300m, the extra buffer is added to that
         // For clarity, we want to display the total buffer size
         this.satelliteImageExtraBuffer = value < 300 ? value : value - 300
