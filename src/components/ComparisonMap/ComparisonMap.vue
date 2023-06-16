@@ -67,7 +67,7 @@
       <v-expansion-panels v-if="!isEmbedded" class="comparison-map__settings">
         <v-expansion-panel>
           <v-expansion-panel-header>
-            <h3>Advance settings</h3>
+            <h3>Advanced settings</h3>
           </v-expansion-panel-header>
           <v-expansion-panel-content>
             <v-slider

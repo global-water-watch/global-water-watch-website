@@ -46,6 +46,10 @@
   &.theme--dark .v-expansion-panel {
     background-color: rgba(2, 41, 53, 0.6);
   }
+
+  .v-slider {
+    cursor: pointer;
+  }
 }
 
 .comparison-map__loading {
