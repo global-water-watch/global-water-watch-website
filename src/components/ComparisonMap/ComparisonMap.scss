@@ -25,6 +25,7 @@
 
   .comparison-map__date-picker {
     width: 90px;
+    // Prevent the date pickers from being partially hidden on smaller screens
     flex-shrink: 0;
   }
 
