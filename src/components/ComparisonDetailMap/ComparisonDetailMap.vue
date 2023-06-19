@@ -29,6 +29,10 @@
         type: Date,
         default: null,
       },
+      extraBuffer: {
+        type: Number,
+        default: 0,
+      },
     },
 
     data () {
@@ -41,7 +45,15 @@
           customAttribution: MAP_CUSTOM_ATTRIBUTIONS,
         },
         map: undefined,
-        isLoadingSatelliteImage: false,
+        generatingSatelliteImageUrl: {
+          loading: {
+            state: false,
+          },
+          error: {
+            state: false,
+            message: '',
+          },
+        },
       }
     },
 
@@ -63,14 +75,23 @@
         }
       },
 
-      isLoadingSatelliteImage (newVal) {
-        this.$emit('loading', newVal)
+      extraBuffer () {
+        if (this.map) {
+          this.addSatelliteImageToMap()
+        }
+      },
+
+      generatingSatelliteImageUrl: {
+        handler (newVal) {
+          this.$emit('generatingSatelliteImage', newVal)
+        },
+        deep: true,
       },
     },
 
     methods: {
       async addSatelliteImageToMap () {
-        this.isLoadingSatelliteImage = true
+        this.generatingSatelliteImageUrl.loading.state = true
         const geometry = {
           ...this.reservoirs,
           properties: {
@@ -78,8 +99,20 @@
           },
         }
 
-        const data = await this.$repo.image.getSatelliteImage(geometry)
+        const data = await this.$repo.image.getSatelliteImage(geometry, this.extraBuffer)
 
+        if (data.error) {
+          this.generatingSatelliteImageUrl.error.state = true
+          this.generatingSatelliteImageUrl.loading.state = false
+          this.generatingSatelliteImageUrl.error.message = `Failed generating satellite images for reservoir. ${this.extraBuffer > 0 ? 'Try choosing a smaller buffer around the reservoir.' : ''}`
+        } else {
+          this.addSatelliteLayer(data.url)
+          this.generatingSatelliteImageUrl.error.state = false
+          this.generatingSatelliteImageUrl.loading.state = false
+        }
+      },
+
+      addSatelliteLayer (url) {
         const layers = this.map.getStyle().layers
         const layerId = layers.find(layer => layer.id.includes('reservoir') && layer.id.includes('line')).id
 
@@ -95,7 +128,7 @@
         // add satellite source as raster to the map
         this.map.addSource('satellite', {
           type: 'raster',
-          tiles: [data.url],
+          tiles: [url],
           tileSize: 256,
         })
 
@@ -108,7 +141,6 @@
             'raster-opacity': 1,
           },
         }, layerId)
-        this.isLoadingSatelliteImage = false
       },
 
       addReservoirsToMap () {

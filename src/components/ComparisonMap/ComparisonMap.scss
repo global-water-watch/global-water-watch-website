@@ -25,12 +25,32 @@
 
   .comparison-map__date-picker {
     width: 90px;
+    // Prevent the date pickers from being partially hidden on smaller screens
+    flex-shrink: 0;
   }
 
   .comparison-map__date-picker--right {
     input {
       text-align: right;
     }
+  }
+}
+
+.comparison-map__settings.v-expansion-panels {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  z-index: 2;
+  border-radius: 4px;
+  box-shadow: 0 0 10px 2px rgb(0 0 0 / 10%);
+  width: 400px;
+
+  &.theme--dark .v-expansion-panel {
+    background-color: rgba(2, 41, 53, 0.6);
+  }
+
+  .v-slider {
+    cursor: pointer;
   }
 }
 
