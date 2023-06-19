@@ -25,6 +25,7 @@
 
   .comparison-map__date-picker {
     width: 90px;
+    flex-shrink: 0;
   }
 
   .comparison-map__date-picker--right {
@@ -36,8 +37,8 @@
 
 .comparison-map__settings.v-expansion-panels {
   position: absolute;
-  top: 20px;
-  left: 20px;
+  bottom: 10px;
+  left: 10px;
   z-index: 2;
   border-radius: 4px;
   box-shadow: 0 0 10px 2px rgb(0 0 0 / 10%);

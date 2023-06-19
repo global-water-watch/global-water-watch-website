@@ -51,7 +51,7 @@
         :extra-buffer="satelliteImageExtraBuffer"
         class="comparison-map__detail-map"
         @setMap="onSetOldMap"
-        @loading="onLoadingSatelliteImage"
+        @generatingSatelliteImage="onGeneratingSatelliteImage"
       />
 
       <ComparisonDetailMap
@@ -61,7 +61,7 @@
         :extra-buffer="satelliteImageExtraBuffer"
         class="comparison-map__detail-map"
         @setMap="onSetCurrentMap"
-        @loading="onLoadingSatelliteImage"
+        @generatingSatelliteImage="onGeneratingSatelliteImage"
       />
 
       <v-expansion-panels v-if="!isEmbedded" class="comparison-map__settings">
@@ -98,13 +98,19 @@
         class="comparison-map__date-picker"
         @dateChanged="onOldDateChanged"
       />
-      <div v-if="isLoadingSatelliteImages" class="comparison-map__loading">
+      <div v-if="generatingSatelliteImageUrl.loading.state" class="comparison-map__loading">
         <div>
-          Loading satellite images
+          Generating satellite images
           <v-progress-circular indeterminate :size="18" :width="2" class="comparison-map__loading-icon" :aria-hidden="true" />
         </div>
         This feature is not optimized for larger reservoirs.
       </div>
+      <MessageBox
+        v-else-if="generatingSatelliteImageUrl.error.state"
+        :message="generatingSatelliteImageUrl.error.message"
+        type="error"
+        icon="mdi-alert"
+      />
       <ComparisonDatePicker
         :available-dates="timeSeriesDates"
         :date="date"
@@ -155,11 +161,19 @@
 
     data () {
       return {
-        isLoadingSatelliteImages: false,
         date: new Date(),
         oldDate: new Date(),
         satelliteImageExtraBuffer: 0,
         sliderValue: 0,
+        generatingSatelliteImageUrl: {
+          loading: {
+            state: false,
+          },
+          error: {
+            state: false,
+            message: '',
+          },
+        },
       }
     },
 
@@ -231,8 +245,8 @@
         // eslint-disable-next-line no-new
         new MapboxCompare(oldMap, currentMap, '#comparison-map-container')
       },
-      onLoadingSatelliteImage (isLoading) {
-        this.isLoadingSatelliteImages = isLoading
+      onGeneratingSatelliteImage (generatingSatelliteImageUrl) {
+        this.generatingSatelliteImageUrl = generatingSatelliteImageUrl
       },
       onOldDateChanged (date) {
         this.oldDate = date
