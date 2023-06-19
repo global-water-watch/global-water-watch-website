@@ -24,7 +24,7 @@
               mdi-content-copy
             </v-icon>
           </v-btn>
-          <input type="text" class="page-share__input" :value="shareUrl" readonly>
+          <input type="text" class="long-input" :value="shareUrl" readonly>
         </v-row>
         <v-row>
           <v-btn
@@ -177,10 +177,10 @@
         anchor.click()
       },
       // For nameless reservoir: #id
-      // For named reservoirs: name (#id)
+      // For named reservoirs: preferred name (#id)
       reservoirName (reservoir) {
-        return reservoir?.properties?.name
-          ? `${reservoir.properties.name} (#${reservoir.id})`
+        return reservoir?.properties?.preferred_name
+          ? `${reservoir.properties.preferred_name} (#${reservoir.id})`
           : `#${reservoir.id}`
       },
     },

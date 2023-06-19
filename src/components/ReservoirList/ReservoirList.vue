@@ -51,7 +51,7 @@
       transformedReservoirs () {
         return this.reservoirs.features.map(reservoir => ({
           id: reservoir.id,
-          name: reservoir.properties?.name ?? 'Nameless reservoir',
+          name: reservoir.properties?.preferred_name ?? 'Nameless reservoir',
         })).sort((a, b) => a.name.localeCompare(b.name))
       },
 

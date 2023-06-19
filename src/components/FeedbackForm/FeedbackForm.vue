@@ -2,7 +2,7 @@
   <v-expansion-panels class="feedback-form">
     <v-expansion-panel>
       <v-expansion-panel-header>
-        <h2>Give Feedback</h2>
+        <h2>Give feedback</h2>
       </v-expansion-panel-header>
       <v-expansion-panel-content>
         <form
@@ -34,7 +34,7 @@
                 v-model="form.reservoirNameSuggestion"
                 class="feedback-form__input-field"
                 name="reservoirNameSuggestion"
-                :placeholder="reservoir.properties.name || 'Reservoir name'"
+                :placeholder="reservoir.properties.preferred_name || 'Reservoir name'"
                 autocomplete="off"
               >
             </div>
