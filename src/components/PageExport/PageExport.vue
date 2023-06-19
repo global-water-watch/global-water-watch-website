@@ -24,7 +24,7 @@
               mdi-content-copy
             </v-icon>
           </v-btn>
-          <input type="text" class="page-share__input" :value="shareUrl" readonly>
+          <input type="text" class="long-input" :value="shareUrl" readonly>
         </v-row>
         <v-row>
           <v-btn
