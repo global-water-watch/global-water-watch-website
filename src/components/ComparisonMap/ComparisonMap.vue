@@ -19,13 +19,13 @@
           You can use the slider on the plot to compare the situation at the "before" date, shown on the left of the slider, and the "after" situation of the reservoir on the right of the slider.
         </p>
         <p class="small">
-          On the advance settings panel, on the left top corner of the map, you can change the buffer size of the satellite images.
+          On the advanced settings panel, on the left top corner of the map, you can change the buffer size of the satellite images.
           This will allow you to see more or less of the surrounding area of the reservoir. The default value is 300m.
           The bigger the buffer size, the longer it will take to load the satellite images.
         </p>
         <h3>Embed the map</h3>
         <p class="small">
-          You can embed the comparison map on your website by copying the code below. The dates will be fixed to the ones currently selected, same for any advance settings.
+          You can embed the comparison map on your website by copying the code below. The dates will be fixed to the ones currently selected, same for any advanced settings.
         </p>
         <v-row class="ma-0 mb-3">
           <v-btn
