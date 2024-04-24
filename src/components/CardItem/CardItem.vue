@@ -2,7 +2,7 @@
   <article>
     <div class="card-item__top">
       <NuxtLink :to="slugRoute" class="card-item__link card-item__top-area" tabindex="-1">
-        <ResponsiveImage :image="image" :contain="true" />
+        <ResponsiveImage v-if="image" :image="image" :contain="true" />
       </NuxtLink>
 
       <ul v-if="tags" class="card-item__tags card-item__top-area">
@@ -25,10 +25,14 @@
     </p>
 
     <address class="card-item__author">
-      <ResponsiveImage class="card-item__author-image" :image="author.image" />
+      <ResponsiveImage
+        v-if="author && author.image"
+        class="card-item__author-image"
+        :image="author.image"
+      />
 
       <div>
-        <span class="p small bold">
+        <span v-if="author && author.image" class="p small bold">
           {{ author.name }}
         </span>
         <time class="p small" :datetime="firstPublishedAt">{{ parsedDate }}</time>
