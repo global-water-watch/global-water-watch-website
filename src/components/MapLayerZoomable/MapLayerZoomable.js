@@ -58,15 +58,26 @@ export default {
       const layer = this.options.layers.find(({ id }) => id === layerId)
       const { styles, clickFn, promoteId, attribution } = this.options
 
-      map.addSource(layerId, {
-        id: layerId,
-        promoteId,
-        attribution: attribution || '',
-        ...layer.source,
-      })
+      // add source only if it doesn't exist
+      // this prevents an error that makes the app unusable
+      if (!map.getSource(layerId)) {
+        map.addSource(layerId, {
+          id: layerId,
+          promoteId,
+          attribution: attribution || '',
+          ...layer.source,
+        })
+      }
 
       styles.forEach((style) => {
         const layerUniqueId = `${layerId}-${style.type}`
+
+        // remove layer if it already exists
+        // this prevents an error that makes the app unusable
+        if (map.getLayer(layerUniqueId)) {
+          map.removeLayer(layerUniqueId)
+        }
+
         map.addLayer({
           id: layerUniqueId,
           type: style.type,
