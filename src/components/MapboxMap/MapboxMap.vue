@@ -71,7 +71,6 @@
       },
       geoCoderOptions () {
         return {
-          placeholder: 'Search for a reservoir',
           externalGeocoder: this.externalGeocoder,
           marker: false,
         }
