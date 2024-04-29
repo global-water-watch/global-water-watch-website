@@ -127,6 +127,11 @@ const formatReservoirs = (featureCollection) => {
 
 export default function (axios) {
   return {
+    getAll: config => axios.$get('reservoir', {
+      ...config,
+      paramsSerializer: params => qs.stringify(params, { indices: false }),
+    }).then(reservoirs => formatReservoirs(reservoirs)),
+
     // Get reservoir by id (fid)
     getById: id => axios.$get(`reservoir/${id}`).then(reservoir => formatReservoir(reservoir)),
 
