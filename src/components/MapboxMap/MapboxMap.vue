@@ -99,7 +99,7 @@
             limit: 1,
             ids: [query],
           },
-        })
+        }).catch(() => null)
 
         return reservoirs.features.map((feature) => {
           const { properties } = feature
