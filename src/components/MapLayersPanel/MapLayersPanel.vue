@@ -309,11 +309,9 @@
 
       onRegionClick (evt) {
         const region = evt.features?.[0]
+        const { source } = region
         const UID = region?.properties.shapeID
         if (!UID) { return }
-
-        const { source, geometry } = region
-        this.$store.commit('zoomable-layers/SET_CACHED_GEOMETRY', Object.freeze({ UID, geometry }))
 
         const zoom = Math.round(evt.target.getZoom())
         const { lng, lat } = evt.target.getCenter()

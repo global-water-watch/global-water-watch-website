@@ -6,6 +6,7 @@
 
 <script>
   import mapboxgl from 'mapbox-gl'
+  import { mergeFeatures } from '~/lib/geojson-helpers'
 
   const AREA_KEY_MAP = {
     basin: 'HYBAS_ID',
@@ -73,12 +74,14 @@
       map.on('idle', () => {
         const { layer, id } = this.mapboxQueryData
         if (!map.getLayer(layer)) { return }
-        const AREA_KEY = AREA_KEY_MAP[this.areaType]
-        const geometry = map.querySourceFeatures(layer, { sourceLayer: layer })
-          // Forcing a string here by doing `+ ''`
-          .find(({ properties }) => properties?.[AREA_KEY] + '' === id)
-          ?.geometry
-        this.$emit('found-geometry', geometry)
+        const AREA_KEY = String(AREA_KEY_MAP[this.areaType])
+
+        const features = map.querySourceFeatures(layer, {
+          sourceLayer: layer,
+          filter: ['==', ['string', ['get', AREA_KEY]], id],
+        })
+
+        this.$emit('found-geometry', mergeFeatures(features).geometry)
       })
     },
   }
