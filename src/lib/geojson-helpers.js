@@ -1,11 +1,9 @@
 import { union } from '@turf/turf'
 
 export function mergeFeatures (features) {
-  return features.reduce((acc, feature) => {
-    if (!acc) {
-      return feature
-    }
+  if (!features?.length) {
+    return []
+  }
 
-    return union(acc, feature)
-  }, undefined)
+  return features.reduce((acc, feature) => union(acc, feature), features[0])
 }
