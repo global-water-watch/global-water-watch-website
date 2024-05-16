@@ -10,7 +10,7 @@
     @mb-load="onMapLoaded"
   >
     <!-- Geocoder -->
-    <v-mapbox-geocoder />
+    <v-mapbox-geocoder :options="geoCoderOptions" />
     <!-- Controls -->
     <v-mapbox-navigation-control position="bottom-right" />
 
@@ -37,6 +37,7 @@
 </template>
 
 <script>
+  import { bbox } from '@turf/turf'
   import { MAP_ZOOM, MAP_CENTER, MAP_CUSTOM_ATTRIBUTIONS, MAPBOX_STYLE_LIGHT } from '@/lib/constants'
 
   export default {
@@ -68,6 +69,12 @@
       anomaliesLayers () {
         return this.$store.getters['anomalies-layers/layers']
       },
+      geoCoderOptions () {
+        return {
+          externalGeocoder: this.externalGeocoder,
+          marker: false,
+        }
+      },
     },
 
     methods: {
@@ -84,6 +91,29 @@
 
       onMapLoaded () {
         this.$store.commit('ui/SET_MAP_READY', true)
+      },
+
+      async externalGeocoder (query) {
+        const reservoirs = await this.$repo.reservoir.getAll({
+          params: {
+            limit: 1,
+            ids: [query],
+          },
+        }).catch(() => null)
+
+        return reservoirs.features.map((feature) => {
+          const { properties } = feature
+
+          const title = `${properties.preferred_name || 'Nameless reservoir'} (from API)`
+          const subtitle = `${feature.id}`
+
+          return {
+            ...feature,
+            place_name: `${title}, ${subtitle}`,
+            text: feature.id,
+            bbox: bbox(feature),
+          }
+        })
       },
     },
 
