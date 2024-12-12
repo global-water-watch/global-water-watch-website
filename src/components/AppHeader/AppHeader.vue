@@ -12,7 +12,7 @@
         <ul v-if="links.length" class="app-header__menu">
           <li>
             <NuxtLink class="app-header__link bold" to="/map">
-              Map (experimental)
+              Interactive viewer
             </NuxtLink>
           </li>
           <li v-for="link in links" :key="link.id">
