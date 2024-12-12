@@ -2,6 +2,10 @@
 #import '../components/ResponsiveImage/ResponsiveImage.fragment.graphql'
 #import '../components/PageHeroes/BlogHero/BlogHero.fragment.graphql'
 #import '../components/PageSections/TextSection/TextSection.fragment.graphql'
+#import '../components/PageSections/LogoSection/LogoSection.fragment.graphql'
+#import '../components/PageSections/TabsSection/TabsSection.fragment.graphql'
+#import '../components/PageSections/TimelineSection/TimelineSection.fragment.graphql'
+#import '../components/PageSections/MultiTextSection/MultiTextSection.fragment.graphql'
 
 query PageQuery($slug: String) {
   page(filter: {slug: {eq: $slug}}) {
@@ -26,6 +30,10 @@ query PageQuery($slug: String) {
       ... on BlogTextSectionRecord {
         ...textSectionFragment
       }
+      ... on LogoSectionRecord { ...logoSectionFragment }
+      ... on TabsSectionRecord { ...tabsSectionFragment }
+      ... on TimelineSectionRecord { ...timelineSectionFragment }
+      ... on MultiTextSectionRecord { ...multiTextSectionFragment }
     }
   }
 }
